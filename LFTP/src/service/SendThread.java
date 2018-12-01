@@ -5,9 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
+import java.util.*;
 
 import tools.ByteConverter;
 import tools.Packet;
@@ -25,7 +23,13 @@ public class SendThread implements Runnable {
 	private DatagramSocket socket;					//用于发送数据包
 	private volatile boolean retrans= false;		//当前是否在重传
 	private volatile int currAck = -1;				//已被确认的最大分组ack
-	
+
+	private volatile int duplicateAck = 0;
+	private volatile long SampleRTT  = 0;
+	private volatile long EstimatedRTT  = 0;		//估计往返时间
+	private volatile long DevRTT  = 0;				//RTT偏差
+	private volatile long TimeoutInterval  = 300;	//超时时间
+	private Map<Integer, Long> SendTimeMap = new HashMap<Integer, Long>(); //发送时间表
 	
 	
 	public SendThread(List<Packet> data, InetAddress address, int sourcePort, int destPort) {
@@ -56,24 +60,21 @@ public class SendThread implements Runnable {
 		time_out_threadThread.start();
 		
 		//启动发送数据包
-		try {
-			while (nextSeq < data.size()) {
-				if (nextSeq < base + N && retrans == false) {
-					//if (nextSeq % N != 0) {
-					byte[] buffer = ByteConverter.objectToBytes(data.get(nextSeq));
-					DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
-					Packet packet = ByteConverter.bytesToObject(dp.getData());
-					System.out.println("发送的分组序号: " + packet.getSeq());
-					socket.send(dp);
-					if (base == nextSeq) startTimer();
-					//}
-					nextSeq++;
-				}
+
+		while (nextSeq < data.size()) {
+			if (nextSeq < base + N && retrans == false) {
+				//if (nextSeq % N != 0) {
+				SendPacket(nextSeq);
+
+				//更新时间表
+				SendTimeMap.put(nextSeq, System.nanoTime());
+
+				if (base == nextSeq) startTimer();
+				//}
+				nextSeq++;
 			}
-		} catch (IOException e) {
-			System.out.println("SendThread: 发送数据包出错");
-			e.printStackTrace();
 		}
+
 		
 		//传输完成时，发送一个FIN包告知接收方
 		while (true) {
@@ -106,6 +107,26 @@ public class SendThread implements Runnable {
 					Packet packet = ByteConverter.bytesToObject(buffer);
 					System.out.println("确认分组: " + packet.getAck());
 					base = packet.getAck() + 1;
+
+					//获取该包发送的时间
+					Long sendTime = SendTimeMap.remove(packet.getAck());
+					if(sendTime != null) {
+						UpdateTimeout(System.nanoTime() - sendTime);
+					}
+
+					//检测冗余Ack
+					if(currAck == packet.getAck()) {
+						duplicateAck ++;
+						//3个冗余Ack，快速重传
+						if(duplicateAck == 3) {
+							System.out.println("启动快速重传");
+							SendPacket(base);
+						}
+					}
+					else {
+						duplicateAck = 0;
+					}
+
 					currAck = packet.getAck();
 					if (base != nextSeq) startTimer();
 					
@@ -126,14 +147,28 @@ public class SendThread implements Runnable {
 				long start_time = date.getTime();
 				long curr_time = new Date().getTime();
 				//超过0.3秒时触发超时
-				if (curr_time - start_time > 300) {
+				if (curr_time - start_time > TimeoutInterval) {
 					System.out.println("启动重传！");
+					//TimeoutInterval = TimeoutInterval * 2; //超时间隔加倍
 					timeOut();
 				}
 				
 				//确认接收最后一个分组时停止计时
 				if (currAck == data.size() - 1) break;
 			}
+		}
+	}
+
+	private void SendPacket(int seq) {
+		try {
+			byte[] buffer = ByteConverter.objectToBytes(data.get(seq));
+			DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
+			Packet packet = ByteConverter.bytesToObject(dp.getData());
+			System.out.println("发送的分组序号: " + packet.getSeq());
+			socket.send(dp);
+		} catch (IOException e) {
+			System.out.println("SendThread: 发送数据包出错");
+			e.printStackTrace();
 		}
 	}
 	
@@ -155,6 +190,13 @@ public class SendThread implements Runnable {
 			System.out.println("SendThread: 发送数据包出错");
 			e.printStackTrace();
 		}
+	}
+
+	private void UpdateTimeout(long SampleRTT) {
+
+		EstimatedRTT = (long)(0.875 * EstimatedRTT + 0.125 * SampleRTT);
+		DevRTT = (long)(0.75 * DevRTT + 0.25 * Math.abs(SampleRTT - EstimatedRTT));
+		TimeoutInterval = EstimatedRTT + 4 * DevRTT;
 	}
 	
 	//启动定时器
