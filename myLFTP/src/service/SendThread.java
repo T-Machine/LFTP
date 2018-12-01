@@ -5,9 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.Date;
-import java.util.List;
-import java.util.Timer;
+import java.util.*;
 
 import tools.ByteConverter;
 import tools.Packet;
@@ -25,6 +23,13 @@ public class SendThread implements Runnable {
 	private DatagramSocket socket;					//用于发送数据包
 	private volatile boolean retrans= false;		//当前是否在重传
 	private volatile int currAck = -1;				//已被确认的最大分组ack
+
+	private volatile int duplicateAck = 0;
+	private volatile long SampleRTT  = 0;
+	private volatile long EstimatedRTT  = 0;		//估计往返时间
+	private volatile long DevRTT  = 0;				//RTT偏差
+	private volatile long TimeoutInterval  = 300;	//超时时间
+	private Map<Integer, Long> SendTimeMap = new HashMap<Integer, Long>(); //发送时间表
 
 
 
@@ -67,6 +72,10 @@ public class SendThread implements Runnable {
 						socket.send(dp);
 					}
 					System.out.println("发送的分组序号: " + packet.getSeq());
+
+					//更新时间表
+					SendTimeMap.put(nextSeq, System.nanoTime());
+
 					if (base == nextSeq) startTimer();
 					//}
 					nextSeq++;
@@ -108,6 +117,26 @@ public class SendThread implements Runnable {
 					Packet packet = ByteConverter.bytesToObject(buffer);
 					System.out.println("确认分组: " + packet.getAck());
 					base = packet.getAck() + 1;
+
+					//获取该包发送的时间
+					Long sendTime = SendTimeMap.remove(packet.getAck());
+					if(sendTime != null) {
+						UpdateTimeout(System.nanoTime() - sendTime);
+					}
+
+					//检测冗余Ack
+					if(currAck == packet.getAck()) {
+						duplicateAck ++;
+						//3个冗余Ack，快速重传
+						if(duplicateAck == 3) {
+							System.out.println("启动快速重传");
+							SendPacket(base);
+						}
+					}
+					else {
+						duplicateAck = 0;
+					}
+
 					currAck = packet.getAck();
 					if (base != nextSeq) startTimer();
 
@@ -139,6 +168,20 @@ public class SendThread implements Runnable {
 		}
 	}
 
+
+	private void SendPacket(int seq) {
+		try {
+			byte[] buffer = ByteConverter.objectToBytes(data.get(seq));
+			DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
+			Packet packet = ByteConverter.bytesToObject(dp.getData());
+			System.out.println("发送的分组序号: " + packet.getSeq());
+			socket.send(dp);
+		} catch (IOException e) {
+			System.out.println("SendThread: 发送数据包出错");
+			e.printStackTrace();
+		}
+	}
+
 	//超时引发重传事件
 	private void timeOut() {
 		System.out.println("启动重传！");
@@ -159,6 +202,13 @@ public class SendThread implements Runnable {
 			System.out.println("SendThread: 发送数据包出错");
 			e.printStackTrace();
 		}
+	}
+
+	private void UpdateTimeout(long SampleRTT) {
+
+		EstimatedRTT = (long)(0.875 * EstimatedRTT + 0.125 * SampleRTT);
+		DevRTT = (long)(0.75 * DevRTT + 0.25 * Math.abs(SampleRTT - EstimatedRTT));
+		TimeoutInterval = EstimatedRTT + 4 * DevRTT;
 	}
 
 	//启动定时器

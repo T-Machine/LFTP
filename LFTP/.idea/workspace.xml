@@ -2,8 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f7ab6331-1ab9-4b98-b3aa-7b4df66b9c78" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/SendThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/SendThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/main/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/main/Client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/main/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/main/Server.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/service/ReceiveThread$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/service/ReceiveThread$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/service/ReceiveThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/service/ReceiveThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/service/SendThread$RecvAck.class" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/service/SendThread$RecvAck.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/service/SendThread$TimeOut.class" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/service/SendThread$TimeOut.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/service/SendThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/service/SendThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/tools/ByteConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/tools/ByteConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/tools/FileIO.class" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/tools/FileIO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/tools/Packet.class" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/out/production/myLFTP/tools/Packet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../myLFTP/src/service/SendThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/../myLFTP/src/service/SendThread.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -62,7 +74,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/service/ReceiveThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-514">
+            <state relative-caret-position="72">
               <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
             </state>
           </provider>
@@ -71,8 +83,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="115" lean-forward="true" selection-start-line="115" selection-end-line="115" />
+            <state relative-caret-position="648">
+              <caret line="200" column="4" lean-forward="true" selection-start-line="200" selection-start-column="4" selection-end-line="200" selection-end-column="4" />
               <folding>
                 <element signature="e#1093#1108#0" expanded="true" />
                 <element signature="e#5402#5403#0" expanded="true" />
@@ -100,10 +112,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="x" value="206" />
+    <option name="y" value="31" />
+    <option name="width" value="1396" />
+    <option name="height" value="1059" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -152,7 +164,8 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543672219785" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543673326638" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../myLFTP" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
   </component>
@@ -178,12 +191,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1543658487870</updated>
-      <workItem from="1543658493392" duration="11196000" />
+      <workItem from="1543658493392" duration="12698000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="11196000" />
+    <option name="totallyTimeSpent" value="12698000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -261,15 +274,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/service/ReceiveThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-514">
+        <state relative-caret-position="72">
           <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="115" lean-forward="true" selection-start-line="115" selection-end-line="115" />
+        <state relative-caret-position="648">
+          <caret line="200" column="4" lean-forward="true" selection-start-line="200" selection-start-column="4" selection-end-line="200" selection-end-column="4" />
           <folding>
             <element signature="e#1093#1108#0" expanded="true" />
             <element signature="e#5402#5403#0" expanded="true" />
