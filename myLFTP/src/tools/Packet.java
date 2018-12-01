@@ -3,11 +3,11 @@ package tools;
 import java.io.Serializable;
 
 public class Packet implements Serializable {
-	private int ack;		//确认号
-	private int seq;		//序列号
+	private Integer ack;		//确认号
+	private Integer seq;		//序列号
 	private boolean ACK;	//ACK标志位
 	private boolean FIN;	//FIN标志位
-	private int rwwd;		//接收窗口(流量控制)
+	private Integer rwwd;		//接收窗口(流量控制)
 	private byte[] data;	//数据
 	
 	public Packet(int ack, int seq, boolean ACK, boolean FIN, int rwwd, byte[] data) {
@@ -23,14 +23,14 @@ public class Packet implements Serializable {
 		this.ack = ack;
 		this.ACK = true;
 	}
-	public int getAck() {
+	public Integer getAck() {
 		return ack;
 	}
 	
 	public void setSeq(int seq) {
 		this.seq = seq;
 	}
-	public int getSeq() {
+	public Integer getSeq() {
 		return seq;
 	}
 	
@@ -51,7 +51,7 @@ public class Packet implements Serializable {
 	public void setRwwd(int rwwd) {
 		this.rwwd = rwwd;
 	}
-	public int getRwwd() {
+	public Integer getRwwd() {
 		return rwwd;
 	}
 	

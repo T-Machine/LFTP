@@ -15,7 +15,7 @@ import tools.*;
 public class Client {
 	
 	public static void main(String[] args) {
-    	String dir = "test.txt";
+    	String dir = "test.flac";
     	String address = "localhost";
     	int sourcePort = 3777;
     	int dstPort = 3888;
