@@ -25,11 +25,14 @@ public class SendThread implements Runnable {
 	private volatile int currAck = -1;				//已被确认的最大分组ack
 
 	private volatile int duplicateAck = 0;
-	private volatile long SampleRTT  = 0;
 	private volatile long EstimatedRTT  = 0;		//估计往返时间
 	private volatile long DevRTT  = 0;				//RTT偏差
 	private volatile long TimeoutInterval  = 300;	//超时时间
 	private Map<Integer, Long> SendTimeMap = new HashMap<Integer, Long>(); //发送时间表
+
+	private volatile double cwnd = 1;					//拥塞窗口
+	private volatile double ssthresh = 64;				//慢启动阈值
+	private volatile boolean isQuickRecover = false;	//是否处于快速恢复状态
 
 
 
@@ -63,7 +66,7 @@ public class SendThread implements Runnable {
 		//启动发送数据包
 		try {
 			while (nextSeq < data.size()) {
-				if (nextSeq < base + rwwd && retrans == false) {
+				if (nextSeq < base + rwwd && retrans == false && nextSeq - base <= cwnd) {
 					//if (nextSeq % N != 0) {
 					byte[] buffer = ByteConverter.objectToBytes(data.get(nextSeq));
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
@@ -111,6 +114,7 @@ public class SendThread implements Runnable {
 		public void run() {
 			try {
 				while (true) {
+					//System.out.println(cwnd);//for debug
 					byte[] buffer = new byte[BUFSIZE];
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
 					socket.receive(dp);
@@ -126,15 +130,36 @@ public class SendThread implements Runnable {
 
 					//检测冗余Ack
 					if(currAck == packet.getAck()) {
-						duplicateAck ++;
+						if(isQuickRecover == true) {
+							cwnd ++;
+						} else {
+							duplicateAck ++;
+						}
+
 						//3个冗余Ack，快速重传
 						if(duplicateAck == 3) {
+							//更新拥塞窗口
+							ssthresh = cwnd / 2;
+							cwnd = ssthresh + 3;
+							isQuickRecover = true;
+
 							System.out.println("启动快速重传");
 							SendPacket(base);
 						}
-					}
-					else {
+					} else {
 						duplicateAck = 0;
+
+						//拥塞控制
+						if(isQuickRecover == true) {	//快速恢复时，收到新的Ack，转到拥塞避免状态
+							isQuickRecover = false;
+							cwnd = ssthresh;
+						} else {
+							if(cwnd >= ssthresh) {
+								cwnd += 1 / cwnd;	//拥塞避免
+							} else {
+								cwnd ++;	//慢启动
+							}
+						}
 					}
 
 					currAck = packet.getAck();
@@ -187,6 +212,12 @@ public class SendThread implements Runnable {
 		System.out.println("启动重传！");
 		startTimer();
 		try {
+			//更新拥塞窗口
+			isQuickRecover = false;
+			duplicateAck = 0;
+			ssthresh = cwnd / 2;
+			cwnd = 1;
+
 			//记录base值和nextSeq值，防止接收线程对其造成改变
 			retrans = true;
 			// 只发送一个包
