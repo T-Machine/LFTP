@@ -14,17 +14,17 @@ import tools.Packet;
 
 public class SendThread implements Runnable {
 	private final static int BUFSIZE = 1024 * 1024;
-	private List<Packet> data;						//Òª·¢ËÍµÄÊı¾İ
-	InetAddress address;							//Ä¿µÄµØÖ·
-	int sourcePort;									//Ô´¶Ë¿Ú
-	int destPort;									//Ä¿µÄ¶Ë¿Ú
-	private volatile int base = 0;					//»ùĞòºÅ
-	private volatile int nextSeq = 0;				//ÏÂÒ»¸ö´ı·¢ËÍ·Ö×éµÄĞòºÅ
-	private int N = 10;								//Î´È·ÈÏµÄ×î´ó·Ö×éÊı
-	private volatile Date date;						//¼ÇÂ¼Æô¶¯¶¨Ê±Æ÷µÄÊ±¼ä
-	private DatagramSocket socket;					//ÓÃÓÚ·¢ËÍÊı¾İ°ü
-	private volatile boolean retrans= false;		//µ±Ç°ÊÇ·ñÔÚÖØ´«
-	private volatile int currAck = -1;				//ÒÑ±»È·ÈÏµÄ×î´ó·Ö×éack
+	private List<Packet> data;						//è¦å‘é€çš„æ•°æ®
+	InetAddress address;							//ç›®çš„åœ°å€
+	int sourcePort;									//æºç«¯å£
+	int destPort;									//ç›®çš„ç«¯å£
+	private volatile int base = 0;					//åŸºåºå·
+	private volatile int nextSeq = 0;				//ä¸‹ä¸€ä¸ªå¾…å‘é€åˆ†ç»„çš„åºå·
+	private int N = 10;								//æœªç¡®è®¤çš„æœ€å¤§åˆ†ç»„æ•°
+	private volatile Date date;						//è®°å½•å¯åŠ¨å®šæ—¶å™¨çš„æ—¶é—´
+	private DatagramSocket socket;					//ç”¨äºå‘é€æ•°æ®åŒ…
+	private volatile boolean retrans= false;		//å½“å‰æ˜¯å¦åœ¨é‡ä¼ 
+	private volatile int currAck = -1;				//å·²è¢«ç¡®è®¤çš„æœ€å¤§åˆ†ç»„ack
 	
 	
 	
@@ -37,7 +37,7 @@ public class SendThread implements Runnable {
 		try {
 			this.socket = new DatagramSocket(sourcePort);
 		} catch (SocketException e) {
-			System.out.println("SendThread: ´´½¨socket³ö´í");
+			System.out.println("SendThread: åˆ›å»ºsocketå‡ºé”™");
 			e.printStackTrace();
 		}
 	}
@@ -46,16 +46,16 @@ public class SendThread implements Runnable {
 	public void run() {
 		//System.out.println("size: " + data.size());
 		
-		//Æô¶¯½ÓÊÕACK°üÏß³Ì
+		//å¯åŠ¨æ¥æ”¶ACKåŒ…çº¿ç¨‹
 		Thread recv_ack_thread = new Thread(new RecvAck());
 		recv_ack_thread.start();
 		
-		// Æô¶¯³¬Ê±ÅĞ¶Ï´¦ÀíÏß³Ì
+		// å¯åŠ¨è¶…æ—¶åˆ¤æ–­å¤„ç†çº¿ç¨‹
 		Thread time_out_threadThread;
 		time_out_threadThread = new Thread(new TimeOut());
 		time_out_threadThread.start();
 		
-		//Æô¶¯·¢ËÍÊı¾İ°ü
+		//å¯åŠ¨å‘é€æ•°æ®åŒ…
 		try {
 			while (nextSeq < data.size()) {
 				if (nextSeq < base + N && retrans == false) {
@@ -63,7 +63,7 @@ public class SendThread implements Runnable {
 					byte[] buffer = ByteConverter.objectToBytes(data.get(nextSeq));
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
 					Packet packet = ByteConverter.bytesToObject(dp.getData());
-					System.out.println("·¢ËÍµÄ·Ö×éĞòºÅ: " + packet.getSeq());
+					System.out.println("å‘é€çš„åˆ†ç»„åºå·: " + packet.getSeq());
 					socket.send(dp);
 					if (base == nextSeq) startTimer();
 					//}
@@ -71,21 +71,21 @@ public class SendThread implements Runnable {
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("SendThread: ·¢ËÍÊı¾İ°ü³ö´í");
+			System.out.println("SendThread: å‘é€æ•°æ®åŒ…å‡ºé”™");
 			e.printStackTrace();
 		}
 		
-		//´«ÊäÍê³ÉÊ±£¬·¢ËÍÒ»¸öFIN°ü¸æÖª½ÓÊÕ·½
+		//ä¼ è¾“å®Œæˆæ—¶ï¼Œå‘é€ä¸€ä¸ªFINåŒ…å‘ŠçŸ¥æ¥æ”¶æ–¹
 		while (true) {
 			if (currAck == data.size() - 1) {
 				try {
-					System.out.print("·¢ËÍÖÕÖ¹packet");
+					System.out.print("å‘é€ç»ˆæ­¢packet");
 					byte[] buffer = ByteConverter.objectToBytes(new Packet(-1, -1, false, true, -1, null));
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
 					socket.send(dp);
-					System.out.println("·¢ËÍÍê±Ï");
+					System.out.println("å‘é€å®Œæ¯•");
 				} catch (IOException e) {
-					System.out.println("SendThread: ·¢ËÍÊı¾İ°ü³ö´í");
+					System.out.println("SendThread: å‘é€æ•°æ®åŒ…å‡ºé”™");
 					e.printStackTrace();
 				}
 				break;
@@ -94,7 +94,7 @@ public class SendThread implements Runnable {
 	
 	}
 	
-	//½ÓÊÕACK°üµÄÏß³Ì
+	//æ¥æ”¶ACKåŒ…çš„çº¿ç¨‹
 	class RecvAck implements Runnable {
 		@Override
 		public void run() {
@@ -104,60 +104,60 @@ public class SendThread implements Runnable {
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
 					socket.receive(dp);
 					Packet packet = ByteConverter.bytesToObject(buffer);
-					System.out.println("È·ÈÏ·Ö×é: " + packet.getAck());
+					System.out.println("ç¡®è®¤åˆ†ç»„: " + packet.getAck());
 					base = packet.getAck() + 1;
 					currAck = packet.getAck();
 					if (base != nextSeq) startTimer();
 					
-					//È·ÈÏ½ÓÊÕ×îºóÒ»¸ö·Ö×é
+					//ç¡®è®¤æ¥æ”¶æœ€åä¸€ä¸ªåˆ†ç»„
 					if (packet.getAck() == data.size() - 1) break;
 				}
 			} catch (IOException e) {
-				System.out.println("ReceiveThread: ½ÓÊÕÊı¾İ°ü³ö´í");
+				System.out.println("ReceiveThread: æ¥æ”¶æ•°æ®åŒ…å‡ºé”™");
 			}
 		}
 	}
 	
-	//ÅĞ¶ÏÊÇ·ñ³¬Ê±µÄÏß³Ì
+	//åˆ¤æ–­æ˜¯å¦è¶…æ—¶çš„çº¿ç¨‹
 	class TimeOut implements Runnable {
 		@Override
 		public void run() {
 			while (true) {
 				long start_time = date.getTime();
 				long curr_time = new Date().getTime();
-				//³¬¹ı0.3ÃëÊ±´¥·¢³¬Ê±
+				//è¶…è¿‡0.3ç§’æ—¶è§¦å‘è¶…æ—¶
 				if (curr_time - start_time > 300) {
-					System.out.println("Æô¶¯ÖØ´«£¡");
+					System.out.println("å¯åŠ¨é‡ä¼ ï¼");
 					timeOut();
 				}
 				
-				//È·ÈÏ½ÓÊÕ×îºóÒ»¸ö·Ö×éÊ±Í£Ö¹¼ÆÊ±
+				//ç¡®è®¤æ¥æ”¶æœ€åä¸€ä¸ªåˆ†ç»„æ—¶åœæ­¢è®¡æ—¶
 				if (currAck == data.size() - 1) break;
 			}
 		}
 	}
 	
-	//³¬Ê±Òı·¢ÖØ´«ÊÂ¼ş
+	//è¶…æ—¶å¼•å‘é‡ä¼ äº‹ä»¶
 	private void timeOut() {
 		startTimer();
 		try {
-			//¼ÇÂ¼baseÖµºÍnextSeqÖµ£¬·ÀÖ¹½ÓÊÕÏß³Ì¶ÔÆäÔì³É¸Ä±ä
+			//è®°å½•baseå€¼å’ŒnextSeqå€¼ï¼Œé˜²æ­¢æ¥æ”¶çº¿ç¨‹å¯¹å…¶é€ æˆæ”¹å˜
 			int myBase = base, myNextSeq = nextSeq;
 			retrans = true;
 			for (int i = myBase; i < myNextSeq; ++i) {
 				byte[] buffer = ByteConverter.objectToBytes(data.get(i));
 				DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
-				System.out.println("ÖØĞÂ·¢ËÍÆ¬¶Î£º" + i);
+				System.out.println("é‡æ–°å‘é€ç‰‡æ®µï¼š" + i);
 				socket.send(dp);
 			}
 			retrans = false;
 		} catch (IOException e) {
-			System.out.println("SendThread: ·¢ËÍÊı¾İ°ü³ö´í");
+			System.out.println("SendThread: å‘é€æ•°æ®åŒ…å‡ºé”™");
 			e.printStackTrace();
 		}
 	}
 	
-	//Æô¶¯¶¨Ê±Æ÷
+	//å¯åŠ¨å®šæ—¶å™¨
 	private void startTimer() {
 		date = new Date();
 	}

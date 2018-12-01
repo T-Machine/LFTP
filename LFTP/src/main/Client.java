@@ -19,7 +19,7 @@ public class Client {
     	String address = "localhost";
     	int sourcePort = 3777;
     	int dstPort = 3888;
-    	System.out.println("ÕıÔÚÍù " + address + ":" + dstPort + " ´«ËÍÎÄ¼ş: " + dir);
+    	System.out.println("æ­£åœ¨å¾€ " + address + ":" + dstPort + " ä¼ é€æ–‡ä»¶: " + dir);
     	List<byte[]> byteList = FileIO.file2byte(dir);
     	List<Packet> packageList = new ArrayList<>();
     	Packet data;
@@ -28,7 +28,7 @@ public class Client {
     		packageList.add(data);
     	}
     	try {
-    		System.out.println("×¼±¸´«Êä£º");
+    		System.out.println("å‡†å¤‡ä¼ è¾“ï¼š");
         	InetAddress ia = InetAddress.getByName(address);
         	Thread send_thread = new Thread(new SendThread(packageList, ia, sourcePort, dstPort));
         	send_thread.start();

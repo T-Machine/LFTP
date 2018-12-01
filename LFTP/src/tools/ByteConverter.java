@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-//ÓÃÓÚ´¦Àí¶ÔÏóÓë×Ö½ÚÖ®¼ä»¥Ïà×ª»»µÄ¹¤¾ßÀà
+//ç”¨äºå¤„ç†å¯¹è±¡ä¸å­—èŠ‚ä¹‹é—´äº’ç›¸è½¬æ¢çš„å·¥å…·ç±»
 public class ByteConverter {
 	public static<T> byte[] objectToBytes(T obj) {
 		byte[] bytes = null;

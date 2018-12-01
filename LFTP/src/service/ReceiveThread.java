@@ -15,11 +15,11 @@ import tools.Packet;
 
 public class ReceiveThread implements Runnable {
 	private final static int BUFSIZE = 1024 * 1024;
-	private DatagramSocket socket;				// UDPÁ¬½ÓDatagramSocket
-	private int serverPort;						// ·şÎñ¶Ë½ÓÊÕ¶Ë¿Ú
-	private int expectedseqnum;					// ÆÚÍûÊÕµ½µÄĞòÁĞºÅ
-	InetAddress clientInetAddress;				// ¿Í»§¶Ë·¢ËÍIPµØÖ·
-	int clientPort;								// ¿Í»§¶Ë·¢ËÍ¶Ë¿Ú
+	private DatagramSocket socket;				// UDPè¿æ¥DatagramSocket
+	private int serverPort;						// æœåŠ¡ç«¯æ¥æ”¶ç«¯å£
+	private int expectedseqnum;					// æœŸæœ›æ”¶åˆ°çš„åºåˆ—å·
+	InetAddress clientInetAddress;				// å®¢æˆ·ç«¯å‘é€IPåœ°å€
+	int clientPort;								// å®¢æˆ·ç«¯å‘é€ç«¯å£
 	
 	public ReceiveThread(int port) {
 		this.serverPort = port;
@@ -46,53 +46,53 @@ public class ReceiveThread implements Runnable {
 			byte[] buffer = new byte[BUFSIZE];
 			List<byte[]> data = new ArrayList<>();
 			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-			// ×èÈûµÈ´ıµÚÒ»¸öÊı¾İ°ü
+			// é˜»å¡ç­‰å¾…ç¬¬ä¸€ä¸ªæ•°æ®åŒ…
 			socket.receive(dp);
-			// »ñÈ¡¿Í»§¶ËIPºÍ·¢ËÍ¶Ë¿Ú
+			// è·å–å®¢æˆ·ç«¯IPå’Œå‘é€ç«¯å£
 			setClientInetAddress(dp.getAddress());
 			setClientPort(dp.getPort());
-			System.out.println("ÕıÔÚ½ÓÊÜÎÄ¼ş´«Êä\n·¢ËÍ·½µØÖ·¡ª¡ª" + clientInetAddress.getAddress().toString() + ":" + clientPort + "\n");
+			System.out.println("æ­£åœ¨æ¥å—æ–‡ä»¶ä¼ è¾“\nå‘é€æ–¹åœ°å€â€”â€”" + clientInetAddress.getAddress().toString() + ":" + clientPort + "\n");
 			while (true) {
 				Packet packet = ByteConverter.bytesToObject(buffer);
-				// ½ÓÊÕµ½·¢ËÍÍê³ÉµÄĞÅºÅÊı¾İ°ü£¬Ìø³öÑ­»·
+				// æ¥æ”¶åˆ°å‘é€å®Œæˆçš„ä¿¡å·æ•°æ®åŒ…ï¼Œè·³å‡ºå¾ªç¯
 				if (packet.isFIN() == true) break;
-				// ½ÓÊÕµ½ÆÚÍûÊÕµ½µÄÊı¾İ°ü
+				// æ¥æ”¶åˆ°æœŸæœ›æ”¶åˆ°çš„æ•°æ®åŒ…
 				if(packet.getSeq() == expectedseqnum) {
-					// ÌáÈ¡Êı¾İ°ü£¬µİ½»Êı¾İ
+					// æå–æ•°æ®åŒ…ï¼Œé€’äº¤æ•°æ®
 					data.add(packet.getData());
-					//System.out.println("½ÓÊÕÆ¬¶Î£º" + packet.getSeq());
-					// ·µ»ØÒ»¸öÕıÈ·½ÓÊÜµÄACK°ü
+					//System.out.println("æ¥æ”¶ç‰‡æ®µï¼š" + packet.getSeq());
+					// è¿”å›ä¸€ä¸ªæ­£ç¡®æ¥å—çš„ACKåŒ…
 					Packet ackPacket = new Packet(expectedseqnum, -1, true, false, 1, null);
 					byte[] ackBuffer = ByteConverter.objectToBytes(ackPacket);
 					DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, clientInetAddress, clientPort);
 					socket.send(ackdp);
-					System.out.println("ACK(right): " + expectedseqnum + "¡ª¡ª¡ª¡ª¡ª¡ªexpect: " + expectedseqnum + "¡ª¡ª¡ª¡ª¡ª¡ªget: " + packet.getSeq());
-					// ÆÚ´ıÏÂÒ»¸öĞòÁĞºÅµÄÊı¾İ°ü
+					System.out.println("ACK(right): " + expectedseqnum + "â€”â€”â€”â€”â€”â€”expect: " + expectedseqnum + "â€”â€”â€”â€”â€”â€”get: " + packet.getSeq());
+					// æœŸå¾…ä¸‹ä¸€ä¸ªåºåˆ—å·çš„æ•°æ®åŒ…
 					expectedseqnum++;
-					// ×èÈûµÈ´ıÏÂÒ»¸öÊı¾İ°ü
+					// é˜»å¡ç­‰å¾…ä¸‹ä¸€ä¸ªæ•°æ®åŒ…
 					socket.receive(dp);
 				}
-				// ½ÓÊÜµ½·ÇÆÚÍûÊı¾İ°ü
+				// æ¥å—åˆ°éæœŸæœ›æ•°æ®åŒ…
 				else {
-					// ·µ»ØÒ»¸ö´íÎó½ÓÊÜµÄACK°ü
+					// è¿”å›ä¸€ä¸ªé”™è¯¯æ¥å—çš„ACKåŒ…
 					Packet ackPacket = new Packet(expectedseqnum-1, -1, true, false, 1, null);
 					byte[] ackBuffer = ByteConverter.objectToBytes(ackPacket);
 					DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, clientInetAddress, clientPort);
 					socket.send(ackdp);
-					System.out.println("ACK(wrong): " + (expectedseqnum-1) + "¡ª¡ª¡ª¡ª¡ª¡ªexpect: " + expectedseqnum + "¡ª¡ª¡ª¡ª¡ª¡ªget: " + packet.getSeq());
-					// ×èÈûµÈ´ıÏÂÒ»¸öÊı¾İ°ü
+					System.out.println("ACK(wrong): " + (expectedseqnum-1) + "â€”â€”â€”â€”â€”â€”expect: " + expectedseqnum + "â€”â€”â€”â€”â€”â€”get: " + packet.getSeq());
+					// é˜»å¡ç­‰å¾…ä¸‹ä¸€ä¸ªæ•°æ®åŒ…
 					socket.receive(dp);
 				}
 			}
 			String dirString = "output.mp4";
 			FileIO.byte2file(dirString, data);
-			System.out.println("½ÓÊÕ²¢Ğ´ÈëÍê±Ï£¡");
+			System.out.println("æ¥æ”¶å¹¶å†™å…¥å®Œæ¯•ï¼");
 		}
 		catch (SocketException e) {
-			System.out.println("ReceiveThread: ´´½¨socket³ö´í");
+			System.out.println("ReceiveThread: åˆ›å»ºsocketå‡ºé”™");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("ReceiveThread: ½ÓÊÕÊı¾İ°ü³ö´í");
+			System.out.println("ReceiveThread: æ¥æ”¶æ•°æ®åŒ…å‡ºé”™");
 			e.printStackTrace();
 		}
 	}

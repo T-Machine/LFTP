@@ -1,4 +1,4 @@
-/// ÒòÎªJVM¶ÑÄÚ´æµÄÏŞÖÆ£¬´ó¸ÅÅÜÁËÒ»ÏÂÖ»ÄÜ¶ÁĞ´300-MBµÄÎÄ¼ş
+/// å› ä¸ºJVMå †å†…å­˜çš„é™åˆ¶ï¼Œå¤§æ¦‚è·‘äº†ä¸€ä¸‹åªèƒ½è¯»å†™300-MBçš„æ–‡ä»¶
 
 package tools;
 
@@ -14,15 +14,15 @@ public class FileIO {
         try {
             FileInputStream inStream =new FileInputStream(new File(path));
             List<byte[]> datas = new ArrayList<>();
-            final int MAX_BYTE = 1024;	//Ã¿¸öbyte[]µÄÈİÁ¿,µ±Ç°1Kb
-            long streamTotal = 0;  //½ÓÊÜÁ÷µÄÈİÁ¿
-            int streamNum = 0;  //Á÷ĞèÒª·Ö¿ªµÄÊıÁ¿
-            int leave = 0;  //ÎÄ¼şÊ£ÏÂµÄ×Ö·ûÊı
-            // »ñµÃÎÄ¼şÊäÈëÁ÷µÄ×ÜÁ¿
+            final int MAX_BYTE = 1024;	//æ¯ä¸ªbyte[]çš„å®¹é‡,å½“å‰1Kb
+            long streamTotal = 0;  //æ¥å—æµçš„å®¹é‡
+            int streamNum = 0;  //æµéœ€è¦åˆ†å¼€çš„æ•°é‡
+            int leave = 0;  //æ–‡ä»¶å‰©ä¸‹çš„å­—ç¬¦æ•°
+            // è·å¾—æ–‡ä»¶è¾“å…¥æµçš„æ€»é‡
             streamTotal = inStream.available();
-            // »ñµÃÁ÷ÎÄ¼şĞèÒª·Ö¿ªµÄÂú1kbµÄÁ÷µÄÊıÁ¿
+            // è·å¾—æµæ–‡ä»¶éœ€è¦åˆ†å¼€çš„æ»¡1kbçš„æµçš„æ•°é‡
             streamNum = (int)Math.floor(streamTotal/MAX_BYTE);
-            // »ñµÃ·Ö¿ª³É¶à¸öµÇ³¤Á÷ÎÄ¼şºó£¬×îºóÊ£ÓàµÄÁ÷´óĞ¡
+            // è·å¾—åˆ†å¼€æˆå¤šä¸ªç™»é•¿æµæ–‡ä»¶åï¼Œæœ€åå‰©ä½™çš„æµå¤§å°
             leave = (int)streamTotal%MAX_BYTE;
             if(streamNum > 0) {
             	for(int i = 0; i < streamNum; i++) {
@@ -32,12 +32,12 @@ public class FileIO {
             		datas.add(data);
             	}
             }
-            // ´¦Àí×îºóÊ£ÓàµÄ²¿·Ö×Ö·û
+            // å¤„ç†æœ€åå‰©ä½™çš„éƒ¨åˆ†å­—ç¬¦
             byte[] data = new byte[leave];
             inStream.read(data, 0, leave);
             datas.add(data);
             inStream.close();
-            System.out.println("¶ÁÈ¡ÎÄ¼şÍê±Ï,¹² " + streamNum + "¶Î");
+            System.out.println("è¯»å–æ–‡ä»¶å®Œæ¯•,å…± " + streamNum + "æ®µ");
             return datas;
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +51,7 @@ public class FileIO {
             for(int i = 0; i < datas.size(); i++) {
             	outputStream.write(datas.get(i));
             	outputStream.flush();
-        		//System.out.println("Ğ´ÈëÎÄ¼şÆ¬¶Î" + i);
+        		//System.out.println("å†™å…¥æ–‡ä»¶ç‰‡æ®µ" + i);
             }
             outputStream.close();
         } catch (Exception e) {
@@ -63,13 +63,13 @@ public class FileIO {
     	try{
 	    	FileInputStream inStream =new FileInputStream(new File(path));
 	        List<byte[]> datas = new ArrayList<>();
-	        final int MAX_BYTE = 1024;	//Ã¿¸öbyte[]µÄÈİÁ¿,µ±Ç°1Kb
-	        long streamTotal = 0;  //½ÓÊÜÁ÷µÄÈİÁ¿
-	        int streamNum = 0;  //Á÷ĞèÒª·Ö¿ªµÄÊıÁ¿
-	        int leave = 0;  //ÎÄ¼şÊ£ÏÂµÄ×Ö·ûÊı
-	        // »ñµÃÎÄ¼şÊäÈëÁ÷µÄ×ÜÁ¿
+	        final int MAX_BYTE = 1024;	//æ¯ä¸ªbyte[]çš„å®¹é‡,å½“å‰1Kb
+	        long streamTotal = 0;  //æ¥å—æµçš„å®¹é‡
+	        int streamNum = 0;  //æµéœ€è¦åˆ†å¼€çš„æ•°é‡
+	        int leave = 0;  //æ–‡ä»¶å‰©ä¸‹çš„å­—ç¬¦æ•°
+	        // è·å¾—æ–‡ä»¶è¾“å…¥æµçš„æ€»é‡
 	        streamTotal = inStream.available();
-	        // »ñµÃÁ÷ÎÄ¼şĞèÒª·Ö¿ªµÄÂú1kbµÄÁ÷µÄÊıÁ¿
+	        // è·å¾—æµæ–‡ä»¶éœ€è¦åˆ†å¼€çš„æ»¡1kbçš„æµçš„æ•°é‡
 	        streamNum = (int)Math.floor(streamTotal/MAX_BYTE);
 	        inStream.close();
 	        return streamNum+1;

@@ -3,12 +3,12 @@ package tools;
 import java.io.Serializable;
 
 public class Packet implements Serializable {
-	private int ack;		//È·ÈÏºÅ
-	private int seq;		//ĞòÁĞºÅ
-	private boolean ACK;	//ACK±êÖ¾Î»
-	private boolean FIN;	//FIN±êÖ¾Î»
-	private int rwwd;		//½ÓÊÕ´°¿Ú(Á÷Á¿¿ØÖÆ)
-	private byte[] data;	//Êı¾İ
+	private int ack;		//ç¡®è®¤å·
+	private int seq;		//åºåˆ—å·
+	private boolean ACK;	//ACKæ ‡å¿—ä½
+	private boolean FIN;	//FINæ ‡å¿—ä½
+	private int rwwd;		//æ¥æ”¶çª—å£(æµé‡æ§åˆ¶)
+	private byte[] data;	//æ•°æ®
 	
 	public Packet(int ack, int seq, boolean ACK, boolean FIN, int rwwd, byte[] data) {
 		this.ack = ack;

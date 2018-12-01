@@ -7,6 +7,6 @@ public class Server {
 		int serverPort = 3888;
 		Thread receiveThread = new Thread(new ReceiveThread(serverPort));
 		receiveThread.start();
-		System.out.println("文件接受端口：" + serverPort);
+		System.out.println("脦脛录镁陆脫脢脺露脣驴脷拢潞" + serverPort);
 	}
 }
