@@ -7,6 +7,6 @@ public class Server {
 		int serverPort = 3888;
 		Thread receiveThread = new Thread(new ReceiveThread(serverPort));
 		receiveThread.start();
-		System.out.println("ÎÄ¼þ½ÓÊÜ¶Ë¿Ú£º" + serverPort);
+		System.out.println("传输完成" + serverPort);
 	}
 }
