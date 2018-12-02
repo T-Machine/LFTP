@@ -14,7 +14,7 @@ public class Server {
 				Thread receiveThread = new Thread(new ReceiveThread(serverPort));
 				receiveThread.start();
 				System.out.println("传输开始" + serverPort);
-				String dirString = "server";
+				String dirString = "data";
 				File file = new File(dirString);
 				if(!file.exists()) {
 					file.mkdir();

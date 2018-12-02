@@ -206,8 +206,9 @@ public class SendThread implements Runnable {
 				long start_time = date.getTime();
 				long curr_time = new Date().getTime();
 				//超过0.3秒时触发超时
-				if (curr_time - start_time > 300) {
+				if (curr_time - start_time > TimeoutInterval) {
 					System.out.println("启动重传！");
+					TimeoutInterval *= 2;
 					timeOut();
 				}
 
@@ -233,7 +234,6 @@ public class SendThread implements Runnable {
 
 	//超时引发重传事件
 	private void timeOut() {
-		System.out.println("启动重传！");
 		startTimer();
 		try {
 			//更新拥塞窗口
