@@ -96,9 +96,11 @@ public class ReceiveThread implements Runnable {
 			List<Packet> randomBuff = new ArrayList<>();
 			// 阻塞等待第一个数据包
 			socket.receive(dp);
-			// 获取客户端IP和发送端口
+
+			// 获取客户端IP和发送端口 (转移到ServerControlThread中)
 			setClientInetAddress(dp.getAddress());
 			setClientPort(dp.getPort());
+
 			System.out.println("正在接受文件传输\n发送方地址——" + clientInetAddress.getAddress().toString() + ":" + clientPort + "\n");
 			while (true) {
 				Packet packet = ByteConverter.bytesToObject(buffer);

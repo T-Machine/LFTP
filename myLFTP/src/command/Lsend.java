@@ -29,21 +29,13 @@ public class Lsend implements Runnable  {
     @Override
     public void run() {
         System.out.println("Send " + serverAddress + ":" + dataPort + " Filename: " + filename);
-
-        List<byte[]> byteList = FileIO.file2byte(filename);
-        List<Packet> packageList = new ArrayList<>();
-        Packet data;
-        data = new Packet(0, 0, false, false, 50, filename.getBytes());
-        packageList.add(data);
-        for(int i = 0; i < byteList.size(); i++) {
-            data = new Packet(0, i + 1, false, false, 50, byteList.get(i));
-            packageList.add(data);
-        }
-
         try {
+            int destPort;
+
+
             System.out.println("Read to send：");
             InetAddress ia = InetAddress.getByName(serverAddress);
-            Thread send_thread = new Thread(new SendThread(packageList, ia, dataPort, 3888, filename));
+            Thread send_thread = new Thread(new SendThread(ia, dataPort, 3888, filename));
             send_thread.start();
             send_thread.join();
         } catch (Exception e) {
