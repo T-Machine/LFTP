@@ -67,7 +67,7 @@ public class ReceiveThread implements Runnable {
 						writeCount += data.size();
 						FileIO.byte2file(totalFileName, data);
 						data.clear();
-						rwnd = BUFLENGTH - (expectedseqnum - 1 - writeCount);
+						rwnd = BUFLENGTH - (expectedseqnum - writeCount);
 						if(rwnd < 0) rwnd = 0;
 						fileLock.unlock();
 					}catch (InterruptedException e){
@@ -112,20 +112,16 @@ public class ReceiveThread implements Runnable {
 						file.delete();
 					}
 					sendSuccessACK(packet);
-					// 期待下一个序列号的数据包
 					expectedseqnum++;
+					// 期待下一个序列号的数据包
+
 					// 阻塞等待下一个数据包
 					socket.receive(dp);
 					okToWrite = true;
 					continue;
 					// 等待第0个
-				} else if(packet.getSeq() != 0 && expectedseqnum == 0) {
-					sendFailACK(packet);
-					System.out.println("ACK(wrong): " + (expectedseqnum-1) + "——————expect: " + expectedseqnum + "——————get: " + packet.getSeq());
-					// 阻塞等待下一个数据包
-					socket.receive(dp);
-					continue;
 				}
+				System.out.println("ss");
 				// 接收到发送完成的信号数据包，跳出循环
 				if (packet.isFIN() == true) break;
 				// 缓存空间不足
@@ -137,11 +133,11 @@ public class ReceiveThread implements Runnable {
 					writeCount += data.size();
 					FileIO.byte2file(totalFileName, data);
 					data.clear();
-					rwnd = BUFLENGTH - (expectedseqnum - 1 - writeCount);
+					rwnd = BUFLENGTH - (expectedseqnum - writeCount);
 					if(rwnd < 0) rwnd = 0;
 					fileLock.unlock();
 					sendFailACK(packet);
-					System.out.println("ACK(rwnd): " + (expectedseqnum-1) + " expect: " + expectedseqnum);
+					System.out.println("ACK(rwnd): " + (expectedseqnum - 1) + " expect: " + expectedseqnum);
 				}
 				else if(packet.getSeq() == expectedseqnum) {
 					// 提取数据包，递交数据
@@ -173,7 +169,9 @@ public class ReceiveThread implements Runnable {
 							}
 							isRandom = false;
 							randomBuff.clear();
-							expectedseqnum += (1 + index);
+							expectedseqnum += index;
+							sendSuccessACK(packet);
+							expectedseqnum++;
 							// 返回一个正确接受的ACK包
 							socket.receive(dp);
 							continue;
@@ -184,8 +182,8 @@ public class ReceiveThread implements Runnable {
 					rwnd--;
 					fileLock.unlock();
 					sendSuccessACK(packet);
-					// 期待下一个序列号的数据包
 					expectedseqnum++;
+					// 期待下一个序列号的数据包
 					// 阻塞等待下一个数据包
 					socket.receive(dp);
 				}
@@ -207,7 +205,7 @@ public class ReceiveThread implements Runnable {
 						}
 					}
 					sendFailACK(packet);
-					System.out.println("ACK(wrong): " + (expectedseqnum-1) + "——————expect: " + expectedseqnum + "——————get: " + packet.getSeq());
+					System.out.println("ACK(wrong): " + expectedseqnum + "——————expect: " + (expectedseqnum + 1) + "——————get: " + packet.getSeq());
 					// 阻塞等待下一个数据包
 					socket.receive(dp);
 				}

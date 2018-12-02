@@ -20,7 +20,7 @@ public class Server {
 					file.mkdir();
 				}
 				receiveThread.join();
-				sleep(5000);
+				sleep(500);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

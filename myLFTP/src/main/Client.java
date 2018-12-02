@@ -19,35 +19,20 @@ public class Client {
 		Scanner scanner = new Scanner(System.in);
 		//利用hasNextXXX()判断是否还有下一输入项
 		String dir = scanner.next();
+		try {
 			while(true) {
-				//创建Scanner对象
-				//System.in表示标准化输出，也就是键盘输出
-
 				String address = "localhost";
 				int sourcePort = 3777;
 				int dstPort = 3888;
-				// 第一个分组传输文件名
-				System.out.println("Send " + address + ":" + dstPort + " Filename: " + dir);
-				List<byte[]> byteList = FileIO.file2byte(dir);
-				List<Packet> packageList = new ArrayList<>();
-				Packet data;
-				data = new Packet(0, 0, false, false, 50, dir.getBytes());
-				packageList.add(data);
-				for(int i = 0; i < byteList.size(); i++) {
-					data = new Packet(0, i + 1, false, false, 50, byteList.get(i));
-					packageList.add(data);
-				}
-				try {
-					System.out.println("Read to send：");
 					InetAddress ia = InetAddress.getByName(address);
-					Thread send_thread = new Thread(new SendThread(packageList, ia, sourcePort, dstPort, dir));
+					Thread send_thread = new Thread(new SendThread(ia, sourcePort, dstPort, dir));
 					send_thread.start();
 					send_thread.join();
-					sleep(10000);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+					sleep(3000);
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     	
 	}
 }
