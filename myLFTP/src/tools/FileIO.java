@@ -7,14 +7,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileIO {
-    private static final int BLOCK_SIZE = 50 * 1024 * 1024;
-    private static final int MAX_BYTE = 1024;
+    public static final int BLOCK_SIZE = 200 * 1024 * 1024;
+    public static final int MAX_BYTE = 1024;
+    public static final int MAX_PACK_PER_BLOCK = BLOCK_SIZE / MAX_BYTE;
 
     private static List<byte[]> blockToByteList(byte[] data, int size){
         int totalByte = (int)Math.floor(size / MAX_BYTE);
         List<byte[]> datas = new ArrayList<>();
+
         int leave = size % MAX_BYTE;
-        // block的byte开始的位置
+        if(leave != 0){
+            System.out.println(totalByte);
+            System.out.println(size);
+        }
+            // block的byte开始的位置
         int pos = 0;
         for(int i = 0; i < totalByte; i++, pos += MAX_BYTE) {
             byte[]outputData = new byte[MAX_BYTE];
@@ -24,6 +30,7 @@ public class FileIO {
             datas.add(outputData);
         }
         if(leave == 0) return datas;
+        System.out.println(leave);
             // 处理最后剩余的部分字符
             byte[]outputData = new byte[leave];
             for(int i = 0; i < leave;i++, pos++){
@@ -40,12 +47,11 @@ public class FileIO {
             FileInputStream inStream =new FileInputStream(new File(path));
             List<byte[]> datas = new ArrayList<>();
             // 获得文件输入流的总量
-            int streamTotal = inStream.available();
-
+            File file = new File(path);
+            long streamTotal = file.length();
             // 查看块的数量
             int blockTotal = (int)Math.floor(streamTotal/BLOCK_SIZE);
             if(blockNum > blockTotal) return null;
-            int leave = streamTotal % MAX_BYTE;
             for(int i = 0; i < blockTotal; i++){
                 byte[] blockData = new byte[BLOCK_SIZE];
                 inStream.read(blockData, 0, BLOCK_SIZE);
@@ -54,7 +60,13 @@ public class FileIO {
                 }
             }
             if(blockNum == blockTotal) {
-                int leaveBlock = streamTotal % BLOCK_SIZE;
+                System.out.println(streamTotal);
+                System.out.println(blockTotal);
+                System.out.println((streamTotal - blockTotal * BLOCK_SIZE));
+
+                int leaveBlock =(int)(streamTotal - (long)(blockTotal * BLOCK_SIZE));
+                System.out.println(leaveBlock);
+                System.out.println("\n\n");
                 byte[] blockData = new byte[leaveBlock];
                 inStream.read(blockData, 0, leaveBlock);
                 datas = blockToByteList(blockData, leaveBlock);
@@ -85,12 +97,11 @@ public class FileIO {
 
     public static int getBlockLength(String path) {
         try{
-            FileInputStream inStream =new FileInputStream(new File(path));
-            // 获得文件输入流的总量
-            int streamTotal = inStream.available();
+            // 获取文件
+            File file = new File(path);
+            long streamTotal = file.length();
             // 查看一共需要多少个块
             int blockNum = (int)Math.floor(streamTotal/BLOCK_SIZE);
-            inStream.close();
             return blockNum + 1;
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,8 +110,8 @@ public class FileIO {
     }
 
     public static void main(String[] args){
-        String str = "test.zip";
-        String str2 = "out.zip";
+        String str = "test.mkv";
+        String str2 = "out.mkv";
         for(int i = 0; i < getBlockLength(str); i++){
 
             byte2file(str2, divideToList(str, i));

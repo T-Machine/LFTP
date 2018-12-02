@@ -48,7 +48,7 @@ public class Lsend implements Runnable  {
             socket.receive(dp);
             Packet returnPkt = ByteConverter.bytesToObject(buffer);
             String serverInfo = new String(returnPkt.getData());
-            if(serverInfo == "NOPORT") {
+            if(serverInfo.equals("NOPORT")) {
                 System.out.println("[Fail] The server has no free port");
             } else {
                 System.out.println("[Info] Read file and send to " + Integer.parseInt(serverInfo));
@@ -59,11 +59,6 @@ public class Lsend implements Runnable  {
 
             socket.disconnect();
             socket.close();
-//            System.out.println("Read to send：");
-//            InetAddress ia = InetAddress.getByName(serverAddress);
-//            Thread send_thread = new Thread(new SendThread(ia, dataPort, 3888, filename));
-//            send_thread.start();
-//            send_thread.join();
         } catch (Exception e) {
             e.printStackTrace();
         }

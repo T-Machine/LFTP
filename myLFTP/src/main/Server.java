@@ -1,7 +1,6 @@
 package main;
 
 import service.ReceiveThread;
-import service.ServerControlThread;
 import tools.ByteConverter;
 import tools.Packet;
 
@@ -69,7 +68,7 @@ public class Server {
                             e.printStackTrace();
                         }
                     }
-                    else if(info[0] == "LGET") {
+                    else if(info[0].equals("LGET")) {
 
                     }
 
