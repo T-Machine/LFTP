@@ -9,6 +9,7 @@ import java.io.File;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,30 +27,59 @@ public class Server {
 	    for(int i = 3888; i <= 3898; i ++) {
 	        PortPool.add(i);
         }
-
-		while(true){
+        try {
+            socket = new DatagramSocket(4001);  //Listening Port: 4001
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        while(true){
 			try{
-                System.out.println("[Server]  Listening at 4001...");
-                socket = new DatagramSocket(4001);  //Listening Port: 4001
+                System.out.println("[Server] Listening at 4001...");
                 byte[] buffer = new byte[BUFSIZE];
                 DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
                 socket.receive(dp);
                 InetAddress clientAddress = dp.getAddress();
                 int clientPort = dp.getPort();
+                Packet packet = ByteConverter.bytesToObject(buffer);
+                String controlInfo = new String(packet.getData());  //控制信息
+                System.out.println("[Server] Get request from " + clientAddress.toString() + ":" + clientPort);
 
                 //仍可分配端口时
                 if(!PortPool.isEmpty()) {
-                    Packet packet = ByteConverter.bytesToObject(buffer);
                     int serverPort = PortPool.remove(0);
-                    String controlInfo = new String(packet.getData());  //控制信息
                     //将可用端口发送给客户端
                     byte[] s_port = String.valueOf(serverPort).getBytes();
                     byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, s_port));
                     DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, clientAddress, clientPort);
                     socket.send(portPack);
+                    System.out.println("[Server] Assign port " + serverPort + " to " + clientAddress.toString());
 
-                    Thread serverControlThread = new Thread(new ServerControlThread(serverPort, controlInfo));
-                    serverControlThread.start();
+                    String [] info = controlInfo.split("#");
+                    if(info[0].equals("LSEND")) {
+                        try {
+                            System.out.println("[Server] [lsend] Receive file in " + serverPort);
+                            File file = new File("data");
+                            if(!file.exists()) {
+                                file.mkdir();
+                            }
+                            Thread receiveThread = new Thread(new ReceiveThread(serverPort));
+                            receiveThread.start();
+                            //receiveThread.join();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if(info[0] == "LGET") {
+
+                    }
+
+                } else {
+                    //端口爆满时，告诉客户端
+                    String msg = "NOPORT";
+                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, msg.getBytes()));
+                    DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, clientAddress, clientPort);
+                    socket.send(portPack);
+                    System.out.println("[Server] No more port can assigned to " + clientAddress.toString());
                 }
 
 //				int serverPort = 3888;
