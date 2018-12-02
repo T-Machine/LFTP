@@ -16,10 +16,6 @@ public class FileIO {
         List<byte[]> datas = new ArrayList<>();
 
         int leave = size % MAX_BYTE;
-        if(leave != 0){
-            System.out.println(totalByte);
-            System.out.println(size);
-        }
             // block的byte开始的位置
         int pos = 0;
         for(int i = 0; i < totalByte; i++, pos += MAX_BYTE) {
@@ -30,7 +26,6 @@ public class FileIO {
             datas.add(outputData);
         }
         if(leave == 0) return datas;
-        System.out.println(leave);
             // 处理最后剩余的部分字符
             byte[]outputData = new byte[leave];
             for(int i = 0; i < leave;i++, pos++){
@@ -60,13 +55,7 @@ public class FileIO {
                 }
             }
             if(blockNum == blockTotal) {
-                System.out.println(streamTotal);
-                System.out.println(blockTotal);
-                System.out.println((streamTotal - blockTotal * BLOCK_SIZE));
-
                 int leaveBlock =(int)(streamTotal - (long)(blockTotal * BLOCK_SIZE));
-                System.out.println(leaveBlock);
-                System.out.println("\n\n");
                 byte[] blockData = new byte[leaveBlock];
                 inStream.read(blockData, 0, leaveBlock);
                 datas = blockToByteList(blockData, leaveBlock);
@@ -110,8 +99,8 @@ public class FileIO {
     }
 
     public static void main(String[] args){
-        String str = "test.mkv";
-        String str2 = "out.mkv";
+        String str = "test.zip";
+        String str2 = "out.zip";
         for(int i = 0; i < getBlockLength(str); i++){
 
             byte2file(str2, divideToList(str, i));

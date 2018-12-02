@@ -14,6 +14,7 @@ import tools.Packet;
 public class SendThread implements Runnable {
     private final static int BUFSIZE = 1024 * 1024;
     private List<Packet> data;						//要发送的数据
+    private List<Packet> readingData;               // 用于多线程读取
     InetAddress address;							//目的地址
     int sourcePort;									//源端口
     int destPort;									//目的端口
@@ -62,23 +63,24 @@ public class SendThread implements Runnable {
         time_out_threadThread = new Thread(new TimeOut());
 
 
-        // 接收文件名
-        data = new ArrayList<>();
-        Packet dataPacket;
-        int currentSeries = 0;
-        dataPacket = new Packet(0, currentSeries, false, false, 50, dir.getBytes());
-        currentSeries++;
-        data.add(dataPacket);
-        isReRoad = false;
+//        // 接收文件名
+//        data = new ArrayList<>();
+//        Packet dataPacket;
+//        dataPacket = new Packet(0, 0, false, false, 50, dir.getBytes());
+//        data.add(dataPacket);
         // 读取文件
         System.out.println("开始读取文件发送");
+        data = new ArrayList<>();
         blockSum = FileIO.getBlockLength(dir);
         for(currentBlock = 0; currentBlock < blockSum; currentBlock++){
-            if(currentBlock != 0) data.clear();
+            isReRoad = true;
+            if(currentBlock != 0){
+                data.clear();
+            }
+            Packet dataPacket;
             List<byte[]> byteData = FileIO.divideToList(dir, currentBlock);
             for(int j = 0; j < byteData.size(); j++) {
-                dataPacket= new Packet(0, currentSeries, false, false, 50, byteData.get(j));
-                currentSeries++;
+                dataPacket= new Packet(0, j + currentBlock * FileIO.MAX_PACK_PER_BLOCK, false, false, 50, byteData.get(j), dir);
                 data.add(dataPacket);
             }
             try {
@@ -86,20 +88,27 @@ public class SendThread implements Runnable {
                     time_out_threadThread.start();
                     recv_ack_thread.start();
                 }
+                isReRoad = false;
                 //启动发送数据包
                 startTime = new Date();
                 // 对于上次的文件传输，需要减掉差值
                 while (nextSeq < data.size() + currentBlock * FileIO.MAX_PACK_PER_BLOCK) {
                     if(isFull == true) {
-                        byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, null));
+                        byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, null, ""));
                         DatagramPacket tmpPack = new DatagramPacket(tmp, tmp.length, address, destPort);
                         socket.send(tmpPack);
                         continue;
                     }
                     int threshold = rwnd < (int)cwnd ? rwnd : (int)cwnd;
                     if (nextSeq <= base + threshold && retrans == false) {
-
-                        Packet sentPacket = data.get(nextSeq - currentBlock * FileIO.MAX_PACK_PER_BLOCK);
+                        // 包含了文件名
+                        Packet sentPacket;
+//                        if(currentBlock == 0){
+                            sentPacket = data.get(nextSeq - currentBlock * FileIO.MAX_PACK_PER_BLOCK);
+//                        } else{
+//                            sentPacket = data.get(nextSeq - 1 - currentBlock * FileIO.MAX_PACK_PER_BLOCK);
+//
+//                        }
                         byte[] buffer = ByteConverter.objectToBytes(sentPacket);
                         DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
                         ByteConverter.bytesToObject(dp.getData());
@@ -110,21 +119,19 @@ public class SendThread implements Runnable {
                         nextSeq++;
                     }
                 }
-                while(base < data.size() + currentBlock * FileIO.MAX_PACK_PER_BLOCK && currentBlock < blockSum - 1) {
-                    isReRoad = true;
-                }
+                while(base < data.size() + (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK && currentBlock < blockSum - 1) {}
             } catch (IOException e) {
                 System.out.println("SendThread: 发送数据包出错");
                 e.printStackTrace();
             }
         }
-
+        //while(base < data.size() + currentBlock * FileIO.MAX_PACK_PER_BLOCK) {}
         //传输完成时，发送一个FIN包告知接收方
         while (true) {
-            if (currAck == data.size() - 1 + currentBlock * FileIO.MAX_PACK_PER_BLOCK) {
+            if (currAck == data.size() - 1 + (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK) {
                 try {
                     System.out.print("发送终止packet");
-                    byte[] buffer = ByteConverter.objectToBytes(new Packet(-1, -1, false, true, rwnd, null));
+                    byte[] buffer = ByteConverter.objectToBytes(new Packet(-1, -1, false, true, rwnd, null, ""));
                     DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
                     socket.send(dp);
                     Date endTime = new Date();
@@ -146,6 +153,22 @@ public class SendThread implements Runnable {
         }
 
     }
+//
+//    // 新建List表，可以一边读取以便发送
+//    class getList implements  Runnable{
+//        @Override
+//        public void run(){
+//            while(isConneted){
+//                if(okToRead){
+//                    List<byte[]> byteData = FileIO.divideToList(dir, currentBlock);
+//                    for(int j = 0; j < byteData.size(); j++) {
+//                        dataPacket= new Packet(0, j + currentBlock * FileIO.MAX_PACK_PER_BLOCK, false, false, 50, byteData.get(j), dir);
+//                        data.add(dataPacket);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     //接收ACK包的线程
     class RecvAck implements Runnable {
@@ -180,7 +203,7 @@ public class SendThread implements Runnable {
                             cwnd = ssthresh + 3;
                             isQuickRecover = true;
 //							duplicateAck = 0;
-                            System.out.println("启动快速重传");
+//                            System.out.println("启动快速重传");
                             SendPacket(base);
                         }
                     } else {
@@ -216,7 +239,7 @@ public class SendThread implements Runnable {
         @Override
         public void run() {
             while (isConneted) {
-                while(isReRoad) continue;
+                while(isReRoad){ startTimer();}
                 long start_time = date.getTime();
                 long curr_time = new Date().getTime();
                 //超过0.3秒时触发超时
@@ -234,7 +257,7 @@ public class SendThread implements Runnable {
             byte[] buffer = ByteConverter.objectToBytes(data.get(seq - currentBlock * FileIO.MAX_PACK_PER_BLOCK));
             DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
             Packet packet = ByteConverter.bytesToObject(dp.getData());
-            System.out.println("发送的分组序号: " + packet.getSeq());
+//            System.out.println("发送的分组序号: " + packet.getSeq());
             socket.send(dp);
         } catch (IOException e) {
             System.out.println("SendThread: 发送数据包出错");

@@ -102,26 +102,34 @@ public class ReceiveThread implements Runnable {
 			System.out.println("正在接受文件传输\n发送方地址——" + clientInetAddress.getAddress().toString() + ":" + clientPort + "\n");
 			while (true) {
 				Packet packet = ByteConverter.bytesToObject(buffer);
-				// 第0个
-				if(packet.getSeq() == 0){
-					// 通过新接收的文件名新建文件
-							fileName = new String(packet.getData());
+				if(expectedseqnum == 0){
+					fileName = packet.getFilename();
 					totalFileName = fileDic + fileName;
-					File file=new File(fileDic + fileName);
-					if(file.exists()&&file.isFile()) {
-						file.delete();
-					}
-					sendSuccessACK(packet);
-					expectedseqnum++;
-					// 期待下一个序列号的数据包
-
-					// 阻塞等待下一个数据包
-					socket.receive(dp);
-					okToWrite = true;
-					continue;
-					// 等待第0个
 				}
-				System.out.println("ss");
+//				if(packet.getSeq() == 8192) System.out.println("ok!" + 8192);
+//				if(packet.getSeq() == 8193) System.out.println("ok!"  + 8193);
+//				if(packet.getSeq() == 8194) System.out.println("ok!"  + 8194);
+//				if(packet.getSeq() == 12937) System.out.println("ok!"  + 12937);
+//				// 第0个
+//				if(packet.getSeq() == 0){
+//					// 通过新接收的文件名新建文件
+//							fileName = new String(packet.getData());
+//					totalFileName = fileDic + fileName;
+//					File file=new File(fileDic + fileName);
+//					if(file.exists()&&file.isFile()) {
+//						file.delete();
+//					}
+//					sendSuccessACK(packet);
+//					expectedseqnum++;
+//					// 期待下一个序列号的数据包
+//
+//					// 阻塞等待下一个数据包
+//					socket.receive(dp);
+//					okToWrite = true;
+//					continue;
+//					// 等待第0个
+//				}
+//				System.out.println("ss");
 				// 接收到发送完成的信号数据包，跳出循环
 				if (packet.isFIN() == true) break;
 				// 缓存空间不足
@@ -189,20 +197,15 @@ public class ReceiveThread implements Runnable {
 				}
 				// 接受到非期望数据包
 				else {
-					// 不能存文件名！
-					if(expectedseqnum != 0){
-						//如果之前不是失序的
-						// 重传数据丢掉
-						if(randomBuff.size() <= rwnd && expectedseqnum < packet.getSeq()){
-							isRandom = true;
-							randomBuff.add(packet);
-							//从小到大排序
-							Collections.sort(randomBuff, new Comparator<Packet>() {
-								public int compare(Packet o1, Packet o2) {
-									return o1.getSeq().compareTo(o2.getSeq());
-								}
-							});
-						}
+					if(randomBuff.size() <= rwnd && expectedseqnum < packet.getSeq()){
+						isRandom = true;
+						randomBuff.add(packet);
+						//从小到大排序
+						Collections.sort(randomBuff, new Comparator<Packet>() {
+							public int compare(Packet o1, Packet o2) {
+								return o1.getSeq().compareTo(o2.getSeq());
+							}
+						});
 					}
 					sendFailACK(packet);
 					System.out.println("ACK(wrong): " + expectedseqnum + "——————expect: " + (expectedseqnum + 1) + "——————get: " + packet.getSeq());
@@ -236,7 +239,7 @@ public class ReceiveThread implements Runnable {
 		private void sendSuccessACK(Packet packet){
 		try {
 			// 返回一个正确接受的ACK包
-			Packet ackPacket = new Packet(expectedseqnum, -1, true, false, rwnd, null);
+			Packet ackPacket = new Packet(expectedseqnum, -1, true, false, rwnd, null, "");
 			byte[] ackBuffer = ByteConverter.objectToBytes(ackPacket);
 			DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, clientInetAddress, clientPort);
 			socket.send(ackdp);
@@ -253,7 +256,7 @@ public class ReceiveThread implements Runnable {
 	private void sendFailACK(Packet packet){
 		try {
 			// 返回一个错误接受的ACK包
-			Packet ackPacket = new Packet(expectedseqnum-1, -1, true, false, rwnd, null);
+			Packet ackPacket = new Packet(expectedseqnum-1, -1, true, false, rwnd, null, "");
 			byte[] ackBuffer = ByteConverter.objectToBytes(ackPacket);
 			DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, clientInetAddress, clientPort);
 			socket.send(ackdp);
