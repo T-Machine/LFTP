@@ -25,8 +25,9 @@ public class ReceiveThread implements Runnable {
 	InetAddress clientInetAddress;				// 客户端发送IP地址
 	int clientPort;								// 客户端发送端口
 	boolean isRandom = false;                   // 是否进入失序模式
-	private volatile int rwnd = 10;                              // 窗口大小
+	private volatile int rwnd = 1024;                              // 窗口大小
 	private volatile int writeCount = 0;        // 写入的数量
+	private  volatile boolean isConneted;
 	private List<Packet> randomBuff;            // 存储失序的包
 	private String fileDic = "data/";           // 存储的文件目录
 	private String fileName;                    // 存储的文件名
@@ -56,16 +57,16 @@ public class ReceiveThread implements Runnable {
 	class WriteFile implements Runnable {
 		@Override
 		synchronized public void run() {
-			while(true){
+			while(isConneted){
 				while(okToWrite){
 					try{
-						sleep(100);
+						sleep(1);
 						if(data.isEmpty()) continue;
 						fileLock.lock();
 						writeCount += data.size();
 						FileIO.byte2file(totalFileName, data);
 						data.clear();
-						rwnd = 10 - (expectedseqnum - 1 - writeCount);
+						rwnd = 1024 - (expectedseqnum - 1 - writeCount);
 						if(rwnd < 0) rwnd = 0;
 						fileLock.unlock();
 					}catch (InterruptedException e){
@@ -82,10 +83,11 @@ public class ReceiveThread implements Runnable {
 	synchronized public void run() {
 		try {
 			// 启动超时判断处理线程
+			socket = new DatagramSocket(serverPort);
+			isConneted = true;
 			Thread file_threadThread;
 			file_threadThread = new Thread(new WriteFile());
 			file_threadThread.start();
-			socket = new DatagramSocket(serverPort);
 			// 一次接收1024个分组
 			byte[] buffer = new byte[BUFSIZE];
 			//数据报
@@ -134,7 +136,7 @@ public class ReceiveThread implements Runnable {
 					writeCount += data.size();
 					FileIO.byte2file(totalFileName, data);
 					data.clear();
-					rwnd = 10 - (expectedseqnum - 1 - writeCount);
+					rwnd = 1024 - (expectedseqnum - 1 - writeCount);
 					if(rwnd < 0) rwnd = 0;
 					fileLock.unlock();
 					sendFailACK(packet);
@@ -214,6 +216,12 @@ public class ReceiveThread implements Runnable {
 			data.clear();
 			fileLock.unlock();
 			System.out.println("接收并写入完毕！");
+			socket.disconnect();
+			socket.close();
+			okToWrite = false;
+			isConneted = false;
+			file_threadThread.join();
+			return;
 		}
 		catch (SocketException e) {
 			System.out.println("ReceiveThread: 创建socket出错");
@@ -221,6 +229,8 @@ public class ReceiveThread implements Runnable {
 		} catch (IOException e) {
 			System.out.println("ReceiveThread: 接收数据包出错");
 			e.printStackTrace();
+		} catch (InterruptedException e){
+			System.out.println("Join err");
 		}
 	}
 

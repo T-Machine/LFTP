@@ -25,12 +25,15 @@ public class SendThread implements Runnable {
 	private volatile int currAck = -1;				//已被确认的最大分组ack
 	private String dir;                             // 传输文件的文件名
 	private volatile int duplicateAck = 0;
-	private volatile long SampleRTT  = 0;
 	private volatile long EstimatedRTT  = 0;		//估计往返时间
 	private volatile long DevRTT  = 0;				//RTT偏差
 	private volatile long TimeoutInterval  = 300;	//超时时间
 	private boolean isFull = false;                 // 判断接收方的缓存是否已经是满的，以调整速率
 	private Map<Integer, Long> SendTimeMap = new HashMap<Integer, Long>(); //发送时间表
+	private boolean isConneted;
+	private volatile double cwnd = 1;					//拥塞窗口
+	private volatile double ssthresh = 64;				//慢启动阈值
+	private volatile boolean isQuickRecover = false;	//是否处于快速恢复状态
 
 
 
@@ -41,18 +44,17 @@ public class SendThread implements Runnable {
 		this.destPort = destPort;
 		this.date = new Date();
 		this.dir = dir;
+	}
+
+	@Override
+	public void run() {
 		try {
 			this.socket = new DatagramSocket(sourcePort);
 		} catch (SocketException e) {
 			System.out.println("SendThread: 创建socket出错");
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void run() {
-		//System.out.println("size: " + data.size());
-
+		isConneted = true;
 		//启动接收ACK包线程
 		Thread recv_ack_thread = new Thread(new RecvAck());
 		recv_ack_thread.start();
@@ -71,7 +73,8 @@ public class SendThread implements Runnable {
 					 socket.send(tmpPack);
 					continue;
 				}
-				if (nextSeq < base + rwnd && retrans == false) {
+				int threshold = rwnd < (int)cwnd ? rwnd : (int)cwnd;
+				if (nextSeq <= base + threshold && retrans == false) {
 					//if (nextSeq % N != 0) {
 					Packet sentPacket = data.get(nextSeq);
 					byte[] buffer = ByteConverter.objectToBytes(sentPacket);
@@ -104,7 +107,12 @@ public class SendThread implements Runnable {
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
 					socket.send(dp);
 					System.out.println("发送完毕");
-				} catch (IOException e) {
+					recv_ack_thread.join();
+					time_out_threadThread.join();
+					socket.disconnect();
+					socket.close();
+					return;
+				} catch (IOException | InterruptedException e) {
 					System.out.println("SendThread: 发送数据包出错");
 					e.printStackTrace();
 				}
@@ -119,7 +127,8 @@ public class SendThread implements Runnable {
 		@Override
 		public void run() {
 			try {
-				while (true) {
+				while (isConneted) {
+					//System.out.println(cwnd);//for debug
 					byte[] buffer = new byte[BUFSIZE];
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
 					socket.receive(dp);
@@ -140,15 +149,36 @@ public class SendThread implements Runnable {
 
 					//检测冗余Ack
 					if(currAck == packet.getAck()) {
-						duplicateAck ++;
+						if(isQuickRecover == true) {
+							cwnd ++;
+						} else {
+							duplicateAck ++;
+						}
+
 						//3个冗余Ack，快速重传
 						if(duplicateAck == 3) {
+							//更新拥塞窗口
+							ssthresh = cwnd / 2;
+							cwnd = ssthresh + 3;
+							isQuickRecover = true;
+
 							System.out.println("启动快速重传");
 							SendPacket(base);
 						}
-					}
-					else {
+					} else {
 						duplicateAck = 0;
+
+						//拥塞控制
+						if(isQuickRecover == true) {	//快速恢复时，收到新的Ack，转到拥塞避免状态
+							isQuickRecover = false;
+							cwnd = ssthresh;
+						} else {
+							if(cwnd >= ssthresh) {
+								cwnd += 1 / cwnd;	//拥塞避免
+							} else {
+								cwnd ++;	//慢启动
+							}
+						}
 					}
 
 					currAck = packet.getAck();
@@ -167,7 +197,7 @@ public class SendThread implements Runnable {
 	class TimeOut implements Runnable {
 		@Override
 		public void run() {
-			while (true) {
+			while (isConneted) {
 				long start_time = date.getTime();
 				long curr_time = new Date().getTime();
 				//超过0.3秒时触发超时
@@ -201,10 +231,17 @@ public class SendThread implements Runnable {
 		System.out.println("启动重传！");
 		startTimer();
 		try {
+			//更新拥塞窗口
+			isQuickRecover = false;
+			duplicateAck = 0;
+			ssthresh = cwnd / 2;
+			cwnd = 1;
+
 			//记录base值和nextSeq值，防止接收线程对其造成改变
 			retrans = true;
 			// 只发送一个包
-			for (int i = base; i < base + 1; ++i) {
+			for (int i = base; i < base + (nextSeq - base); ++i) {
+				//if(nextSeq == base) break;
 				while (rwnd <= 0) System.out.println("接收方缓存不够，暂停重传");
 				byte[] buffer = ByteConverter.objectToBytes(data.get(i));
 				DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
