@@ -47,7 +47,9 @@ public class FileIO {
 
     public static void byte2file(String path,List<byte[]> datas) {
         try {
-            FileOutputStream outputStream  =new FileOutputStream(new File(path));
+            //  if true, then bytes will be written to the end of the file rather than the beginning
+            System.out.println(path);
+            FileOutputStream outputStream  =new FileOutputStream(new File(path), true);
             for(int i = 0; i < datas.size(); i++) {
             	outputStream.write(datas.get(i));
             	outputStream.flush();

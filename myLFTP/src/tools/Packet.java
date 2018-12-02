@@ -7,15 +7,15 @@ public class Packet implements Serializable {
 	private Integer seq;		//序列号
 	private boolean ACK;	//ACK标志位
 	private boolean FIN;	//FIN标志位
-	private Integer rwwd;		//接收窗口(流量控制)
+	private Integer rwnd;		//接收窗口(流量控制)
 	private byte[] data;	//数据
 	
-	public Packet(int ack, int seq, boolean ACK, boolean FIN, int rwwd, byte[] data) {
+	public Packet(int ack, int seq, boolean ACK, boolean FIN, int rwnd, byte[] data) {
 		this.ack = ack;
 		this.seq = seq;
 		this.ACK = ACK;
 		this.FIN = FIN;
-		this.rwwd = rwwd;
+		this.rwnd = rwnd;
 		this.data = data;
 	}
 	
@@ -48,11 +48,11 @@ public class Packet implements Serializable {
 		return FIN;
 	}
 	
-	public void setRwwd(int rwwd) {
-		this.rwwd = rwwd;
+	public void setRwnd(int rwnd) {
+		this.rwnd = rwnd;
 	}
-	public Integer getRwwd() {
-		return rwwd;
+	public Integer getRwnd() {
+		return rwnd;
 	}
 	
 	public void setData(byte[] data) {

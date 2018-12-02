@@ -18,27 +18,29 @@ public class SendThread implements Runnable {
 	int destPort;									//目的端口
 	private volatile int base = 0;					//基序号
 	private volatile int nextSeq = 0;				//下一个待发送分组的序号
-	private int rwwd = 10;								//未确认的最大分组数
+	private int rwnd = 10;								//未确认的最大分组数
 	private volatile Date date;						//记录启动定时器的时间
 	private DatagramSocket socket;					//用于发送数据包
 	private volatile boolean retrans= false;		//当前是否在重传
 	private volatile int currAck = -1;				//已被确认的最大分组ack
-
+	private String dir;                             // 传输文件的文件名
 	private volatile int duplicateAck = 0;
 	private volatile long SampleRTT  = 0;
 	private volatile long EstimatedRTT  = 0;		//估计往返时间
 	private volatile long DevRTT  = 0;				//RTT偏差
 	private volatile long TimeoutInterval  = 300;	//超时时间
+	private boolean isFull = false;                 // 判断接收方的缓存是否已经是满的，以调整速率
 	private Map<Integer, Long> SendTimeMap = new HashMap<Integer, Long>(); //发送时间表
 
 
 
-	public SendThread(List<Packet> data, InetAddress address, int sourcePort, int destPort) {
+	public SendThread(List<Packet> data, InetAddress address, int sourcePort, int destPort, String dir) {
 		this.data = data;
 		this.address = address;
 		this.sourcePort = sourcePort;
 		this.destPort = destPort;
 		this.date = new Date();
+		this.dir = dir;
 		try {
 			this.socket = new DatagramSocket(sourcePort);
 		} catch (SocketException e) {
@@ -63,14 +65,21 @@ public class SendThread implements Runnable {
 		//启动发送数据包
 		try {
 			while (nextSeq < data.size()) {
-				if (nextSeq < base + rwwd && retrans == false) {
+				if(isFull == true) {
+					 byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, null));
+					 DatagramPacket tmpPack = new DatagramPacket(tmp, tmp.length, address, destPort);
+					 socket.send(tmpPack);
+					continue;
+				}
+				if (nextSeq < base + rwnd && retrans == false) {
 					//if (nextSeq % N != 0) {
-					byte[] buffer = ByteConverter.objectToBytes(data.get(nextSeq));
+					Packet sentPacket = data.get(nextSeq);
+					byte[] buffer = ByteConverter.objectToBytes(sentPacket);
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
 					Packet packet = ByteConverter.bytesToObject(dp.getData());
-					if(packet.getSeq() % 3000 != 0){
+
 						socket.send(dp);
-					}
+
 					System.out.println("发送的分组序号: " + packet.getSeq());
 
 					//更新时间表
@@ -91,7 +100,7 @@ public class SendThread implements Runnable {
 			if (currAck == data.size() - 1) {
 				try {
 					System.out.print("发送终止packet");
-					byte[] buffer = ByteConverter.objectToBytes(new Packet(-1, -1, false, true, rwwd, null));
+					byte[] buffer = ByteConverter.objectToBytes(new Packet(-1, -1, false, true, rwnd, null));
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
 					socket.send(dp);
 					System.out.println("发送完毕");
@@ -117,6 +126,11 @@ public class SendThread implements Runnable {
 					Packet packet = ByteConverter.bytesToObject(buffer);
 					System.out.println("确认分组: " + packet.getAck());
 					base = packet.getAck() + 1;
+					rwnd = packet.getRwnd();
+					// 如果已经满
+					if (rwnd == 0) {
+						isFull = true;
+					} else isFull = false;
 
 					//获取该包发送的时间
 					Long sendTime = SendTimeMap.remove(packet.getAck());
@@ -191,7 +205,7 @@ public class SendThread implements Runnable {
 			retrans = true;
 			// 只发送一个包
 			for (int i = base; i < base + 1; ++i) {
-				while (rwwd <= 0) System.out.println("接收方缓存不够，暂停重传");
+				while (rwnd <= 0) System.out.println("接收方缓存不够，暂停重传");
 				byte[] buffer = ByteConverter.objectToBytes(data.get(i));
 				DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
 				System.out.println("重新发送片段：" + i);
