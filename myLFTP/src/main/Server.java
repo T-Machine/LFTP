@@ -55,21 +55,18 @@ public class Server {
 
                     String [] info = controlInfo.split("#");
                     if(info[0].equals("LSEND")) {
-                        try {
-                            System.out.println("[Server] [lsend] Receive file in " + serverPort);
-                            File file = new File("data");
-                            if(!file.exists()) {
-                                file.mkdir();
-                            }
-                            Thread receiveThread = new Thread(new ReceiveThread(serverPort));
-                            receiveThread.start();
-                            //receiveThread.join();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        System.out.println("[Server] [lsend] Receive file in " + serverPort);
+                        File file = new File("data");
+                        if(!file.exists()) {
+                            file.mkdir();
                         }
+                        Thread receiveThread = new Thread(new ReceiveThread(serverPort));
+                        receiveThread.start();
+                        //receiveThread.join();
                     }
                     else if(info[0].equals("LGET")) {
-
+                        System.out.println("[Server] [lget] Send file in " + serverPort);
+                        
                     }
 
                 } else {
