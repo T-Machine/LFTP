@@ -33,13 +33,12 @@ public class Lsend implements Runnable  {
 
     @Override
     public void run() {
-        System.out.println("Send " + serverAddress + ":" + dataPort + " Filename: " + filename);
+        System.out.println("[Info] Send " + serverAddress + ":" + dataPort + " Filename: " + filename);
         try {
-            int destPort;
             //将控制信息发送给服务端（LSEND + 文件名）
             DatagramSocket socket = new DatagramSocket(controlPort);
             String controlInfo = "LSEND#" + filename;
-            byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, controlInfo.getBytes()));
+            byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, controlInfo.getBytes(), ""));
             DatagramPacket controlPkt = new DatagramPacket(tmp, tmp.length, InetAddress.getByName(serverAddress), 4001);
             socket.send(controlPkt);
             //从服务端获取可用端口

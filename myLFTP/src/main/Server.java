@@ -1,6 +1,7 @@
 package main;
 
 import service.ReceiveThread;
+import service.SendThread;
 import tools.ByteConverter;
 import tools.Packet;
 
@@ -48,7 +49,7 @@ public class Server {
                     int serverPort = PortPool.remove(0);
                     //将可用端口发送给客户端
                     byte[] s_port = String.valueOf(serverPort).getBytes();
-                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, s_port));
+                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, s_port, ""));
                     DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, clientAddress, clientPort);
                     socket.send(portPack);
                     System.out.println("[Server] Assign port " + serverPort + " to " + clientAddress.toString());
@@ -66,13 +67,20 @@ public class Server {
                     }
                     else if(info[0].equals("LGET")) {
                         System.out.println("[Server] [lget] Send file in " + serverPort);
-                        
+                        String filename = info[1];
+                        int targetPort = Integer.parseInt(info[2]);
+                        //TODO:判断文件是否存在
+                        Thread send_thread = new Thread(new SendThread(clientAddress, serverPort, targetPort, filename));
+                        send_thread.start();
+                    }
+                    else {
+                        System.out.println("[Server] [error] Send invalid commend");
                     }
 
                 } else {
                     //端口爆满时，告诉客户端
                     String msg = "NOPORT";
-                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, msg.getBytes()));
+                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, msg.getBytes(), ""));
                     DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, clientAddress, clientPort);
                     socket.send(portPack);
                     System.out.println("[Server] No more port can assigned to " + clientAddress.toString());

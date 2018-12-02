@@ -9,14 +9,16 @@ public class Packet implements Serializable {
 	private boolean FIN;	//FIN标志位
 	private Integer rwnd;		//接收窗口(流量控制)
 	private byte[] data;	//数据
+	private String filename;
 	
-	public Packet(int ack, int seq, boolean ACK, boolean FIN, int rwnd, byte[] data) {
+	public Packet(int ack, int seq, boolean ACK, boolean FIN, int rwnd, byte[] data, String fn) {
 		this.ack = ack;
 		this.seq = seq;
 		this.ACK = ACK;
 		this.FIN = FIN;
 		this.rwnd = rwnd;
 		this.data = data;
+		this.filename = fn;
 	}
 	
 	public void setAck(int ack) {
@@ -61,4 +63,21 @@ public class Packet implements Serializable {
 	public byte[] getData() {
 		return data;
 	}
+
+	public void setAck(Integer ack) {
+		this.ack = ack;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public void setRwnd(Integer rwnd) {
+		this.rwnd = rwnd;
+	}
+
+	public void setSeq(Integer seq) {
+		this.seq = seq;
+	}
+	public String getFilename(){ return  filename; }
 }
