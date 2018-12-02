@@ -2,16 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e5c602b7-3ad5-4c9b-8868-44c1f6a5dbde" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/test.flac" beforeDir="false" afterPath="$PROJECT_DIR$/data/test.flac" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/main/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/main/Client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/main/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/main/Server.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$WriteFile.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$WriteFile.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$RecvAck.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$RecvAck.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$TimeOut.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$TimeOut.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Server.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/service/ReceiveThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/ReceiveThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/service/SendThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/SendThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tools/FileIO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/FileIO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,8 +36,8 @@
             <file pinned="false" current-in-tab="true">
               <entry file="file://$PROJECT_DIR$/src/service/ReceiveThread.java">
                 <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="316">
-                    <caret line="20" column="45" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
+                  <state relative-caret-position="758">
+                    <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
                     <folding>
                       <element signature="imports" expanded="true" />
                     </folding>
@@ -100,8 +102,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
+            <state relative-caret-position="463">
+              <caret line="45" column="28" selection-start-line="45" selection-start-column="28" selection-end-line="45" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -110,7 +112,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/Server.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="374">
-              <caret line="22" column="26" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
+              <caret line="22" column="23" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -121,8 +123,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="326" column="16" selection-start-line="326" selection-start-column="16" selection-end-line="326" selection-end-column="16" />
+            <state relative-caret-position="450">
+              <caret line="329" column="16" selection-start-line="329" selection-start-column="16" selection-end-line="329" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -130,11 +132,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="20" column="27" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
+            <state relative-caret-position="166">
+              <caret line="157" column="36" selection-start-line="157" selection-start-column="36" selection-end-line="157" selection-end-column="36" />
               <folding>
                 <element signature="e#1194#1209#0" expanded="true" />
-                <element signature="e#7548#7549#0" expanded="true" />
+                <element signature="e#7554#7555#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -149,6 +151,7 @@
       <find>sock</find>
       <find>1024</find>
       <find>disconn</find>
+      <find>ssthresh</find>
       <find>rwnd</find>
     </findStrings>
   </component>
@@ -159,11 +162,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
+        <option value="$PROJECT_DIR$/src/tools/FileIO.java" />
+        <option value="$PROJECT_DIR$/src/service/ReceiveThread.java" />
         <option value="$PROJECT_DIR$/src/main/Server.java" />
         <option value="$PROJECT_DIR$/src/main/Client.java" />
-        <option value="$PROJECT_DIR$/src/tools/FileIO.java" />
         <option value="$PROJECT_DIR$/src/service/SendThread.java" />
-        <option value="$PROJECT_DIR$/src/service/ReceiveThread.java" />
       </list>
     </option>
   </component>
@@ -175,7 +178,7 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543718995026" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543720791605" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -192,7 +195,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Client">
+  <component name="RunManager" selected="Application.Server">
     <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="main.Client" />
       <module name="myLFTP" />
@@ -221,8 +224,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Client" />
         <item itemvalue="Application.Server" />
+        <item itemvalue="Application.Client" />
       </list>
     </recent_temporary>
   </component>
@@ -238,12 +241,12 @@
       <updated>1543658584363</updated>
       <workItem from="1543658586630" duration="12984000" />
       <workItem from="1543672556653" duration="1171000" />
-      <workItem from="1543712370660" duration="5397000" />
+      <workItem from="1543712370660" duration="7030000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33203000" />
+    <option name="totallyTimeSpent" value="34836000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -268,7 +271,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.4804772" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.1681128" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.36984816" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
@@ -331,23 +334,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="26" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/tools/Packet.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -377,8 +363,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="326" column="16" selection-start-line="326" selection-start-column="16" selection-end-line="326" selection-end-column="16" />
+        <state relative-caret-position="450">
+          <caret line="329" column="16" selection-start-line="329" selection-start-column="16" selection-end-line="329" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -389,23 +375,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
+    <entry file="file://$PROJECT_DIR$/src/service/ReceiveThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="20" column="27" selection-start-line="20" selection-start-column="27" selection-end-line="20" selection-end-column="27" />
+        <state relative-caret-position="758">
+          <caret line="54" column="5" selection-start-line="54" selection-start-column="5" selection-end-line="54" selection-end-column="5" />
           <folding>
-            <element signature="e#1194#1209#0" expanded="true" />
-            <element signature="e#7548#7549#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/service/ReceiveThread.java">
+    <entry file="file://$PROJECT_DIR$/src/main/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="20" column="45" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
+        <state relative-caret-position="463">
+          <caret line="45" column="28" selection-start-line="45" selection-start-column="28" selection-end-line="45" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="23" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="157" column="36" selection-start-line="157" selection-start-column="36" selection-end-line="157" selection-end-column="36" />
+          <folding>
+            <element signature="e#1194#1209#0" expanded="true" />
+            <element signature="e#7554#7555#0" expanded="true" />
           </folding>
         </state>
       </provider>

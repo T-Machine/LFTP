@@ -43,7 +43,7 @@ public class Client {
 					Thread send_thread = new Thread(new SendThread(packageList, ia, sourcePort, dstPort, dir));
 					send_thread.start();
 					send_thread.join();
-					sleep(2000);
+					sleep(10000);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

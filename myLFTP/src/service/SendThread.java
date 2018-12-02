@@ -32,7 +32,7 @@ public class SendThread implements Runnable {
 	private Map<Integer, Long> SendTimeMap = new HashMap<Integer, Long>(); //发送时间表
 	private boolean isConneted;
 	private volatile double cwnd = 1;					//拥塞窗口
-	private volatile double ssthresh = 64;				//慢启动阈值
+	private volatile double ssthresh = 60;				//慢启动阈值
 	private volatile boolean isQuickRecover = false;	//是否处于快速恢复状态
 	private volatile Date startTime;
 
@@ -84,7 +84,7 @@ public class SendThread implements Runnable {
 
 						socket.send(dp);
 
-					System.out.println("发送的分组序号: " + packet.getSeq());
+//					System.out.println("发送的分组序号: " + packet.getSeq());
 
 					//更新时间表
 					SendTimeMap.put(nextSeq, System.nanoTime());
@@ -138,7 +138,7 @@ public class SendThread implements Runnable {
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
 					socket.receive(dp);
 					Packet packet = ByteConverter.bytesToObject(buffer);
-					System.out.println("确认分组: " + packet.getAck());
+//					System.out.println("确认分组: " + packet.getAck());
 					base = packet.getAck() + 1;
 					rwnd = packet.getRwnd();
 					// 如果已经满
@@ -155,7 +155,7 @@ public class SendThread implements Runnable {
 					//检测冗余Ack
 					if(currAck == packet.getAck()) {
 						if(isQuickRecover == true) {
-							cwnd ++;
+							cwnd++;
 						} else {
 							duplicateAck ++;
 						}

@@ -61,7 +61,7 @@ public class ReceiveThread implements Runnable {
 			while(isConneted){
 				while(okToWrite){
 					try{
-						sleep(1);
+						sleep(10);
 						if(data.isEmpty()) continue;
 						fileLock.lock();
 						writeCount += data.size();
