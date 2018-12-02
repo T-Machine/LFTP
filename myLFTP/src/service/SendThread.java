@@ -18,7 +18,7 @@ public class SendThread implements Runnable {
 	int destPort;									//目的端口
 	private volatile int base = 0;					//基序号
 	private volatile int nextSeq = 0;				//下一个待发送分组的序号
-	private int rwnd = 10;								//未确认的最大分组数
+	private int rwnd = 8192 * 1024;								//未确认的最大分组数
 	private volatile Date date;						//记录启动定时器的时间
 	private DatagramSocket socket;					//用于发送数据包
 	private volatile boolean retrans= false;		//当前是否在重传
@@ -34,7 +34,7 @@ public class SendThread implements Runnable {
 	private volatile double cwnd = 1;					//拥塞窗口
 	private volatile double ssthresh = 64;				//慢启动阈值
 	private volatile boolean isQuickRecover = false;	//是否处于快速恢复状态
-
+	private volatile Date startTime;
 
 
 	public SendThread(List<Packet> data, InetAddress address, int sourcePort, int destPort, String dir) {
@@ -66,6 +66,7 @@ public class SendThread implements Runnable {
 
 		//启动发送数据包
 		try {
+			startTime = new Date();
 			while (nextSeq < data.size()) {
 				if(isFull == true) {
 					 byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, null));
@@ -106,6 +107,10 @@ public class SendThread implements Runnable {
 					byte[] buffer = ByteConverter.objectToBytes(new Packet(-1, -1, false, true, rwnd, null));
 					DatagramPacket dp = new DatagramPacket(buffer, buffer.length, address, destPort);
 					socket.send(dp);
+					Date endTime = new Date();
+					float speed = data.size() / (endTime.getTime() - startTime.getTime());
+					speed *= 1000;
+					System.out.println(speed + "kB/s");
 					System.out.println("发送完毕");
 					recv_ack_thread.join();
 					time_out_threadThread.join();

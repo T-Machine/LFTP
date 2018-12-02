@@ -18,14 +18,15 @@ import tools.Packet;
 import static java.lang.Thread.sleep;
 
 public class ReceiveThread implements Runnable {
-	private final static int BUFSIZE = 1024 * 1024;
+	private final static int BUFLENGTH = 8192;
+	private final static int BUFSIZE = BUFLENGTH * 1024;
 	private DatagramSocket socket;				// UDP连接DatagramSocket
 	private int serverPort;						// 服务端接收端口
 	private int expectedseqnum;					// 期望收到的序列号
 	InetAddress clientInetAddress;				// 客户端发送IP地址
 	int clientPort;								// 客户端发送端口
 	boolean isRandom = false;                   // 是否进入失序模式
-	private volatile int rwnd = 1024;                              // 窗口大小
+	private volatile int rwnd = BUFLENGTH;                              // 窗口大小
 	private volatile int writeCount = 0;        // 写入的数量
 	private  volatile boolean isConneted;
 	private List<Packet> randomBuff;            // 存储失序的包
@@ -66,7 +67,7 @@ public class ReceiveThread implements Runnable {
 						writeCount += data.size();
 						FileIO.byte2file(totalFileName, data);
 						data.clear();
-						rwnd = 1024 - (expectedseqnum - 1 - writeCount);
+						rwnd = BUFLENGTH - (expectedseqnum - 1 - writeCount);
 						if(rwnd < 0) rwnd = 0;
 						fileLock.unlock();
 					}catch (InterruptedException e){
@@ -88,7 +89,7 @@ public class ReceiveThread implements Runnable {
 			Thread file_threadThread;
 			file_threadThread = new Thread(new WriteFile());
 			file_threadThread.start();
-			// 一次接收1024个分组
+			// 一次接收BUFLENGTH个分组
 			byte[] buffer = new byte[BUFSIZE];
 			//数据报
 			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
@@ -136,7 +137,7 @@ public class ReceiveThread implements Runnable {
 					writeCount += data.size();
 					FileIO.byte2file(totalFileName, data);
 					data.clear();
-					rwnd = 1024 - (expectedseqnum - 1 - writeCount);
+					rwnd = BUFLENGTH - (expectedseqnum - 1 - writeCount);
 					if(rwnd < 0) rwnd = 0;
 					fileLock.unlock();
 					sendFailACK(packet);

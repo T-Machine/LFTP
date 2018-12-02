@@ -14,7 +14,7 @@ public class FileIO {
         try {
             FileInputStream inStream =new FileInputStream(new File(path));
             List<byte[]> datas = new ArrayList<>();
-            final int MAX_BYTE = 1024;	//每个byte[]的容量,当前1Kb
+            final int MAX_BYTE = 1024;	//每个byte[]的容量,当前1KB
             long streamTotal = 0;  //接受流的容量
             int streamNum = 0;  //流需要分开的数量
             int leave = 0;  //文件剩下的字符数
