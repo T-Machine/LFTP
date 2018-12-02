@@ -61,7 +61,7 @@ public class ReceiveThread implements Runnable {
 			while(isConneted){
 				while(okToWrite){
 					try{
-						sleep(10);
+						sleep(5);
 						if(data.isEmpty()) continue;
 						fileLock.lock();
 						writeCount += data.size();
@@ -194,9 +194,9 @@ public class ReceiveThread implements Runnable {
 					// 不能存文件名！
 					if(expectedseqnum != 0){
 						//如果之前不是失序的
-						isRandom = true;
 						// 重传数据丢掉
 						if(randomBuff.size() <= rwnd && expectedseqnum < packet.getSeq()){
+							isRandom = true;
 							randomBuff.add(packet);
 							//从小到大排序
 							Collections.sort(randomBuff, new Comparator<Packet>() {

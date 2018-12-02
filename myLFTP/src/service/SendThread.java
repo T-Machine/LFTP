@@ -71,7 +71,7 @@ public class SendThread implements Runnable {
 				if(isFull == true) {
 					 byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, null));
 					 DatagramPacket tmpPack = new DatagramPacket(tmp, tmp.length, address, destPort);
-					 socket.send(tmpPack);
+						 socket.send(tmpPack);
 					continue;
 				}
 				int threshold = rwnd < (int)cwnd ? rwnd : (int)cwnd;
@@ -166,7 +166,7 @@ public class SendThread implements Runnable {
 							ssthresh = cwnd / 2;
 							cwnd = ssthresh + 3;
 							isQuickRecover = true;
-
+//							duplicateAck = 0;
 							System.out.println("启动快速重传");
 							SendPacket(base);
 						}
@@ -207,7 +207,8 @@ public class SendThread implements Runnable {
 				long curr_time = new Date().getTime();
 				//超过0.3秒时触发超时
 				if (curr_time - start_time > 300) {
-					System.out.println("启动重传！");
+					startTimer();
+					TimeoutInterval *= 2;
 					timeOut();
 				}
 
@@ -233,8 +234,6 @@ public class SendThread implements Runnable {
 
 	//超时引发重传事件
 	private void timeOut() {
-		System.out.println("启动重传！");
-		startTimer();
 		try {
 			//更新拥塞窗口
 			isQuickRecover = false;
@@ -245,7 +244,7 @@ public class SendThread implements Runnable {
 			//记录base值和nextSeq值，防止接收线程对其造成改变
 			retrans = true;
 			// 只发送一个包
-			for (int i = base; i < base + (nextSeq - base); ++i) {
+			for (int i = base; i < nextSeq; ++i) {
 				//if(nextSeq == base) break;
 				while (rwnd <= 0) System.out.println("接收方缓存不够，暂停重传");
 				byte[] buffer = ByteConverter.objectToBytes(data.get(i));
