@@ -1,14 +1,17 @@
 package service;
 
+import tools.ByteConverter;
+import tools.Packet;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.*;
-
-import tools.ByteConverter;
-import tools.Packet;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SendThread implements Runnable {
 	private final static int BUFSIZE = 1024 * 1024;
@@ -18,7 +21,7 @@ public class SendThread implements Runnable {
 	int destPort;									//目的端口
 	private volatile int base = 0;					//基序号
 	private volatile int nextSeq = 0;				//下一个待发送分组的序号
-	private int rwnd = 8192 * 1024;								//未确认的最大分组数
+	private int rwnd = 8192;								//未确认的最大分组数
 	private volatile Date date;						//记录启动定时器的时间
 	private DatagramSocket socket;					//用于发送数据包
 	private volatile boolean retrans= false;		//当前是否在重传
@@ -32,7 +35,7 @@ public class SendThread implements Runnable {
 	private Map<Integer, Long> SendTimeMap = new HashMap<Integer, Long>(); //发送时间表
 	private boolean isConneted;
 	private volatile double cwnd = 1;					//拥塞窗口
-	private volatile double ssthresh = 60;				//慢启动阈值
+	private volatile double ssthresh = 64;				//慢启动阈值
 	private volatile boolean isQuickRecover = false;	//是否处于快速恢复状态
 	private volatile Date startTime;
 
@@ -206,9 +209,8 @@ public class SendThread implements Runnable {
 				long start_time = date.getTime();
 				long curr_time = new Date().getTime();
 				//超过0.3秒时触发超时
-				if (curr_time - start_time > TimeoutInterval) {
+				if (curr_time - start_time > 300) {
 					System.out.println("启动重传！");
-					TimeoutInterval *= 2;
 					timeOut();
 				}
 
@@ -234,6 +236,7 @@ public class SendThread implements Runnable {
 
 	//超时引发重传事件
 	private void timeOut() {
+		System.out.println("启动重传！");
 		startTimer();
 		try {
 			//更新拥塞窗口
@@ -241,6 +244,8 @@ public class SendThread implements Runnable {
 			duplicateAck = 0;
 			ssthresh = cwnd / 2;
 			cwnd = 1;
+
+			TimeoutInterval *= 2;
 
 			//记录base值和nextSeq值，防止接收线程对其造成改变
 			retrans = true;
