@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileIO {
-    public static final int BLOCK_SIZE = 200 * 1024 * 1024;
+    public static final int BLOCK_SIZE = 8 * 1024 * 1024;
     public static final int MAX_BYTE = 1024;
     public static final int MAX_PACK_PER_BLOCK = BLOCK_SIZE / MAX_BYTE;
 

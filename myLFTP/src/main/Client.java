@@ -13,7 +13,7 @@ import static java.lang.Thread.sleep;
 
 
 public class Client {
-	
+
 	public static void main(String[] args) {
 		System.out.println("请输入文件名");
 		Scanner scanner = new Scanner(System.in);
@@ -24,15 +24,15 @@ public class Client {
 				String address = "localhost";
 				int sourcePort = 3777;
 				int dstPort = 3888;
-					InetAddress ia = InetAddress.getByName(address);
-					Thread send_thread = new Thread(new SendThread(ia, sourcePort, dstPort, dir));
-					send_thread.start();
-					send_thread.join();
-					sleep(3000);
+				InetAddress ia = InetAddress.getByName(address);
+				Thread send_thread = new Thread(new SendThread(ia, sourcePort, dstPort, dir));
+				send_thread.start();
+				send_thread.join();
+				sleep(3000);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	
+
 	}
 }
