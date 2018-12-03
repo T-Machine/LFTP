@@ -86,6 +86,6 @@ public class Packet implements Serializable {
 		return fileName;
 	}
 
-	public void setTotalPackage(){ this.totalPackage = totalPackage;}
+	public void setTotalPackage(int totalPackage){ this.totalPackage = totalPackage;}
 	public int getTotalPackage(){ return this.totalPackage; }
 }

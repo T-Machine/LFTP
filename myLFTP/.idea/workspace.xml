@@ -1,32 +1,162 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ArtifactsWorkspaceSettings">
-    <artifacts-to-build>
-      <artifact name="myLFTP:jar" />
-    </artifacts-to-build>
-  </component>
   <component name="ChangeListManager">
-<<<<<<< HEAD
     <list default="true" id="101bd70e-e6c5-4589-81f7-3501d7063b32" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/myLFTP_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tools/ProgressBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/myLFTP_jar.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-=======
-    <list default="true" id="841af199-dee9-495b-900a-2b1e42468473" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/myLFTP_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/myLFTP_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-<<<<<<< HEAD
-      <change beforePath="$PROJECT_DIR$/test.zip" beforeDir="false" afterPath="$PROJECT_DIR$/test.zip" afterDir="false" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-      <change beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/myLFTP_jar/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/myLFTP_jar/myLFTP_jar.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/myLFTP_jar/myLFTP.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/command/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/command/Client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/command/Client2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/command/Client2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/command/Lget.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/command/Lget.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/command/Lsend.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/command/Lsend.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/main/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/main/Client.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/main/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/main/Server.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$AbstractHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$AbstractHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$AbstractParseResultHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$AbstractParseResultHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Assert.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Assert.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$AutoHelpMixin.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$AutoHelpMixin.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$BigDecimalConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$BigDecimalConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$BigIntegerConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$BigIntegerConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$BooleanConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$BooleanConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ByteConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ByteConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ByteOrderConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ByteOrderConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$CharSequenceConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$CharSequenceConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$CharacterConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$CharacterConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$CharsetConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$CharsetConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ClassConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ClassConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$CurrencyConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$CurrencyConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$DoubleConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$DoubleConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$FileConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$FileConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$FloatConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$FloatConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ISO8601DateConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ISO8601DateConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ISO8601TimeConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ISO8601TimeConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$InetAddressConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$InetAddressConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$IntegerConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$IntegerConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$LongConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$LongConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$NetworkInterfaceConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$NetworkInterfaceConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$PatternConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$PatternConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ReflectionConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ReflectionConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ShortConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$ShortConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$StringBuilderConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$StringBuilderConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$StringConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$StringConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$TimeZoneConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$TimeZoneConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$URIConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$URIConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$URLConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$URLConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$UUIDConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn$UUIDConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$BuiltIn.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Command.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Command.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$CosineSimilarity.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$CosineSimilarity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$DefaultExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$DefaultExceptionHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$DefaultFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$DefaultFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$DuplicateOptionAnnotationsException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$DuplicateOptionAnnotationsException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ExecutionException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ExecutionException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi$IStyle.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi$IStyle.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi$Palette256Color.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi$Palette256Color.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi$Style.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi$Style.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi$StyledSection.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi$StyledSection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi$Text.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi$Text.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Ansi.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$ColorScheme.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$ColorScheme.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Column$Overflow.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Column$Overflow.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Column.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Column.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$DefaultOptionRenderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$DefaultOptionRenderer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$DefaultParamLabelRenderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$DefaultParamLabelRenderer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$DefaultParameterRenderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$DefaultParameterRenderer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$IOptionRenderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$IOptionRenderer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$IParamLabelRenderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$IParamLabelRenderer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$IParameterRenderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$IParameterRenderer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Layout.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Layout.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$MinimalOptionRenderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$MinimalOptionRenderer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$MinimalParameterRenderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$MinimalParameterRenderer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$ShortestFirst.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$ShortestFirst.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$SortByOptionArityAndNameAlphabetically.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$SortByOptionArityAndNameAlphabetically.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$SortByShortestOptionNameAlphabetically.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$SortByShortestOptionNameAlphabetically.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$TextTable$Cell.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$TextTable$Cell.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$TextTable.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$TextTable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Visibility.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help$Visibility.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Help.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$HelpCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$HelpCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IDefaultValueProvider.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IDefaultValueProvider.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IExceptionHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IExceptionHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IExceptionHandler2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IExceptionHandler2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IHelpCommandInitializable.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IHelpCommandInitializable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IParseResultHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IParseResultHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IParseResultHandler2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IParseResultHandler2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ITypeConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ITypeConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IVersionProvider.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$IVersionProvider.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$InitializationException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$InitializationException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Interpreter$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Interpreter$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Interpreter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Interpreter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$LookBehind.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$LookBehind.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$MaxValuesExceededException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$MaxValuesExceededException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$MissingParameterException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$MissingParameterException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$MissingTypeConverterException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$MissingTypeConverterException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Mixin.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Mixin.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ArgSpec$Builder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ArgSpec$Builder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ArgSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ArgSpec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ArgsReflection.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ArgsReflection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$CommandReflection$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$CommandReflection$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$CommandReflection.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$CommandReflection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$CommandSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$CommandSpec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$FieldBinding.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$FieldBinding.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$IGetter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$IGetter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ISetter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ISetter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$Messages.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$Messages.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$MethodBinding.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$MethodBinding.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$MethodParam.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$MethodParam.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ObjectBinding.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ObjectBinding.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$OptionSpec$Builder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$OptionSpec$Builder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$OptionSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$OptionSpec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ParserSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$ParserSpec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$PicocliInvocationHandler$ProxyBinding.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$PicocliInvocationHandler$ProxyBinding.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$PicocliInvocationHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$PicocliInvocationHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$PositionalParamSpec$Builder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$PositionalParamSpec$Builder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$PositionalParamSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$PositionalParamSpec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$TypedMember.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$TypedMember.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$UnmatchedArgsBinding.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$UnmatchedArgsBinding.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$UsageMessageSpec.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model$UsageMessageSpec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Model.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$NoCompletionCandidates.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$NoCompletionCandidates.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$NoDefaultProvider.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$NoDefaultProvider.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$NoVersionProvider.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$NoVersionProvider.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Option.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Option.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$OverwrittenOptionException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$OverwrittenOptionException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ParameterException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ParameterException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ParameterIndexGapException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ParameterIndexGapException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Parameters.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Parameters.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ParentCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ParentCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ParseResult$Builder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ParseResult$Builder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ParseResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$ParseResult.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$PicocliException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$PicocliException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$PositionalParametersSorter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$PositionalParametersSorter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Range.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Range.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$RunAll.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$RunAll.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$RunFirst.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$RunFirst.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$RunLast.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$RunLast.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Spec.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Spec.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$TraceLevel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$TraceLevel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Tracer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Tracer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$TypeConversionException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$TypeConversionException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Unmatched.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$Unmatched.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$UnmatchedArgumentException.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine$UnmatchedArgumentException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/picocli/CommandLine.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$WriteFile.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$WriteFile.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$RecvAck.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$RecvAck.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$TimeCounter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$TimeCounter.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/tools/ByteConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/tools/ByteConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/tools/FileIO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/tools/FileIO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/tools/Packet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/tools/Packet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/service/ReceiveThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/ReceiveThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/service/SendThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/SendThread.java" afterDir="false" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
+      <change beforePath="$PROJECT_DIR$/src/tools/Packet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/Packet.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -43,14 +173,40 @@
       <FILTER>main.*</FILTER>
     </SUITE>
   </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/src/tools/ProgressBar.java">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="1387">
+                    <caret line="88" column="83" selection-start-line="88" selection-start-column="83" selection-end-line="88" selection-end-column="83" />
+                    <folding>
+                      <element signature="e#2624#2625#0" expanded="true" />
+                      <element signature="e#2672#2673#0" expanded="true" />
+                      <element signature="e#2708#2709#0" expanded="true" />
+                      <element signature="e#2746#2747#0" expanded="true" />
+                      <element signature="e#2786#2787#0" expanded="true" />
+                      <element signature="e#2829#2830#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-<<<<<<< HEAD
-        <entry file="file://$PROJECT_DIR$/src/command/Client.java">
+        <entry file="file://$PROJECT_DIR$/src/service/ReceiveThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+            <state relative-caret-position="-816">
+              <caret line="21" column="39" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -59,30 +215,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/picocli/CommandLine.java">
+        <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1598">
-              <caret line="131" column="13" selection-start-line="131" selection-start-column="13" selection-end-line="131" selection-end-column="13" />
-=======
-        <entry file="file://$PROJECT_DIR$/src/service/ReceiveThread.java">
-          <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state relative-caret-position="-3671">
-              <caret line="34" column="57" selection-start-line="34" selection-start-column="57" selection-end-line="34" selection-end-column="57" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-            <state relative-caret-position="302">
-              <caret line="237" column="17" selection-start-line="237" selection-start-column="17" selection-end-line="237" selection-end-column="17" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1488#1489#0" expanded="true" />
-                <element signature="e#1524#1525#0" expanded="true" />
-                <element signature="e#1572#1573#0" expanded="true" />
-                <element signature="e#1609#1610#0" expanded="true" />
-                <element signature="e#4485#4486#0" expanded="true" />
-                <element signature="e#4545#4546#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="221">
+              <caret line="13" column="20" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -90,33 +226,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tools/FileIO.java">
           <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <state relative-caret-position="544">
-              <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-=======
-            <state relative-caret-position="979">
-              <caret line="105" column="29" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-              <folding>
-                <element signature="e#3112#3113#0" expanded="true" />
-                <element signature="e#3133#3134#0" expanded="true" />
-                <element signature="e#3208#3209#0" expanded="true" />
-                <element signature="e#3251#3252#0" expanded="true" />
-              </folding>
-=======
-            <state relative-caret-position="2134">
-              <caret line="105" column="29" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
+            <state relative-caret-position="-1360">
+              <caret line="9" column="43" selection-start-line="9" selection-start-column="43" selection-end-line="9" selection-end-column="43" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tools/ByteConverter.java">
+        <entry file="file://$PROJECT_DIR$/src/command/Client2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+            <state relative-caret-position="85">
+              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -124,92 +244,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
           <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <state relative-caret-position="442">
-              <caret line="35" column="30" selection-start-line="14" selection-start-column="4" selection-end-line="35" selection-end-column="30" />
-=======
-            <state relative-caret-position="1894">
-              <caret line="181" column="21" selection-start-line="181" selection-start-column="21" selection-end-line="181" selection-end-column="21" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-            <state relative-caret-position="81">
-              <caret line="196" column="21" selection-start-line="196" selection-start-column="21" selection-end-line="196" selection-end-column="21" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/Server.java">
-          <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <state relative-caret-position="136">
-              <caret line="20" selection-start-line="20" selection-end-line="20" />
-=======
-            <state relative-caret-position="261">
-              <caret line="66" column="50" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-            <state relative-caret-position="-99">
-              <caret line="77" column="39" selection-start-line="77" selection-start-column="39" selection-end-line="77" selection-end-column="39" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/META-INF/MANIFEST.MF">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/command/Lget.java">
-          <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <state relative-caret-position="272">
-              <caret line="16" selection-start-line="16" selection-end-line="16" />
-=======
-            <state relative-caret-position="401">
-=======
-            <state relative-caret-position="814">
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
-              <caret line="45" column="66" selection-start-line="45" selection-start-column="66" selection-end-line="45" selection-end-column="66" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/command/Lsend.java">
-          <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <state relative-caret-position="68">
-              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-=======
-            <state relative-caret-position="-220">
-              <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-            <state relative-caret-position="374">
-              <caret line="29" selection-start-line="29" selection-end-line="29" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
+            <state relative-caret-position="476">
+              <caret line="67" column="39" lean-forward="true" selection-start-line="67" selection-start-column="39" selection-end-line="67" selection-end-column="39" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -220,17 +256,32 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tools/Packet.java">
           <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-<<<<<<< HEAD
-            <state relative-caret-position="34">
-              <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
-=======
-            <state relative-caret-position="352">
-=======
-            <state relative-caret-position="814">
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
-              <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
+            <state relative-caret-position="1224">
+              <caret line="88" column="48" selection-start-line="88" selection-start-column="48" selection-end-line="88" selection-end-column="48" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/Server.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="289">
+              <caret line="17" selection-start-line="16" selection-start-column="21" selection-end-line="17" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/command/Client.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -249,17 +300,16 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>startTimer</find>
-      <find>dir</find>
-      <find>da</find>
-      <find>setClientInetAddress</find>
-      <find>socket.receive</find>
-      <find>dirString</find>
-      <find>socket</find>
-      <find>clientPort</find>
-      <find>FileIO</find>
-      <find>4001</find>
-      <find>SendPacket</find>
+      <find>System.out</find>
+      <find>Success</find>
+      <find>format</find>
+      <find>formater</find>
+      <find>System.</find>
+      <find>isConnec</find>
+      <find>isConneted</find>
+      <find>System.out.print</find>
+      <find>before</find>
+      <find>开始接收ip地址</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -268,33 +318,21 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/Client.java" />
-        <option value="$PROJECT_DIR$/src/service/ReceiveThread.java" />
-        <option value="$PROJECT_DIR$/src/service/ServerControlThread.java" />
-        <option value="$PROJECT_DIR$/.idea/misc.xml" />
-        <option value="$PROJECT_DIR$/src/command/Client2.java" />
-        <option value="$PROJECT_DIR$/src/tools/FileIO.java" />
         <option value="$PROJECT_DIR$/src/tools/Packet.java" />
-        <option value="$PROJECT_DIR$/src/command/Lget.java" />
-        <option value="$PROJECT_DIR$/src/command/Lsend.java" />
-        <option value="$PROJECT_DIR$/src/main/Server.java" />
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
+        <option value="$PROJECT_DIR$/.idea/artifacts/myLFTP_jar.xml" />
+        <option value="$PROJECT_DIR$/src/tools/ShowProgressBar.java" />
+        <option value="$PROJECT_DIR$/src/service/ReceiveThread.java" />
         <option value="$PROJECT_DIR$/src/service/SendThread.java" />
+        <option value="$PROJECT_DIR$/src/tools/ProgressBar.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-<<<<<<< HEAD
-    <option name="x" value="-1022" />
-    <option name="y" value="79" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="78" />
+    <option name="y" value="96" />
     <option name="width" value="953" />
     <option name="height" value="1056" />
-=======
-    <option name="x" value="92" />
-    <option name="y" value="74" />
-    <option name="width" value="1683" />
-    <option name="height" value="859" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -302,11 +340,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-<<<<<<< HEAD
       <pane id="PackagesPane" />
       <pane id="Scope" />
-=======
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -318,16 +353,6 @@
               <item name="LFTP" type="b2602c69:ProjectViewProjectNode" />
               <item name="myLFTP" type="462c0819:PsiDirectoryNode" />
               <item name=".idea" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LFTP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="myLFTP" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="LFTP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="myLFTP" type="462c0819:PsiDirectoryNode" />
-              <item name="META-INF" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="LFTP" type="b2602c69:ProjectViewProjectNode" />
@@ -364,39 +389,19 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="tools" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="LFTP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-<<<<<<< HEAD
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543849356772" />
-    <property name="project.structure.last.edited" value="Artifacts" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.2" />
-=======
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-    </panes>
-  </component>
-  <component name="PropertiesComponent">
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543852990834" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543859085590" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -414,7 +419,7 @@
     <configuration name="Client" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="command.Client" />
       <module name="myLFTP" />
-      <option name="PROGRAM_PARAMETERS" value="lsend test.zip -s=119.29.204.215" />
+      <option name="PROGRAM_PARAMETERS" value="lsend test.zip" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="command.*" />
@@ -425,13 +430,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Client2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="command.Client2" />
+    <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="main.Server" />
       <module name="myLFTP" />
-      <option name="PROGRAM_PARAMETERS" value="lsend test2.zip -dp=3378 -cp=3999" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="command.*" />
+          <option name="PATTERN" value="main.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -441,12 +445,12 @@
     </configuration>
     <list>
       <item itemvalue="Application.Client" />
-      <item itemvalue="Application.Client2" />
+      <item itemvalue="Application.Server" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Client" />
-        <item itemvalue="Application.Client2" />
+        <item itemvalue="Application.Server" />
       </list>
     </recent_temporary>
   </component>
@@ -455,15 +459,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-<<<<<<< HEAD
-<<<<<<< HEAD
       <changelist id="101bd70e-e6c5-4589-81f7-3501d7063b32" name="Default Changelist" comment="" />
-=======
-      <changelist id="e5c602b7-3ad5-4c9b-8868-44c1f6a5dbde" name="Default Changelist" comment="" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-      <changelist id="841af199-dee9-495b-900a-2b1e42468473" name="Default Changelist" comment="" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
       <created>1543658584363</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -471,71 +467,39 @@
       <workItem from="1543658586630" duration="12984000" />
       <workItem from="1543672556653" duration="1171000" />
       <workItem from="1543712370660" duration="7030000" />
-<<<<<<< HEAD
-<<<<<<< HEAD
       <workItem from="1543721117719" duration="46054000" />
       <workItem from="1543814738200" duration="2392000" />
       <workItem from="1543817202436" duration="8120000" />
-      <workItem from="1543849261034" duration="342000" />
-=======
-      <workItem from="1543721117719" duration="61529000" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-      <workItem from="1543721117719" duration="61997000" />
-      <workItem from="1543850142716" duration="2815000" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
+      <workItem from="1543849261034" duration="3655000" />
+      <workItem from="1543855146644" duration="3874000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <option name="totallyTimeSpent" value="1531000" />
-=======
-    <option name="totallyTimeSpent" value="7906000" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-    <option name="totallyTimeSpent" value="11189000" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
+    <option name="totallyTimeSpent" value="7127000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <window_info content_ui="combo" id="Project" order="0" weight="0.265444" />
-=======
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14658849" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14818764" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Designer" order="2" />
-      <window_info id="Image Layers" order="3" />
-      <window_info id="Capture Tool" order="4" />
-      <window_info id="UI Designer" order="5" />
-      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info id="Structure" order="0" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="1" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Capture Tool" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="6" weight="0.14925373" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" weight="0.21587126" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.28301886" />
-=======
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.1670282" />
-=======
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49946696" visible="true" weight="0.5043384" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.61930585" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" weight="0.27006507" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.28199565" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.48590022" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.4855716" />
       <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50053304" side_tool="true" weight="0.2483731" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.4208243" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.10303687" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.329718" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -549,71 +513,60 @@
       <window_info anchor="right" id="Theme Preview" order="8" />
       <window_info anchor="right" id="Coverage" order="9" side_tool="true" weight="0.0" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Structure" order="0" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="1" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Capture Tool" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="6" visible="true" weight="0.14925373" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49946696" weight="0.27006507" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.28199565" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.329718" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.4855716" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50053304" side_tool="true" weight="0.2483731" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.10303687" />
+      <window_info anchor="bottom" id="Database Changes" order="11" />
+      <window_info anchor="bottom" id="Version Control" order="12" weight="0.329718" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="3" />
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="right" id="Capture Analysis" order="5" />
+      <window_info anchor="right" id="Database" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Theme Preview" order="8" />
+      <window_info anchor="right" id="Coverage" order="9" side_tool="true" weight="0.0" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/command/Client2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="19" column="1" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/src/command/Client.java">
+    <entry file="file://$PROJECT_DIR$/src/tools/ByteConverter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-=======
-    <entry file="file://$PROJECT_DIR$/src/main/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/picocli/CommandLine.java">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state relative-caret-position="1598">
-=======
-        <state relative-caret-position="22">
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
+        <state relative-caret-position="422">
           <caret line="131" column="13" selection-start-line="131" selection-start-column="13" selection-end-line="131" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/command/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <state relative-caret-position="544">
-          <caret line="45" column="23" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="23" />
-=======
-        <state relative-caret-position="-3671">
-          <caret line="34" column="57" selection-start-line="34" selection-start-column="57" selection-end-line="34" selection-end-column="57" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-        <state relative-caret-position="132">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
-<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/main/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -621,76 +574,70 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
+    <entry file="file://$PROJECT_DIR$/src/command/Lsend.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="35" column="30" selection-start-line="14" selection-start-column="4" selection-end-line="35" selection-end-column="30" />
+        <state relative-caret-position="340">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-=======
-    <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
-=======
-    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-66" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tools/FileIO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2134">
-          <caret line="105" column="29" selection-start-line="105" selection-start-column="29" selection-end-line="105" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tools/ByteConverter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/command/Lget.java">
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="814">
-          <caret line="45" column="66" selection-start-line="45" selection-start-column="66" selection-end-line="45" selection-end-column="66" />
+        <state relative-caret-position="408">
+          <caret line="24" column="27" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
-      <provider selected="true" editor-type-id="text-editor" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="20" selection-start-line="13" selection-start-column="20" selection-end-line="13" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/artifacts/myLFTP_jar.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="32" lean-forward="true" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state relative-caret-position="136">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-=======
-        <state relative-caret-position="261">
-          <caret line="66" column="50" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-    <entry file="file://$PROJECT_DIR$/src/command/Lsend.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="29" selection-start-line="29" selection-end-line="29" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
+        <state relative-caret-position="289">
+          <caret line="17" selection-start-line="16" selection-start-column="21" selection-end-line="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
-<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/src/command/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tools/Packet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1224">
+          <caret line="88" column="48" selection-start-line="88" selection-start-column="48" selection-end-line="88" selection-end-column="48" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/command/Client2.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -698,78 +645,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tools/Packet.java">
+    <entry file="file://$PROJECT_DIR$/src/tools/ShowProgressBar.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-=======
-    <entry file="file://$PROJECT_DIR$/src/command/Client.java">
-=======
-    <entry file="file://$PROJECT_DIR$/src/tools/Packet.java">
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="814">
-          <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
+        <state relative-caret-position="646">
+          <caret line="38" column="1" lean-forward="true" selection-start-line="38" selection-start-column="1" selection-end-line="38" selection-end-column="1" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/META-INF/MANIFEST.MF">
+    <entry file="file://$PROJECT_DIR$/src/tools/FileIO.java">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state relative-caret-position="401">
-          <caret line="45" column="66" selection-start-line="45" selection-start-column="66" selection-end-line="45" selection-end-column="66" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-        <state relative-caret-position="66">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/META-INF/MANIFEST.MF">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="-1360">
+          <caret line="9" column="43" selection-start-line="9" selection-start-column="43" selection-end-line="9" selection-end-column="43" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/service/ReceiveThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="237" column="17" selection-start-line="237" selection-start-column="17" selection-end-line="237" selection-end-column="17" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1488#1489#0" expanded="true" />
-            <element signature="e#1524#1525#0" expanded="true" />
-            <element signature="e#1572#1573#0" expanded="true" />
-            <element signature="e#1609#1610#0" expanded="true" />
-            <element signature="e#4485#4486#0" expanded="true" />
-            <element signature="e#4545#4546#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/src/main/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="13" column="22" selection-start-line="13" selection-start-column="22" selection-end-line="13" selection-end-column="22" />
-=======
-    <entry file="file://$PROJECT_DIR$/src/tools/Packet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-    <entry file="file://$PROJECT_DIR$/src/main/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-99">
-          <caret line="77" column="39" selection-start-line="77" selection-start-column="39" selection-end-line="77" selection-end-column="39" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
+        <state relative-caret-position="-816">
+          <caret line="21" column="39" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -778,20 +674,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-<<<<<<< HEAD
-        <state relative-caret-position="272">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-=======
-        <state relative-caret-position="-220">
-          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-=======
-        <state relative-caret-position="81">
-          <caret line="196" column="21" selection-start-line="196" selection-start-column="21" selection-end-line="196" selection-end-column="21" />
->>>>>>> 4b088c206cc6d85c4acea3045716ffbd1f7af840
+        <state relative-caret-position="476">
+          <caret line="67" column="39" lean-forward="true" selection-start-line="67" selection-start-column="39" selection-end-line="67" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tools/ProgressBar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1387">
+          <caret line="88" column="83" selection-start-line="88" selection-start-column="83" selection-end-line="88" selection-end-column="83" />
+          <folding>
+            <element signature="e#2624#2625#0" expanded="true" />
+            <element signature="e#2672#2673#0" expanded="true" />
+            <element signature="e#2708#2709#0" expanded="true" />
+            <element signature="e#2746#2747#0" expanded="true" />
+            <element signature="e#2786#2787#0" expanded="true" />
+            <element signature="e#2829#2830#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -801,24 +702,12 @@
     <states>
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
-<<<<<<< HEAD
           <artifact-editor />
-=======
-          <artifact-editor>
-            <show-content>
-              <type id="jpa-descriptors" />
-              <type id="library" />
-              <type id="artifact" />
-              <type id="javaee-facet-resources" />
-            </show-content>
-          </artifact-editor>
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
           <last-edited>myLFTP:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
-                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
@@ -849,7 +738,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>1.8</last-edited>
+          <last-edited>11</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -866,6 +755,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>

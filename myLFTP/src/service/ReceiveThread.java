@@ -12,10 +12,14 @@ import java.util.concurrent.locks.ReentrantLock;
 import tools.ByteConverter;
 import tools.FileIO;
 import tools.Packet;
+import tools.ProgressBar;
+
+import static java.lang.Thread.sleep;
 
 public class ReceiveThread implements Runnable {
-	private final static int BUFLENGTH = 4 * 1024; // BUFF大小（单位KB）
+	private final static int BUFLENGTH = 8 * 1024; // BUFF大小（单位KB）
 	private final static int BUFSIZE = BUFLENGTH * 1024; // BUFF大小（单位byte）
+	private final static int SAMPLE = 1; // 速度采样时间
 	private DatagramSocket socket; // UDP连接DatagramSocket
 	private int receivePort; // 服务端接收端口
 	private List<Packet> randomBuff; // 选择重传的缓存
@@ -23,6 +27,7 @@ public class ReceiveThread implements Runnable {
 	private String fileName; // 存储的文件名
 	private String totalFileName; // 完整文件名
 	private InetAddress senderAddr; // 发送方IP地址
+	private int totalPackageSum; // 数据包的总数
 	private int senderPort; // 发送方的发送端口
 	private volatile int ackIndex; // 确认收到的分组编号
 	private volatile boolean isRandom = false; // 判断接收的分组顺序是否是正常的
@@ -61,6 +66,40 @@ public class ReceiveThread implements Runnable {
 		}
 	}
 
+	// 进行进度条的显示
+	class ShowProgressBar implements Runnable{
+		@Override
+		public void run(){
+			ProgressBar pg = new ProgressBar(0, 100, 60, '#');
+			// 之前的时间 现在的时间 之前的ack idnex  现在的ack index
+			Date before;
+			Date current;
+			int ackBefore;
+			int ackAfter;
+			try {
+				while(isConneted){
+					before = new Date();
+					ackBefore = ackIndex;
+					// 睡眠
+					sleep(SAMPLE);
+					current = new Date();
+					ackAfter = ackIndex;
+					// 显示百分比
+					float haveGot = (float)ackAfter / (float)totalPackageSum;
+					int val = Math.round(haveGot * 100);
+					float rate = (float)(ackAfter - ackBefore) / (float)(current.getTime() - before.getTime());
+					rate /= (float)SAMPLE;
+					rate *= 1000;
+					if(!isConneted) break;
+					pg.show(val, rate);
+
+				}
+			}catch (InterruptedException e){
+				System.out.println("Interrupt!");
+			}
+		}
+	}
+
 	// 接收线程打开
 	@Override
 	synchronized public void run() {
@@ -68,9 +107,9 @@ public class ReceiveThread implements Runnable {
 			// 新建套接字
 			socket = new DatagramSocket(receivePort);
 			isConneted = true;
-			Thread fileWriter;
 			// 调用多线程在等待接收的时候写入数据，避免缓存过满
-			fileWriter = new Thread(new WriteFile());
+			Thread fileWriter = new Thread(new WriteFile());
+			Thread showProgressBar = new Thread(new ShowProgressBar());
 			fileWriter.start();
 			// 一次性接收分组的数量
 			byte[] receiverBuff = new byte[BUFSIZE];
@@ -83,7 +122,7 @@ public class ReceiveThread implements Runnable {
 			// 获取客户端IP和发送端口
 			setSenderAddr(dp.getAddress());
 			setSenderPort(dp.getPort());
-			System.out.println("开始接收ip地址为" + senderAddr.getAddress() + "和端口为" + senderPort + "设备的数据\n");
+			System.out.println("开始接收数据\n");
 			// 直到接收到最后一个FIN的数据包，一直处于接收状态
 			while (true) {
 				Packet packet = ByteConverter.bytesToObject(receiverBuff);
@@ -93,16 +132,17 @@ public class ReceiveThread implements Runnable {
 				// 第一次接收加上文件名
 				if (ackIndex == 0) {
 					fileName = packet.getFilename();
+					totalPackageSum = packet.getTotalPackage();
 					// 加上完整的文件名
 					totalFileName = fileDic + fileName;
+					showProgressBar.start();
 				}
-
 				// 缓存空间不足
 				if (rwnd == 0) {
 					// 清空List，重置接收窗口空闲空间
 					writeFile();
 					// 因为RWND Overflow导致错误
-					sendFailACK(true);
+					sendFailACK();
 
 				} else if (packet.getSeq() == ackIndex) {
 					// 如果符合选择重传，从BUFF中读取
@@ -136,7 +176,6 @@ public class ReceiveThread implements Runnable {
 							randomBuff.clear();
 							ackIndex += index;
 							sendSuccessACK();
-							System.out.println("SR: Receive BUFF Length->" + index);
 							ackIndex++;
 							// 继续阻塞
 							socket.receive(dp);
@@ -167,7 +206,7 @@ public class ReceiveThread implements Runnable {
 						});
 					}
 					// 因为非期望数据包导致错误
-					sendFailACK(false);
+					sendFailACK();
 					// 阻塞等待下一个数据包
 					socket.receive(dp);
 				}
@@ -197,7 +236,6 @@ public class ReceiveThread implements Runnable {
 			byte[] ackBuffer = ByteConverter.objectToBytes(successAckPacket);
 			DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, senderAddr, senderPort);
 			socket.send(ackdp);
-			System.out.println("Success: Receive->" + ackIndex + " expect->" + (ackIndex + 1));
 		} catch (SocketException e) {
 			System.out.println("Fail to create socket!");
 			e.printStackTrace();
@@ -207,7 +245,7 @@ public class ReceiveThread implements Runnable {
 		}
 	}
 
-	private void sendFailACK(boolean choice) {
+	private void sendFailACK() {
 		try {
 			// 返回一个错误接受ACK包
 			Packet errorAckPacket = new Packet(ackIndex - 1, -1, true, false, rwnd, null, "");
@@ -215,10 +253,6 @@ public class ReceiveThread implements Runnable {
 			DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, senderAddr, senderPort);
 			socket.send(ackdp);
 			// 因为RWND导致
-			if(choice){
-				System.out.println("Fail Caused by RWND Overflow: Receive->" + ackIndex + " expect->" + ackIndex);
-			}
-			else System.out.println("Fail Caused by unexpected Packet: Receive->" + ackIndex + " expect->" + (ackIndex + 1));
 		} catch (SocketException e) {
 			System.out.println("Fail to create socket!");
 			e.printStackTrace();
