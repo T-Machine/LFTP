@@ -19,20 +19,20 @@ public class Client {
 		Scanner scanner = new Scanner(System.in);
 		//利用hasNextXXX()判断是否还有下一输入项
 		String dir = scanner.next();
-		try {
-			while(true) {
-				String address = "localhost";
-				int sourcePort = 3777;
-				int dstPort = 3888;
-				InetAddress ia = InetAddress.getByName(address);
-				Thread send_thread = new Thread(new SendThread(dir, ia, sourcePort, dstPort));
-				send_thread.start();
-				send_thread.join();
-				sleep(3000);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			while(true) {
+//				String address = "localhost";
+//				int sourcePort = 3777;
+//				int dstPort = 3888;
+//				InetAddress ia = InetAddress.getByName(address);
+//				Thread send_thread = new Thread(new SendThread(dir, ia, sourcePort, dstPort, ""));
+//				send_thread.start();
+//				send_thread.join();
+//				sleep(3000);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
 	}
 }
