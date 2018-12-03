@@ -6,6 +6,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class Packet implements Serializable {
+	private final static int BUFLENGTH = 8192;
+	private final static int BUFSIZE = BUFLENGTH * 1024;
 	private Integer ack; // 确认的分组编号，用于接收端
 	private Integer seq; // 该分组的编号，用于发送端
 	private boolean ACK; // ACK标志
@@ -13,6 +15,7 @@ public class Packet implements Serializable {
 	private Integer rwnd; // 接收窗口
 	private byte[] pkData; // 数据端
 	private String fileName; // 文件名
+	private int totalPackage; // 包的总数
 
 	public Packet(int _ack, int _seq, boolean _ACK, boolean _FIN, int _rwnd, byte[] _pkData, String _fn) {
 		this.ack = _ack;
@@ -22,6 +25,7 @@ public class Packet implements Serializable {
 		this.rwnd = _rwnd;
 		this.pkData = _pkData;
 		this.fileName = _fn;
+		this.totalPackage = totalPackage;
 	}
 
 	// 确认信息的数据报
@@ -34,6 +38,20 @@ public class Packet implements Serializable {
 			e.printStackTrace();
 		}
 
+	}
+	// 接收数据包信息
+	public static String getStringParketFrom(DatagramSocket socket) {
+		try {
+			byte[] buffer = new byte[BUFSIZE];
+			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
+			socket.receive(dp);
+			Packet pkt = ByteConverter.bytesToObject(buffer);
+			String info = new String(pkt.getData());
+			return info;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	public Integer getAck() {
@@ -67,4 +85,7 @@ public class Packet implements Serializable {
 	public String getFilename() {
 		return fileName;
 	}
+
+	public void setTotalPackage(){ this.totalPackage = totalPackage;}
+	public int getTotalPackage(){ return this.totalPackage; }
 }

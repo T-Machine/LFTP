@@ -83,7 +83,7 @@ public class SendThread implements Runnable {
 
                 // 启动发送数据包
                 while (nextSeq < sentDataList.size() + currentBlock * FileIO.MAX_PACK_PER_BLOCK) {
-                    
+
                     // 如果接收方的BUFF满发送空的数据报
                     if (isFull) {
                         byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, null, ""));
@@ -106,12 +106,12 @@ public class SendThread implements Runnable {
                 // 如果不是最后一块准备文件切换，在ACK最后一个数据报后切换
                 while (base < sentDataList.size() + (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK
                         && currentBlock < blockSum - 1) {}
-        }
+            }
 
-        // 发送完成，需要确定ACK最后一个数据包后才能断开
-        while (true) {
-            // 注意：此时currentBlock已经再加上1
-            if (currAck == sentDataList.size() - 1 + (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK) {
+            // 发送完成，需要确定ACK最后一个数据包后才能断开
+            while (true) {
+                // 注意：此时currentBlock已经再加上1
+                if (currAck == sentDataList.size() - 1 + (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK) {
                     byte[] buff = ByteConverter.objectToBytes(new Packet(-1, -1, false, true, rwnd, null, ""));
                     DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
                     socket.send(dp);
@@ -119,8 +119,8 @@ public class SendThread implements Runnable {
                     socket.disconnect();
                     socket.close();
                     return;
+                }
             }
-        }
         } catch (SocketException e) {
             System.out.println("Fail to create socket!");
             e.printStackTrace();

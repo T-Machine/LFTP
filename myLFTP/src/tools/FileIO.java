@@ -85,13 +85,28 @@ public class FileIO {
     }
 
     public static int getBlockLength(String path) {
+        return getLength(path, false);
+    }
+
+    public static int getByteLength(String path) {
+        return getLength(path, true);
+    }
+
+    // 0 -> blockSum, 1 -> byteSum
+    private static int getLength(String path, boolean choice){
         try{
             // 获取文件
             File file = new File(path);
             long streamTotal = file.length();
-            // 查看一共需要多少个块
-            int blockNum = (int)Math.floor(streamTotal/BLOCK_SIZE);
-            return blockNum + 1;
+            if(choice){
+                // 查看一共需要多少个块
+                int byteSum = (int)Math.floor(streamTotal/MAX_BYTE);
+                return byteSum + 1;
+            } else{
+                // 查看一共需要多少个块
+                int blockSum = (int)Math.floor(streamTotal/BLOCK_SIZE);
+                return blockSum + 1;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
