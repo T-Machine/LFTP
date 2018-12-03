@@ -14,7 +14,7 @@ import tools.Packet;
 public class SendThread implements Runnable {
     private final static int BUFSIZE = 1024 * 1024;
     private List<Packet> data;						//要发送的数据
-    private List<Packet> readingData;               // 用于多线程读取
+    private int byteSum;                                 //字节数量也是包数量
     InetAddress address;							//目的地址
     int sourcePort;									//源端口
     int destPort;									//目的端口
@@ -72,6 +72,7 @@ public class SendThread implements Runnable {
         System.out.println("开始读取文件发送");
         data = new ArrayList<>();
         blockSum = FileIO.getBlockLength(dir);
+        byteSum = FileIO.getByteLength(dir);
         for(currentBlock = 0; currentBlock < blockSum; currentBlock++){
             isReRoad = true;
             if(currentBlock != 0){

@@ -13,6 +13,7 @@ public class Packet implements Serializable {
 	private Integer rwnd; // 接收窗口
 	private byte[] pkData; // 数据端
 	private String fileName; // 文件名
+	private int totalPackage; // 包的总数
 
 	public Packet(int _ack, int _seq, boolean _ACK, boolean _FIN, int _rwnd, byte[] _pkData, String _fn) {
 		this.ack = _ack;
@@ -22,6 +23,7 @@ public class Packet implements Serializable {
 		this.rwnd = _rwnd;
 		this.pkData = _pkData;
 		this.fileName = _fn;
+		this.totalPackage = totalPackage;
 	}
 
 	// 确认信息的数据报
@@ -71,4 +73,7 @@ public class Packet implements Serializable {
 	public String getFilename() {
 		return fileName;
 	}
+
+	public void setTotalPackage(){ this.totalPackage = totalPackage;}
+	public int getTotalPackage(){ return this.totalPackage; }
 }
