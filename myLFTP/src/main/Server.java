@@ -13,8 +13,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Thread.sleep;
-
 public class Server {
 
     private final static int BUFLENGTH = 8192;
@@ -48,10 +46,6 @@ public class Server {
                 if(!PortPool.isEmpty()) {
                     int serverPort = PortPool.remove(0);
                     //将可用端口发送给客户端
-//                    byte[] s_port = String.valueOf(serverPort).getBytes();
-//                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, s_port, ""));
-//                    DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, clientAddress, clientPort);
-//                    socket.send(portPack);
                     Packet.sendStringParketTo(socket, String.valueOf(serverPort), clientAddress, clientPort);
                     System.out.println("[Server] Assign port " + serverPort + " to " + clientAddress.toString());
 
@@ -72,10 +66,7 @@ public class Server {
                         int targetPort = Integer.parseInt(info[2]);
                         File file = new File(filename);
                         if(!file.exists()) {
-//                            String msg = "NOFILE";
-//                            byte[] tmp1= ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, msg.getBytes(), ""));
-//                            DatagramPacket filePack = new DatagramPacket(tmp1, tmp1.length, clientAddress, clientPort);
-//                            socket.send(filePack);
+                            //告诉客户端文件不存在
                             Packet.sendStringParketTo(socket, "NOFILE", clientAddress, clientPort);
                         } else {
                             Thread send_thread = new Thread(new SendThread(filename, clientAddress, serverPort, targetPort));
@@ -88,25 +79,10 @@ public class Server {
 
                 } else {
                     //端口爆满时，告诉客户端
-//                    String msg = "NOPORT";
-//                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, msg.getBytes(), ""));
-//                    DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, clientAddress, clientPort);
-//                    socket.send(portPack);
                     Packet.sendStringParketTo(socket, "NOPORT", clientAddress, clientPort);
                     System.out.println("[Server] No more port can assigned to " + clientAddress.toString());
                 }
-
-//				int serverPort = 3888;
-//				Thread receiveThread = new Thread(new ReceiveThread(serverPort));
-//				receiveThread.start();
-//				System.out.println("传输开始" + serverPort);
-//				String dirString = "data";
-//				File file = new File(dirString);
-//				if(!file.exists()) {
-//					file.mkdir();
-//				}
-//				receiveThread.join();
-//				sleep(500);
+                
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
