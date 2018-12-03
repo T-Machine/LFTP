@@ -7,31 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="841af199-dee9-495b-900a-2b1e42468473" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$TimeCounter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/myLFTP.iml" beforeDir="false" afterPath="$PROJECT_DIR$/myLFTP.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/command/Client2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/command/Client2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/command/Lget.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/command/Lget.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/command/Lsend.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/command/Lsend.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/main/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/main/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/main/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/main/Server.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$WriteFile.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$WriteFile.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$RecvAck.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$RecvAck.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$TimeOut.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/tools/FileIO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/tools/FileIO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/tools/Packet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/tools/Packet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/command/Lget.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/command/Lget.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/command/Lsend.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/command/Lsend.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/ReceiveThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/ReceiveThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/SendThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/SendThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tools/FileIO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/FileIO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tools/Packet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/Packet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.zip" beforeDir="false" afterPath="$PROJECT_DIR$/test.zip" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +83,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/Server.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="261">
-              <caret line="66" column="50" lean-forward="true" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
+              <caret line="66" column="50" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -118,7 +95,7 @@
         <entry file="file://$PROJECT_DIR$/src/command/Lget.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="401">
-              <caret line="45" column="66" lean-forward="true" selection-start-line="45" selection-start-column="66" selection-end-line="45" selection-end-column="66" />
+              <caret line="45" column="66" selection-start-line="45" selection-start-column="66" selection-end-line="45" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -129,8 +106,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/command/Lsend.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="463">
-              <caret line="52" column="72" selection-start-line="52" selection-start-column="72" selection-end-line="52" selection-end-column="72" />
+            <state relative-caret-position="-220">
+              <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -271,7 +248,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543849451296" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543849549942" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -342,12 +319,12 @@
       <workItem from="1543658586630" duration="12984000" />
       <workItem from="1543672556653" duration="1171000" />
       <workItem from="1543712370660" duration="7030000" />
-      <workItem from="1543721117719" duration="61431000" />
+      <workItem from="1543721117719" duration="61529000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7808000" />
+    <option name="totallyTimeSpent" value="7906000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -433,32 +410,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/tools/Packet.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1094#1095#0" expanded="true" />
-            <element signature="e#1111#1112#0" expanded="true" />
-            <element signature="e#1192#1193#0" expanded="true" />
-            <element signature="e#1209#1210#0" expanded="true" />
-            <element signature="e#1237#1238#0" expanded="true" />
-            <element signature="e#1254#1255#0" expanded="true" />
-            <element signature="e#1283#1284#0" expanded="true" />
-            <element signature="e#1301#1302#0" expanded="true" />
-            <element signature="e#1340#1341#0" expanded="true" />
-            <element signature="e#1367#1368#0" expanded="true" />
-            <element signature="e#1395#1396#0" expanded="true" />
-            <element signature="e#1415#1416#0" expanded="true" />
-            <element signature="e#1460#1461#0" expanded="true" />
-            <element signature="e#1491#1492#0" expanded="true" />
-            <element signature="e#1523#1524#0" expanded="true" />
-            <element signature="e#1545#1546#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/service/ReceiveThread.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3671">
@@ -491,7 +442,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/Server.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="261">
-          <caret line="66" column="50" lean-forward="true" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
+          <caret line="66" column="50" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -511,17 +462,43 @@
     <entry file="file://$PROJECT_DIR$/src/command/Lget.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="401">
-          <caret line="45" column="66" lean-forward="true" selection-start-line="45" selection-start-column="66" selection-end-line="45" selection-end-column="66" />
+          <caret line="45" column="66" selection-start-line="45" selection-start-column="66" selection-end-line="45" selection-end-column="66" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/tools/Packet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="40" column="5" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1094#1095#0" expanded="true" />
+            <element signature="e#1111#1112#0" expanded="true" />
+            <element signature="e#1192#1193#0" expanded="true" />
+            <element signature="e#1209#1210#0" expanded="true" />
+            <element signature="e#1237#1238#0" expanded="true" />
+            <element signature="e#1254#1255#0" expanded="true" />
+            <element signature="e#1283#1284#0" expanded="true" />
+            <element signature="e#1301#1302#0" expanded="true" />
+            <element signature="e#1340#1341#0" expanded="true" />
+            <element signature="e#1367#1368#0" expanded="true" />
+            <element signature="e#1395#1396#0" expanded="true" />
+            <element signature="e#1415#1416#0" expanded="true" />
+            <element signature="e#1460#1461#0" expanded="true" />
+            <element signature="e#1491#1492#0" expanded="true" />
+            <element signature="e#1523#1524#0" expanded="true" />
+            <element signature="e#1545#1546#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/command/Lsend.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="463">
-          <caret line="52" column="72" selection-start-line="52" selection-start-column="72" selection-end-line="52" selection-end-column="72" />
+        <state relative-caret-position="-220">
+          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
