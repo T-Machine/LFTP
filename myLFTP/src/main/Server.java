@@ -62,7 +62,7 @@ public class Server {
                         if(!file.exists()) {
                             file.mkdir();
                         }
-                        Thread receiveThread = new Thread(new ReceiveThread(serverPort));
+                        /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(serverPort, "data/"));
                         receiveThread.start();
                         //receiveThread.join();
                     }
