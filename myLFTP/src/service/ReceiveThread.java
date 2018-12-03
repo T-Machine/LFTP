@@ -1,8 +1,6 @@
 package service;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -14,8 +12,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import tools.ByteConverter;
 import tools.FileIO;
 import tools.Packet;
-
-import static java.lang.Thread.sleep;
 
 public class ReceiveThread implements Runnable {
 	private final static int BUFLENGTH = 4 * 1024; // BUFF大小（单位KB）
@@ -42,18 +38,9 @@ public class ReceiveThread implements Runnable {
 		ackIndex = 0;
 	}
 
-	// 获取发送方的ip地址
-	public InetAddress getSenderAddr() {
-		return senderAddr;
-	}
-
 	// 设置发送方的ip地址
 	public void setSenderAddr(InetAddress _senderAddr) {
 		this.senderAddr = _senderAddr;
-	}
-
-	public int getSenderPort() {
-		return senderPort;
 	}
 
 	public void setSenderPort(int _receivePort) {
@@ -96,12 +83,12 @@ public class ReceiveThread implements Runnable {
 			// 获取客户端IP和发送端口
 			setSenderAddr(dp.getAddress());
 			setSenderPort(dp.getPort());
-			System.out.println("开始接收ip地址为" + senderAddr.getAddress().toString() + "和端口为" + senderPort + "设备的数据\n");
+			System.out.println("开始接收ip地址为" + senderAddr.getAddress() + "和端口为" + senderPort + "设备的数据\n");
 			// 直到接收到最后一个FIN的数据包，一直处于接收状态
 			while (true) {
 				Packet packet = ByteConverter.bytesToObject(receiverBuff);
 				// 接收完成
-				if (packet.getFIN() == true)
+				if (packet.getFIN())
 					break;
 				// 第一次接收加上文件名
 				if (ackIndex == 0) {
@@ -194,8 +181,6 @@ public class ReceiveThread implements Runnable {
 			System.out.println("Writing Success!");
 			socket.disconnect();
 			socket.close();
-
-			return;
 		} catch (SocketException e) {
 			System.out.println("Fail to create socket!");
 			e.printStackTrace();

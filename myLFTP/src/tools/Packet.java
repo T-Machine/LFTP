@@ -6,6 +6,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class Packet implements Serializable {
+	private final static int BUFLENGTH = 8192;
+	private final static int BUFSIZE = BUFLENGTH * 1024;
 	private Integer ack; // 确认的分组编号，用于接收端
 	private Integer seq; // 该分组的编号，用于发送端
 	private boolean ACK; // ACK标志
@@ -37,13 +39,23 @@ public class Packet implements Serializable {
 		}
 
 	}
+	// 接收数据包信息
+	public static String getStringParketFrom(DatagramSocket socket) {
+		try {
+			byte[] buffer = new byte[BUFSIZE];
+			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
+			socket.receive(dp);
+			Packet pkt = ByteConverter.bytesToObject(buffer);
+			String info = new String(pkt.getData());
+			return info;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
 
 	public Integer getAck() {
 		return ack;
-	}
-
-	public void setSeq(int seq) {
-		this.seq = seq;
 	}
 
 	public Integer getSeq() {

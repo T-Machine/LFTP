@@ -33,21 +33,28 @@ public class Lget implements Runnable  {
         try {
             //将控制信息发送给服务端（LSEND + 文件名）
             DatagramSocket socket = new DatagramSocket(controlPort);
-            String controlInfo = "LGET#" + filename + "#" + String.valueOf(dataPort);
+            String controlInfo = "LGET#" + filename + "#" + dataPort;   //[LGET]#[FileName]#[Port]
 //            byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, controlInfo.getBytes(), ""));
-//            DatagramPacket controlPkt = new DatagramPacket(tmp, tmp.length, InetAddress.getByName(serverAddress), 4001);
+//            DatagramPacket controlPkt = new DatagramPacket(tmp, tmp.length, InetAddress.getByName(serverAddress), 5500);
 //            socket.send(controlPkt);
-            Packet.sendStringParketTo(socket, controlInfo, InetAddress.getByName(serverAddress), 4001);
+            Packet.sendStringParketTo(socket, controlInfo, InetAddress.getByName(serverAddress), 5500);
             //从服务端获取可用端口
-            byte[] buffer = new byte[BUFSIZE];
-            DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-            socket.receive(dp);
-            Packet returnPkt = ByteConverter.bytesToObject(buffer);
-            String serverInfo = new String(returnPkt.getData());
-            if(serverInfo.equals("NOPORT")) {
+//            byte[] buffer = new byte[BUFSIZE];
+//            DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
+//            socket.receive(dp);
+//            Packet returnPkt = ByteConverter.bytesToObject(buffer);
+//            String serverInfo = new String(returnPkt.getData());
+            String serverInfo = Packet.getStringParketFrom(socket);
+            String [] info = serverInfo.split("#");
+            System.out.println("[Info] Server response: " + serverInfo);
+
+            if(info[0].equals("NOPORT")) {
                 System.out.println("[Fail] The server has no free port");
+            } else if(info[0].equals("NOFILE")) {
+                System.out.println("[Fail] The file is not existed in server");
             } else {
-                System.out.println("[Info] Get file from " + Integer.parseInt(serverInfo));
+                System.out.println("[Info] Get file from " + info[1]);
+                //TODO:获取文件长度 info[2]
                 /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(dataPort, "data/"));
                 receiveThread.start();
                 receiveThread.join();

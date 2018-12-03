@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileIO {
-    public static final int BLOCK_SIZE = 16 * 1024 * 1024;
+    public static final int BLOCK_SIZE = 64 * 1024 * 1024;
     public static final int MAX_BYTE = 1024;
     public static final int MAX_PACK_PER_BLOCK = BLOCK_SIZE / MAX_BYTE;
 
@@ -35,7 +35,7 @@ public class FileIO {
         return datas;
     }
 
-    // 按照块进行读取，每个块大小8MB
+    // 按照块进行读取，每个块大小64MB
     public static List<byte[]> divideToList(String path, int blockNum) {
         if(blockNum < 0) return null;
         try {

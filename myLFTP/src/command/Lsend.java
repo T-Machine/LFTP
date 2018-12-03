@@ -35,24 +35,28 @@ public class Lsend implements Runnable  {
     public void run() {
         System.out.println("[Info] Send " + serverAddress + ":" + dataPort + " Filename: " + filename);
         try {
-            //将控制信息发送给服务端（LSEND + 文件名）
+            //将控制信息（请求）发送给服务端（LSEND + 文件名 + 文件长度）
             DatagramSocket socket = new DatagramSocket(controlPort);
             String controlInfo = "LSEND#" + filename;
 //            byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, controlInfo.getBytes(), ""));
-//            DatagramPacket controlPkt = new DatagramPacket(tmp, tmp.length, InetAddress.getByName(serverAddress), 4001);
+//            DatagramPacket controlPkt = new DatagramPacket(tmp, tmp.length, InetAddress.getByName(serverAddress), 5500);
 //            socket.send(controlPkt);
-            Packet.sendStringParketTo(socket, controlInfo, InetAddress.getByName(serverAddress), 4001);
+            Packet.sendStringParketTo(socket, controlInfo, InetAddress.getByName(serverAddress), 5500);
             //从服务端获取可用端口
-            byte[] buffer = new byte[BUFSIZE];
-            DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-            socket.receive(dp);
-            Packet returnPkt = ByteConverter.bytesToObject(buffer);
-            String serverInfo = new String(returnPkt.getData());
-            if(serverInfo.equals("NOPORT")) {
+//            byte[] buffer = new byte[BUFSIZE];
+//            DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
+//            socket.receive(dp);
+//            Packet returnPkt = ByteConverter.bytesToObject(buffer);
+//            String serverInfo = new String(returnPkt.getData());
+            String serverInfo = Packet.getStringParketFrom(socket);
+            String [] info = serverInfo.split("#");
+            System.out.println("[Info] Server response: " + serverInfo);
+
+            if(info[0].equals("NOPORT")) {
                 System.out.println("[Fail] The server has no free port");
             } else {
-                System.out.println("[Info] Read file and send to " + Integer.parseInt(serverInfo));
-                Thread send_thread = new Thread(new SendThread(InetAddress.getByName(serverAddress), dataPort, Integer.parseInt(serverInfo), filename));
+                System.out.println("[Info] Read file and send to " + info[1]);
+                Thread send_thread = new Thread(new SendThread(filename, InetAddress.getByName(serverAddress), dataPort, Integer.parseInt(info[1])));
                 send_thread.start();
                 send_thread.join();
             }
