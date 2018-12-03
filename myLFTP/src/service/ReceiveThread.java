@@ -31,10 +31,16 @@ public class ReceiveThread implements Runnable {
 	private volatile boolean isConneted; // 判断当前是否仍在连接
 	private volatile Lock fileLock = new ReentrantLock(); // 文件读写的锁
 	private volatile List<byte[]> receiveDataList = new ArrayList<>();// 存储接收到分组数据的list
+    private CallbackEnd callback;
 
-	public ReceiveThread(int _receivePort, String _fileDic) {
+    public interface CallbackEnd {
+        void finish();
+    }
+
+	public ReceiveThread(int _receivePort, String _fileDic, CallbackEnd _callback) {
 		this.receivePort = _receivePort;
 		this.fileDic = _fileDic;
+		this.callback = _callback;
 		ackIndex = 0;
 	}
 
@@ -188,6 +194,11 @@ public class ReceiveThread implements Runnable {
 			System.out.println("Fail to receive packets");
 			e.printStackTrace();
 		}
+
+		//回调
+        if(this.callback != null) {
+            callback.finish();
+        }
 	}
 
 	private void sendSuccessACK() {

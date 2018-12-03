@@ -44,7 +44,7 @@ public class Server {
                 System.out.println("[Server] Get request from " + clientAddress.toString() + ":" + clientPort + " request: " + controlInfo);
 
                 //Server返回的信息：[Msg]#[Port]#[FileLength]
-                //Msg包括：[OK]可行, [NOPORT]无端口可用, [NOFILE]文件不存在
+                //Msg包括：[OK]可行, [NOPORT]无端口可用, [NOFILE]文件不存在, [EXIST]文件已存在
                 //仍可分配端口时
                 if(!PortPool.isEmpty()) {
                     int serverPort = PortPool.remove(0);    //可用端口
@@ -52,31 +52,37 @@ public class Server {
                     //Packet.sendStringParketTo(socket, String.valueOf(serverPort), clientAddress, clientPort);
 
                     String [] info = controlInfo.split("#");
+                    String filename = info[1];
                     if(info[0].equals("LSEND")) {
                         File file = new File("data");
                         if(!file.exists()) {
                             file.mkdir();
                         }
-                        Packet.sendStringParketTo(socket, "OK#" + serverPort, clientAddress, clientPort);
-                        System.out.println("[Server] [lsend] Assign port " + serverPort + " to " + clientAddress.toString());
-                        /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(serverPort, "data/"));
-                        receiveThread.start();
-                        //receiveThread.join();
+
+                        File findFile = new File("data/" + filename);
+                        if(findFile.exists()) {
+                            Packet.sendStringParketTo(socket, "EXIST#", clientAddress, clientPort);
+                            System.out.println("[Server] [error] The file is existed");
+                        } else {
+                            Packet.sendStringParketTo(socket, "OK#" + serverPort, clientAddress, clientPort);
+                            System.out.println("[Server] [lsend] Assign port " + serverPort + " to " + clientAddress.toString());
+                            /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(serverPort, "data/", () -> PortPool.add(serverPort)));
+                            receiveThread.start();
+                        }
                     }
                     else if(info[0].equals("LGET")) {
-                        String filename = info[1];
                         int targetPort = Integer.parseInt(info[2]);
                         File file = new File(filename);
                         if(!file.exists()) {
                             //告诉客户端文件不存在
                             Packet.sendStringParketTo(socket, "NOFILE#", clientAddress, clientPort);
-                            System.out.println("[Server] [error] The requested is not existed");
+                            System.out.println("[Server] [error] The requested file is not existed");
                         } else {
                             String fileLength = String.valueOf(FileIO.getByteLength(filename));
                             Packet.sendStringParketTo(socket, "OK#" + serverPort + "#" + fileLength, clientAddress, clientPort);
                             System.out.println("[Server] [lget] Assign port " + serverPort + " to " + clientAddress.toString());
                             //TODO: 握手?
-                            Thread send_thread = new Thread(new SendThread(filename, clientAddress, serverPort, targetPort));
+                            Thread send_thread = new Thread(new SendThread(filename, clientAddress, serverPort, targetPort, () -> PortPool.add(serverPort)));
                             send_thread.start();
                         }
                     }

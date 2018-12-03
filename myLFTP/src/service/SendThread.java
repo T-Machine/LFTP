@@ -34,14 +34,20 @@ public class SendThread implements Runnable {
     private String fileName; // 传输文件的文件名
     private boolean isFull = false; // 判断接收方的缓存是否已经是满的，以调整速率
     private boolean isConneted;
+    private CallbackEnd callback;
+
+    public interface CallbackEnd {
+        void finish();
+    }
 
 
-    public SendThread(String _fileName, InetAddress _receiveAddr, int _sentPort, int _receivePort) {
+    public SendThread(String _fileName, InetAddress _receiveAddr, int _sentPort, int _receivePort, CallbackEnd _callback) {
         this.fileName = _fileName;
         this.receiveAddr = _receiveAddr;
         this.sentPort = _sentPort;
         this.receivePort = _receivePort;
         this.startTime = new Date();
+        this.callback = _callback;
     }
 
     @Override
@@ -127,6 +133,11 @@ public class SendThread implements Runnable {
         } catch (IOException e) {
             System.out.println("Fail to send packets");
             e.printStackTrace();
+        }
+
+        //回调
+        if(this.callback != null) {
+            callback.finish();
         }
     }
 
