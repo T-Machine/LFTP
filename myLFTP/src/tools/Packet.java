@@ -40,10 +40,6 @@ public class Packet implements Serializable {
 		return ack;
 	}
 
-	public void setSeq(int seq) {
-		this.seq = seq;
-	}
-
 	public Integer getSeq() {
 		return seq;
 	}

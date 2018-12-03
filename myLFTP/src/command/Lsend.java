@@ -51,7 +51,7 @@ public class Lsend implements Runnable  {
                 System.out.println("[Fail] The server has no free port");
             } else {
                 System.out.println("[Info] Read file and send to " + Integer.parseInt(serverInfo));
-                Thread send_thread = new Thread(new SendThread(InetAddress.getByName(serverAddress), dataPort, Integer.parseInt(serverInfo), filename));
+                Thread send_thread = new Thread(new SendThread(filename, InetAddress.getByName(serverAddress), dataPort, Integer.parseInt(serverInfo)));
                 send_thread.start();
                 send_thread.join();
             }

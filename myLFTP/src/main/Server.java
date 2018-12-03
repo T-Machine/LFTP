@@ -78,7 +78,7 @@ public class Server {
 //                            socket.send(filePack);
                             Packet.sendStringParketTo(socket, "NOFILE", clientAddress, clientPort);
                         } else {
-                            Thread send_thread = new Thread(new SendThread(clientAddress, serverPort, targetPort, filename));
+                            Thread send_thread = new Thread(new SendThread(filename, clientAddress, serverPort, targetPort));
                             send_thread.start();
                         }
                     }

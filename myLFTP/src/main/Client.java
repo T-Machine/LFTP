@@ -25,7 +25,7 @@ public class Client {
 				int sourcePort = 3777;
 				int dstPort = 3888;
 				InetAddress ia = InetAddress.getByName(address);
-				Thread send_thread = new Thread(new SendThread(ia, sourcePort, dstPort, dir));
+				Thread send_thread = new Thread(new SendThread(dir, ia, sourcePort, dstPort));
 				send_thread.start();
 				send_thread.join();
 				sleep(3000);
