@@ -31,19 +31,11 @@ public class Lget implements Runnable  {
     public void run() {
         System.out.println("[Info] Get " + filename + " from " + serverAddress);
         try {
-            //将控制信息发送给服务端（LSEND + 文件名）
+            //将控制信息发送给服务端（LSEND + 文件名 + 端口）
             DatagramSocket socket = new DatagramSocket(controlPort);
             String controlInfo = "LGET#" + filename + "#" + dataPort;   //[LGET]#[FileName]#[Port]
-//            byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, controlInfo.getBytes(), ""));
-//            DatagramPacket controlPkt = new DatagramPacket(tmp, tmp.length, InetAddress.getByName(serverAddress), 5500);
-//            socket.send(controlPkt);
             Packet.sendStringParketTo(socket, controlInfo, InetAddress.getByName(serverAddress), 5500);
             //从服务端获取可用端口
-//            byte[] buffer = new byte[BUFSIZE];
-//            DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-//            socket.receive(dp);
-//            Packet returnPkt = ByteConverter.bytesToObject(buffer);
-//            String serverInfo = new String(returnPkt.getData());
             String serverInfo = Packet.getStringParketFrom(socket);
             String [] info = serverInfo.split("#");
             System.out.println("[Info] Server response: " + serverInfo);
@@ -55,7 +47,7 @@ public class Lget implements Runnable  {
             } else {
                 System.out.println("[Info] Get file from " + info[1]);
                 //TODO:获取文件长度 info[2]
-                /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(dataPort, "data/"));
+                /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(dataPort, "data/", null));
                 receiveThread.start();
                 receiveThread.join();
             }

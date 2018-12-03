@@ -40,7 +40,12 @@ public class SendThread implements Runnable {
     private boolean isConneted;
     private final static int SAMPLE = 1; // 速度采样时间
     private int totalPackageSum;
+    private CallbackEnd callback;
 
+
+    public interface CallbackEnd {
+        void finish();
+    }
 
     // 进行进度条的显示
     class ShowProgressBar implements Runnable{
@@ -73,15 +78,14 @@ public class SendThread implements Runnable {
         }
     }
 
-
-
-
-    public SendThread(String _fileName, InetAddress _receiveAddr, int _sentPort, int _receivePort) {
+    // 回调函数
+    public SendThread(String _fileName, InetAddress _receiveAddr, int _sentPort, int _receivePort, CallbackEnd _callback) {
         this.fileName = _fileName;
         this.receiveAddr = _receiveAddr;
         this.sentPort = _sentPort;
         this.receivePort = _receivePort;
         this.startTime = new Date();
+        this.callback = _callback;
     }
 
     @Override
@@ -116,6 +120,12 @@ public class SendThread implements Runnable {
                 }
                 Packet dataPacket;
                 List<byte[]> byteData = FileIO.divideToList(fileName, currentBlock);
+                if(byteData == null){
+                    isConneted = false;
+                    socket.disconnect();
+                    socket.close();
+                    return;
+                }
                 for (int j = 0; j < byteData.size(); j++) {
                     int packetIndex = j + currentBlock * FileIO.MAX_PACK_PER_BLOCK;
                     dataPacket = new Packet(0, packetIndex, false, false, 0, byteData.get(j), fileName);
@@ -175,6 +185,11 @@ public class SendThread implements Runnable {
         } catch (IOException e) {
             System.out.println("Fail to send packets");
             e.printStackTrace();
+        }
+
+        //回调
+        if(this.callback != null) {
+            callback.finish();
         }
     }
 
