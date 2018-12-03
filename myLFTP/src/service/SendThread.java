@@ -194,6 +194,8 @@ public class SendThread implements Runnable {
 
     private void SendPacket(int seq) {
         try {
+            // jiance
+            if(seq - currentBlock * FileIO.MAX_PACK_PER_BLOCK < 0) return;
             byte[] buff = ByteConverter.objectToBytes(sentDataList.get(seq - currentBlock * FileIO.MAX_PACK_PER_BLOCK));
             DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
             Packet packet = ByteConverter.bytesToObject(dp.getData());
@@ -234,8 +236,10 @@ public class SendThread implements Runnable {
 
         // 记录base值和nextSeq值，防止接收线程对其造成改变
         reSending = true;
+        int myBase = base;
+        if(myBase >= 1) myBase--;
         // 只发送一个报可能出现卡死，故使用GBN的机制
-        for (int i = base; i < nextSeq; ++i) {
+        for (int i = myBase; isConneted && i >= 0 && i < nextSeq; ++i) {
             while (rwnd <= 0) System.out.println("Reciever has no enough buffer!");
             SendPacket(i);
         }
