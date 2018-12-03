@@ -34,9 +34,10 @@ public class Lget implements Runnable  {
             //将控制信息发送给服务端（LSEND + 文件名）
             DatagramSocket socket = new DatagramSocket(controlPort);
             String controlInfo = "LGET#" + filename + "#" + String.valueOf(dataPort);
-            byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, controlInfo.getBytes(), ""));
-            DatagramPacket controlPkt = new DatagramPacket(tmp, tmp.length, InetAddress.getByName(serverAddress), 4001);
-            socket.send(controlPkt);
+//            byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, controlInfo.getBytes(), ""));
+//            DatagramPacket controlPkt = new DatagramPacket(tmp, tmp.length, InetAddress.getByName(serverAddress), 4001);
+//            socket.send(controlPkt);
+            Packet.sendStringParketTo(socket, controlInfo, InetAddress.getByName(serverAddress), 4001);
             //从服务端获取可用端口
             byte[] buffer = new byte[BUFSIZE];
             DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
