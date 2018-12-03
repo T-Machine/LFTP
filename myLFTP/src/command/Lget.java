@@ -47,7 +47,7 @@ public class Lget implements Runnable  {
                 System.out.println("[Fail] The server has no free port");
             } else {
                 System.out.println("[Info] Get file from " + Integer.parseInt(serverInfo));
-                Thread receiveThread = new Thread(new ReceiveThread(dataPort));
+                /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(dataPort, "data/"));
                 receiveThread.start();
                 receiveThread.join();
             }

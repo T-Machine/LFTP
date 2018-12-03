@@ -18,257 +18,243 @@ import tools.Packet;
 import static java.lang.Thread.sleep;
 
 public class ReceiveThread implements Runnable {
-	private final static int BUFLENGTH = 8192;
-	private final static int BUFSIZE = BUFLENGTH * 1024;
-	private DatagramSocket socket;				// UDP连接DatagramSocket
-	private int serverPort;						// 服务端接收端口
-	private int expectedseqnum;					// 期望收到的序列号
-	InetAddress clientInetAddress;				// 客户端发送IP地址
-	int clientPort;								// 客户端发送端口
-	boolean isRandom = false;                   // 是否进入失序模式
-	private volatile int rwnd = BUFLENGTH;                              // 窗口大小
-	private volatile int writeCount = 0;        // 写入的数量
-	private  volatile boolean isConneted;
-	private List<Packet> randomBuff;            // 存储失序的包
-	private String fileDic = "data/";           // 存储的文件目录
-	private String fileName;                    // 存储的文件名
-	private String totalFileName;               // 完整文件名
-	private volatile Lock fileLock = new ReentrantLock();        //文件读写的锁
-	private volatile List<byte[]> data = new ArrayList<>();       // 存储文件的list
-	private volatile boolean okToWrite = false;           // 可以读写文件
-	public ReceiveThread(int port) {
-		this.serverPort = port;
-		expectedseqnum = 0;
-	}
-	
-	public InetAddress getClientInetAddress() {
-		return clientInetAddress;
-	}
-	public void setClientInetAddress(InetAddress ia) {
-		this.clientInetAddress = ia;
-	}
-	public int getClientPort() {
-		return clientPort;
-	}
-	public void setClientPort(int port) {
-		this.clientPort = port;
+	private final static int BUFLENGTH = 4 * 1024; // BUFF大小（单位KB）
+	private final static int BUFSIZE = BUFLENGTH * 1024; // BUFF大小（单位byte）
+	private DatagramSocket socket; // UDP连接DatagramSocket
+	private int receivePort; // 服务端接收端口
+	private List<Packet> randomBuff; // 选择重传的缓存
+	private String fileDic; // 存储的文件目录
+	private String fileName; // 存储的文件名
+	private String totalFileName; // 完整文件名
+	private InetAddress senderAddr; // 发送方IP地址
+	private int senderPort; // 发送方的发送端口
+	private volatile int ackIndex; // 确认收到的分组编号
+	private volatile boolean isRandom = false; // 判断接收的分组顺序是否是正常的
+	private volatile int rwnd = BUFLENGTH; // 接收窗口大小
+	private volatile int writeCount = 0; // 写入数据的分组数量
+	private volatile boolean isConneted; // 判断当前是否仍在连接
+	private volatile Lock fileLock = new ReentrantLock(); // 文件读写的锁
+	private volatile List<byte[]> receiveDataList = new ArrayList<>();// 存储接收到分组数据的list
+
+	public ReceiveThread(int _receivePort, String _fileDic) {
+		this.receivePort = _receivePort;
+		this.fileDic = _fileDic;
+		ackIndex = 0;
 	}
 
-	//判断是否超时的线程
+	// 获取发送方的ip地址
+	public InetAddress getSenderAddr() {
+		return senderAddr;
+	}
+
+	// 设置发送方的ip地址
+	public void setSenderAddr(InetAddress _senderAddr) {
+		this.senderAddr = _senderAddr;
+	}
+
+	public int getSenderPort() {
+		return senderPort;
+	}
+
+	public void setSenderPort(int _receivePort) {
+		this.senderPort = _receivePort;
+	}
+
+	// 进行文件写入的线程
 	class WriteFile implements Runnable {
 		@Override
 		synchronized public void run() {
-			while(isConneted){
-				while(okToWrite){
-					try{
-						sleep(5);
-						if(data.isEmpty()) continue;
-						fileLock.lock();
-						writeCount += data.size();
-						FileIO.byte2file(totalFileName, data);
-						data.clear();
-						rwnd = BUFLENGTH - (expectedseqnum - writeCount);
-						if(rwnd < 0) rwnd = 0;
-						fileLock.unlock();
-					}catch (InterruptedException e){
-						System.out.println(Thread.currentThread().getName());
-						Thread.currentThread().interrupt();
-						System.out.println("after interrupt");
-					}
-				}
+			// 判断是否仍然在连接
+			while (isConneted) {
+				// 接收数据列表不能为空
+				if (receiveDataList.isEmpty())
+					continue;
+				writeFile();
 			}
 		}
 	}
 
+	// 接收线程打开
 	@Override
 	synchronized public void run() {
 		try {
-			// 启动超时判断处理线程
-			socket = new DatagramSocket(serverPort);
+			// 新建套接字
+			socket = new DatagramSocket(receivePort);
 			isConneted = true;
-			Thread file_threadThread;
-			file_threadThread = new Thread(new WriteFile());
-			file_threadThread.start();
-			// 一次接收BUFLENGTH个分组
-			byte[] buffer = new byte[BUFSIZE];
-			//数据报
-			DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
-			List<Packet> randomBuff = new ArrayList<>();
+			Thread fileWriter;
+			// 调用多线程在等待接收的时候写入数据，避免缓存过满
+			fileWriter = new Thread(new WriteFile());
+			fileWriter.start();
+			// 一次性接收分组的数量
+			byte[] receiverBuff = new byte[BUFSIZE];
+			// 选择重传的缓存
+			randomBuff = new ArrayList<>();
+			// 获得Packet
+			DatagramPacket dp = new DatagramPacket(receiverBuff, receiverBuff.length);
 			// 阻塞等待第一个数据包
 			socket.receive(dp);
 			// 获取客户端IP和发送端口
-			setClientInetAddress(dp.getAddress());
-			setClientPort(dp.getPort());
-			System.out.println("正在接受文件传输\n发送方地址——" + clientInetAddress.getAddress().toString() + ":" + clientPort + "\n");
+			setSenderAddr(dp.getAddress());
+			setSenderPort(dp.getPort());
+			System.out.println("开始接收ip地址为" + senderAddr.getAddress().toString() + "和端口为" + senderPort + "设备的数据\n");
+			// 直到接收到最后一个FIN的数据包，一直处于接收状态
 			while (true) {
-				Packet packet = ByteConverter.bytesToObject(buffer);
-				if(expectedseqnum == 0){
+				Packet packet = ByteConverter.bytesToObject(receiverBuff);
+				// 接收完成
+				if (packet.getFIN() == true)
+					break;
+				// 第一次接收加上文件名
+				if (ackIndex == 0) {
 					fileName = packet.getFilename();
+					// 加上完整的文件名
 					totalFileName = fileDic + fileName;
 				}
-//				if(packet.getSeq() == 8192) System.out.println("ok!" + 8192);
-//				if(packet.getSeq() == 8193) System.out.println("ok!"  + 8193);
-//				if(packet.getSeq() == 8194) System.out.println("ok!"  + 8194);
-//				if(packet.getSeq() == 12937) System.out.println("ok!"  + 12937);
-//				// 第0个
-//				if(packet.getSeq() == 0){
-//					// 通过新接收的文件名新建文件
-//							fileName = new String(packet.getData());
-//					totalFileName = fileDic + fileName;
-//					File file=new File(fileDic + fileName);
-//					if(file.exists()&&file.isFile()) {
-//						file.delete();
-//					}
-//					sendSuccessACK(packet);
-//					expectedseqnum++;
-//					// 期待下一个序列号的数据包
-//
-//					// 阻塞等待下一个数据包
-//					socket.receive(dp);
-//					okToWrite = true;
-//					continue;
-//					// 等待第0个
-//				}
-//				System.out.println("ss");
-				// 接收到发送完成的信号数据包，跳出循环
-				if (packet.isFIN() == true) break;
-				// 缓存空间不足
-				if(rwnd == 0) {
 
-					System.out.println("RWND Overflow");
+				// 缓存空间不足
+				if (rwnd == 0) {
 					// 清空List，重置接收窗口空闲空间
-					fileLock.lock();
-					writeCount += data.size();
-					FileIO.byte2file(totalFileName, data);
-					data.clear();
-					rwnd = BUFLENGTH - (expectedseqnum - writeCount);
-					if(rwnd < 0) rwnd = 0;
-					fileLock.unlock();
-					sendFailACK(packet);
-					System.out.println("ACK(rwnd): " + (expectedseqnum - 1) + " expect: " + expectedseqnum);
-				}
-				else if(packet.getSeq() == expectedseqnum) {
-					// 提取数据包，递交数据
-					// 判断收到的包是不是重发送的包
-					if(isRandom){
+					writeFile();
+					// 因为RWND Overflow导致错误
+					sendFailACK(true);
+
+				} else if (packet.getSeq() == ackIndex) {
+					// 如果符合选择重传，从BUFF中读取
+					if (isRandom) {
 						int index = 0;
-						//遍历缓存区，查看是否出现了符合缓存的分组
-						while(index < randomBuff.size()){
-							if(randomBuff.get(index).getSeq() != packet.getSeq() + index + 1){
+						// 遍历缓存区，查看是否出现了符合缓存的分组
+						while (index < randomBuff.size()) {
+							if (randomBuff.get(index).getSeq() != packet.getSeq() + index + 1) {
 								break;
 							}
 							index++;
 						}
 						// 存在与否
-						if(index > 0){
-							System.out.println("Yes!");
+						if (index > 0) {
+							// 读取DataList加锁
 							fileLock.lock();
-							data.add(packet.getData());
+							receiveDataList.add(packet.getData());
 							rwnd--;
 							// 利用缓存读取数据
-							for(int i = 0; i < index; i++){
-								System.out.println("Yes!");
-								data.add(randomBuff.get(i).getData());
+							for (int i = 0; i < index; i++) {
+								receiveDataList.add(randomBuff.get(i).getData());
 								rwnd--;
 							}
 							fileLock.unlock();
-							for(int i = 0; i < index; i++){
+							// 清除BUFF
+							for (int i = 0; i < index; i++) {
 								randomBuff.remove(0);
 							}
+							// 顺序正常
 							isRandom = false;
 							randomBuff.clear();
-							expectedseqnum += index;
-							sendSuccessACK(packet);
-							expectedseqnum++;
-							// 返回一个正确接受的ACK包
+							ackIndex += index;
+							sendSuccessACK();
+							System.out.println("SR: Receive BUFF Length->" + index);
+							ackIndex++;
+							// 继续阻塞
 							socket.receive(dp);
 							continue;
 						}
 					}
+					// 正常顺序的读取
 					fileLock.lock();
-					data.add(packet.getData());
+					receiveDataList.add(packet.getData());
 					rwnd--;
 					fileLock.unlock();
-					sendSuccessACK(packet);
-					expectedseqnum++;
-					// 期待下一个序列号的数据包
+					sendSuccessACK();
+					ackIndex++;
 					// 阻塞等待下一个数据包
 					socket.receive(dp);
 				}
 				// 接受到非期望数据包
 				else {
-					if(randomBuff.size() <= rwnd && expectedseqnum < packet.getSeq()){
+					// 选择重传的分组编号不能是之前重传的
+					if (randomBuff.size() <= rwnd && ackIndex < packet.getSeq()) {
 						isRandom = true;
 						randomBuff.add(packet);
-						//从小到大排序
+						// 从小到大排序
 						Collections.sort(randomBuff, new Comparator<Packet>() {
 							public int compare(Packet o1, Packet o2) {
 								return o1.getSeq().compareTo(o2.getSeq());
 							}
 						});
 					}
-					sendFailACK(packet);
-					System.out.println("ACK(wrong): " + expectedseqnum + "——————expect: " + (expectedseqnum + 1) + "——————get: " + packet.getSeq());
+					// 因为非期望数据包导致错误
+					sendFailACK(false);
 					// 阻塞等待下一个数据包
 					socket.receive(dp);
 				}
 			}
+			isConneted = false;
+			// 加锁
 			fileLock.lock();
-			FileIO.byte2file(totalFileName, data);
-			data.clear();
+			FileIO.byte2file(totalFileName, receiveDataList);
+			receiveDataList.clear();
 			fileLock.unlock();
-			System.out.println("接收并写入完毕！");
+			System.out.println("Writing Success!");
 			socket.disconnect();
 			socket.close();
-			okToWrite = false;
-			isConneted = false;
-			file_threadThread.join();
+
 			return;
-		}
-		catch (SocketException e) {
-			System.out.println("ReceiveThread: 创建socket出错");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("ReceiveThread: 接收数据包出错");
-			e.printStackTrace();
-		} catch (InterruptedException e){
-			System.out.println("Join err");
-		}
-	}
-
-		private void sendSuccessACK(Packet packet){
-		try {
-			// 返回一个正确接受的ACK包
-			Packet ackPacket = new Packet(expectedseqnum, -1, true, false, rwnd, null, "");
-			byte[] ackBuffer = ByteConverter.objectToBytes(ackPacket);
-			DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, clientInetAddress, clientPort);
-			socket.send(ackdp);
-			System.out.println("ACK(right): " + expectedseqnum + " expect: " + expectedseqnum + " get: " + packet.getSeq());
 		} catch (SocketException e) {
-			System.out.println("ReceiveThread: 创建socket出错");
+			System.out.println("Fail to create socket!");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("ReceiveThread: 接收数据包出错");
+			System.out.println("Fail to receive packets");
 			e.printStackTrace();
 		}
 	}
 
-	private void sendFailACK(Packet packet){
+	private void sendSuccessACK() {
 		try {
-			// 返回一个错误接受的ACK包
-			Packet ackPacket = new Packet(expectedseqnum-1, -1, true, false, rwnd, null, "");
-			byte[] ackBuffer = ByteConverter.objectToBytes(ackPacket);
-			DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, clientInetAddress, clientPort);
+			// 返回一个正确接受ACK包
+			Packet successAckPacket = new Packet(ackIndex, -1, true, false, rwnd, null, "");
+			byte[] ackBuffer = ByteConverter.objectToBytes(successAckPacket);
+			DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, senderAddr, senderPort);
 			socket.send(ackdp);
+			System.out.println("Success: Receive->" + ackIndex + " expect->" + (ackIndex + 1));
 		} catch (SocketException e) {
-			System.out.println("ReceiveThread: 创建socket出错");
+			System.out.println("Fail to create socket!");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("ReceiveThread: 接收数据包出错");
+			System.out.println("Fail to receive packets");
 			e.printStackTrace();
 		}
 	}
 
+	private void sendFailACK(boolean choice) {
+		try {
+			// 返回一个错误接受ACK包
+			Packet errorAckPacket = new Packet(ackIndex - 1, -1, true, false, rwnd, null, "");
+			byte[] ackBuffer = ByteConverter.objectToBytes(errorAckPacket);
+			DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, senderAddr, senderPort);
+			socket.send(ackdp);
+			// 因为RWND导致
+			if(choice){
+				System.out.println("Fail Caused by RWND Overflow: Receive->" + ackIndex + " expect->" + ackIndex);
+			}
+			else System.out.println("Fail Caused by unexpected Packet: Receive->" + ackIndex + " expect->" + (ackIndex + 1));
+		} catch (SocketException e) {
+			System.out.println("Fail to create socket!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Fail to receive packets");
+			e.printStackTrace();
+		}
+	}
 
+	// 进行文件的写入，需要加锁
+	private void writeFile() {
+		fileLock.lock();
+		// 写入文件对应的分组编号
+		writeCount += receiveDataList.size();
+		FileIO.byte2file(totalFileName, receiveDataList);
+		receiveDataList.clear();
+		// 更新rwnd
+		rwnd = BUFLENGTH - (ackIndex - writeCount);
+		if (rwnd < 1)
+			rwnd = 1;
+		fileLock.unlock();
+	}
 
 }
