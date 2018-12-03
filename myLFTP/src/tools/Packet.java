@@ -1,6 +1,9 @@
 package tools;
 
 import java.io.Serializable;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 public class Packet implements Serializable {
 	private Integer ack;		//确认号
@@ -19,6 +22,17 @@ public class Packet implements Serializable {
 		this.rwnd = rwnd;
 		this.data = data;
 		this.filename = fn;
+	}
+
+	public static void sendStringParketTo(DatagramSocket socket, String msg, InetAddress address, int port) {
+		try {
+			byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, msg.getBytes(), ""));
+			DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, address, port);
+			socket.send(portPack);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 	public void setAck(int ack) {

@@ -48,10 +48,11 @@ public class Server {
                 if(!PortPool.isEmpty()) {
                     int serverPort = PortPool.remove(0);
                     //将可用端口发送给客户端
-                    byte[] s_port = String.valueOf(serverPort).getBytes();
-                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, s_port, ""));
-                    DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, clientAddress, clientPort);
-                    socket.send(portPack);
+//                    byte[] s_port = String.valueOf(serverPort).getBytes();
+//                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, s_port, ""));
+//                    DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, clientAddress, clientPort);
+//                    socket.send(portPack);
+                    Packet.sendStringParketTo(socket, String.valueOf(serverPort), clientAddress, clientPort);
                     System.out.println("[Server] Assign port " + serverPort + " to " + clientAddress.toString());
 
                     String [] info = controlInfo.split("#");
@@ -69,9 +70,17 @@ public class Server {
                         System.out.println("[Server] [lget] Send file in " + serverPort);
                         String filename = info[1];
                         int targetPort = Integer.parseInt(info[2]);
-                        //TODO:判断文件是否存在
-                        Thread send_thread = new Thread(new SendThread(clientAddress, serverPort, targetPort, filename));
-                        send_thread.start();
+                        File file = new File(filename);
+                        if(!file.exists()) {
+//                            String msg = "NOFILE";
+//                            byte[] tmp1= ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, msg.getBytes(), ""));
+//                            DatagramPacket filePack = new DatagramPacket(tmp1, tmp1.length, clientAddress, clientPort);
+//                            socket.send(filePack);
+                            Packet.sendStringParketTo(socket, "NOFILE", clientAddress, clientPort);
+                        } else {
+                            Thread send_thread = new Thread(new SendThread(clientAddress, serverPort, targetPort, filename));
+                            send_thread.start();
+                        }
                     }
                     else {
                         System.out.println("[Server] [error] Send invalid commend");
@@ -79,10 +88,11 @@ public class Server {
 
                 } else {
                     //端口爆满时，告诉客户端
-                    String msg = "NOPORT";
-                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, msg.getBytes(), ""));
-                    DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, clientAddress, clientPort);
-                    socket.send(portPack);
+//                    String msg = "NOPORT";
+//                    byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, msg.getBytes(), ""));
+//                    DatagramPacket portPack = new DatagramPacket(tmp, tmp.length, clientAddress, clientPort);
+//                    socket.send(portPack);
+                    Packet.sendStringParketTo(socket, "NOPORT", clientAddress, clientPort);
                     System.out.println("[Server] No more port can assigned to " + clientAddress.toString());
                 }
 
