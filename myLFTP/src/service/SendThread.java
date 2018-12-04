@@ -17,8 +17,8 @@ import static java.lang.Thread.sleep;
 
 public class SendThread implements Runnable {
     private final static int BUFSIZE = 1024 * 1024;// 数据报的大小最大1024 * 1024
-    private volatile int rwnd; // 未确认最大分组的编号
-    private volatile int base = 0; // 基序号
+    private volatile int rwnd = 8192; // 未确认最大分组的编号
+    private volatile int base = 1; // 基序号
     private volatile int nextSeq = 0; // 下一个待发送分组的序号
     private volatile Date startTime; // 记录时间
     private volatile boolean reSending = false; // 重传模式是否打开
@@ -163,6 +163,9 @@ public class SendThread implements Runnable {
                     System.out.println(isFull);
                     // 拥塞控制和流量控制
                     int threshold = rwnd < (int) cwnd ? rwnd : (int) cwnd;
+                    if(threshold <= 0) threshold = 1;
+                    System.out.println(threshold + " | " + cwnd + " | " + rwnd + " + " + base);
+                    System.out.println(reSending + " | " + nextSeq);
                     if (nextSeq <= base + threshold && reSending == false) {
                         System.out.println("send" + currAck);
                         Packet sentPacket = sentDataList.get(nextSeq - currentBlock * FileIO.MAX_PACK_PER_BLOCK);
@@ -237,6 +240,9 @@ public class SendThread implements Runnable {
                         if (duplicateAck == 3) {
                             // 更新拥塞窗口
                             ssthresh = cwnd / 2;
+                            if(ssthresh <= 0) {
+                                ssthresh = 1;
+                            }
                             cwnd = ssthresh + 3;
                             isQuickRecover = true;
                             SendPacket(base);
