@@ -57,6 +57,9 @@ public class Packet implements Serializable {
 	public Integer getAck() {
 		return ack;
 	}
+	public boolean getACKBoolean() {
+		return ACK;
+	}
 
 	public Integer getSeq() {
 		return seq;
@@ -86,6 +89,6 @@ public class Packet implements Serializable {
 		return fileName;
 	}
 
-	public void setTotalPackage(){ this.totalPackage = totalPackage;}
+	public void setTotalPackage(int totalPackage){ this.totalPackage = totalPackage;}
 	public int getTotalPackage(){ return this.totalPackage; }
 }

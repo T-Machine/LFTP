@@ -61,11 +61,9 @@ public class FileIO {
                 datas = blockToByteList(blockData, leaveBlock);
             }
             inStream.close();
-            System.out.println("读取区块" + blockNum + "完毕! 区块大小" + datas.size());
             return datas;
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("读取越界");
+            System.out.println("文件名不存在，程序强制退出");
             return null;
         }
     }
@@ -110,15 +108,6 @@ public class FileIO {
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
-        }
-    }
-
-    public static void main(String[] args){
-        String str = "test.zip";
-        String str2 = "out.zip";
-        for(int i = 0; i < getBlockLength(str); i++){
-
-            byte2file(str2, divideToList(str, i));
         }
     }
 }

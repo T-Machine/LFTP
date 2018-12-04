@@ -52,7 +52,9 @@ public class Lsend implements Runnable  {
                 System.out.println("[Info] Read file and send to " + info[1]);
                 Thread send_thread = new Thread(new SendThread(filename, InetAddress.getByName(serverAddress), dataPort, Integer.parseInt(info[1]), null));
                 send_thread.start();
+                System.out.println("sending!");
                 send_thread.join();
+                System.out.println("end!");
             }
 
             socket.disconnect();
