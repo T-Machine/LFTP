@@ -7,26 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="841af199-dee9-495b-900a-2b1e42468473" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/myLFTP_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Server_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/main.zip" beforeDir="false" afterPath="$PROJECT_DIR$/data/main.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/myLFTP_jar/myLFTP.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/myLFTP_jar/myLFTP.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/command/Lget.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/command/Lget.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/command/Lsend.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/command/Lsend.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$ShowProgressBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$ShowProgressBar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$WriteFile.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread$WriteFile.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/ReceiveThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$RecvAck.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$RecvAck.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$ShowProgressBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$ShowProgressBar.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$TimeCounter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread$TimeCounter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/service/SendThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/myLFTP/tools/Packet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/myLFTP/tools/Packet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/command/Lget.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/command/Lget.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/command/Lsend.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/command/Lsend.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/ReceiveThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/ReceiveThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/service/SendThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/service/SendThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tools/Packet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/Packet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../LFTP 设计文档.md" beforeDir="false" afterPath="$PROJECT_DIR$/../LFTP 设计文档.md" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -79,8 +60,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="28" column="43" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="43" />
+            <state relative-caret-position="472">
+              <caret line="242" column="50" lean-forward="true" selection-start-line="242" selection-start-column="50" selection-end-line="242" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -277,7 +258,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543909129100" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543909149937" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
@@ -349,12 +330,12 @@
       <workItem from="1543672556653" duration="1171000" />
       <workItem from="1543712370660" duration="7030000" />
       <workItem from="1543721117719" duration="61997000" />
-      <workItem from="1543850142716" duration="26726000" />
+      <workItem from="1543850142716" duration="27243000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17278000" />
+    <option name="totallyTimeSpent" value="17795000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -538,8 +519,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/service/SendThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="28" column="43" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="43" />
+        <state relative-caret-position="472">
+          <caret line="242" column="50" lean-forward="true" selection-start-line="242" selection-start-column="50" selection-end-line="242" selection-end-column="50" />
         </state>
       </provider>
     </entry>
