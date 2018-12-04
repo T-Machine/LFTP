@@ -54,19 +54,19 @@ public class Server {
                     String [] info = controlInfo.split("#");
                     String filename = info[1];
                     if(info[0].equals("LSEND")) {
-                        File file = new File("data");
-                        if(!file.exists()) {
-                            file.mkdir();
-                        }
+//                        File file = new File("data");
+//                        if(!file.exists()) {
+//                            file.mkdir();
+//                        }
 
-                        File findFile = new File("data/" + filename);
+                        File findFile = new File(filename);
                         if(findFile.exists()) {
                             Packet.sendStringParketTo(socket, "EXIST#", clientAddress, clientPort);
                             System.out.println("[Server] [error] The file is existed");
                         } else {
                             Packet.sendStringParketTo(socket, "OK#" + serverPort, clientAddress, clientPort);
                             System.out.println("[Server] [lsend] Assign port " + serverPort + " to " + clientAddress.toString());
-                            /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(serverPort, "data/", () -> PortPool.add(serverPort)));
+                            /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(serverPort, () -> PortPool.add(serverPort)));
                             receiveThread.start();
                         }
                     }

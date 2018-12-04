@@ -23,9 +23,7 @@ public class ReceiveThread implements Runnable {
 	private DatagramSocket socket; // UDP连接DatagramSocket
 	private int receivePort; // 服务端接收端口
 	private List<Packet> randomBuff; // 选择重传的缓存
-	private String fileDic; // 存储的文件目录
 	private String fileName; // 存储的文件名
-	private String totalFileName; // 完整文件名
 	private InetAddress senderAddr; // 发送方IP地址
 	private int totalPackageSum; // 数据包的总数
 	private int senderPort; // 发送方的发送端口
@@ -42,9 +40,8 @@ public class ReceiveThread implements Runnable {
 		void finish();
 	}
 
-	public ReceiveThread(int _receivePort, String _fileDic, CallbackEnd _callback) {
+	public ReceiveThread(int _receivePort, CallbackEnd _callback) {
 		this.receivePort = _receivePort;
-		this.fileDic = _fileDic;
 		this.callback = _callback;
 		ackIndex = 0;
 	}
@@ -144,7 +141,6 @@ public class ReceiveThread implements Runnable {
 					fileName = packet.getFilename();
 					totalPackageSum = packet.getTotalPackage();
 					// 加上完整的文件名
-					totalFileName = fileDic + fileName;
 					showProgressBar.start();
 				}
 				// 缓存空间不足
@@ -224,7 +220,7 @@ public class ReceiveThread implements Runnable {
 			isConneted = false;
 			// 加锁
 			fileLock.lock();
-			FileIO.byte2file(totalFileName, receiveDataList);
+			FileIO.byte2file(fileName, receiveDataList);
 			receiveDataList.clear();
 			fileLock.unlock();
 			socket.close();
@@ -280,7 +276,7 @@ public class ReceiveThread implements Runnable {
 		fileLock.lock();
 		// 写入文件对应的分组编号
 		writeCount += receiveDataList.size();
-		FileIO.byte2file(totalFileName, receiveDataList);
+		FileIO.byte2file(fileName, receiveDataList);
 		receiveDataList.clear();
 		// 更新rwnd
 		rwnd = BUFLENGTH - (ackIndex - writeCount);

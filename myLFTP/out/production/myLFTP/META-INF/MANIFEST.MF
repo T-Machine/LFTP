@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-<<<<<<< HEAD
-=======
-Class-Path: commons-cli-1.4.jar commons-cli-1.4-tests.jar
->>>>>>> 63aeb783bf8b0cb365945da3aa6831cd6c57cc64
-Main-Class: main.Server
-
