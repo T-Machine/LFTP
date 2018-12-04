@@ -5,11 +5,15 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import tools.ByteConverter;
 import tools.FileIO;
 import tools.Packet;
+import tools.ProgressBar;
+
+import static java.lang.Thread.sleep;
 
 public class SendThread implements Runnable {
     private final static int BUFSIZE = 1024 * 1024;// 数据报的大小最大1024 * 1024
@@ -26,6 +30,7 @@ public class SendThread implements Runnable {
     private volatile int currentBlock = 0; // 当前读取的块
     private volatile int blockSum; // 块的总数量
     private volatile boolean isReRoad; // 判断现在是否是已读
+    private volatile boolean isMainSent = false; //主线程是否送完所有数据
     private List<Packet> sentDataList; // 要发送的数据
     private InetAddress receiveAddr; // 目的地址
     private int sentPort; // 源端口
@@ -33,15 +38,55 @@ public class SendThread implements Runnable {
     private DatagramSocket socket; // 用于发送数据包
     private String fileName; // 传输文件的文件名
     private boolean isFull = false; // 判断接收方的缓存是否已经是满的，以调整速率
-    private boolean isConneted;
+    private volatile boolean isConneted;
+    private final static int SAMPLE = 1; // 速度采样时间
+    private int totalPackageSum;
+    private CallbackEnd callback;
 
 
-    public SendThread(String _fileName, InetAddress _receiveAddr, int _sentPort, int _receivePort) {
+    public interface CallbackEnd {
+        void finish();
+    }
+
+    // 进行进度条的显示
+    class ShowProgressBar implements Runnable{
+        @Override
+        public void run(){
+            ProgressBar pg = new ProgressBar(0, 100, 60, '#');
+            // 之前的时间 现在的时间 之前的ack idnex  现在的ack index
+            Date before, current;
+            int ackAfter, ackBefore;
+            try {
+                while(isConneted){
+                    ackBefore = currAck;
+                    before = new Date();
+
+                    // 睡眠
+                    sleep(SAMPLE);
+                    ackAfter = currAck;
+                    current = new Date();
+                    // 显示百分比
+                    float haveGot = (float)ackAfter / (float)totalPackageSum;
+                    float rate = (float)(ackAfter - ackBefore) / (float)(current.getTime() - before.getTime());
+                    int val = Math.round(haveGot * 100);
+                    rate = (rate / (float)SAMPLE) * 1000;
+                    if(!isConneted) break;
+                    pg.show(val, rate);
+                }
+            }catch (InterruptedException e){
+                System.out.println("Interrupt!");
+            }
+        }
+    }
+
+    // 回调函数
+    public SendThread(String _fileName, InetAddress _receiveAddr, int _sentPort, int _receivePort, CallbackEnd _callback) {
         this.fileName = _fileName;
         this.receiveAddr = _receiveAddr;
         this.sentPort = _sentPort;
         this.receivePort = _receivePort;
         this.startTime = new Date();
+        this.callback = _callback;
     }
 
     @Override
@@ -52,7 +97,7 @@ public class SendThread implements Runnable {
             isConneted = true;
             // 新建ACK接收线程
             Thread ACKreceiver = new Thread(new RecvAck());
-
+            Thread showProgessBar = new Thread(new ShowProgressBar());
             // 超时判断线程
             Thread timeCounter;
             timeCounter = new Thread(new TimeCounter());
@@ -60,7 +105,11 @@ public class SendThread implements Runnable {
             sentDataList = new ArrayList<>();
             // 记录一共读取的块的数量
             blockSum = FileIO.getBlockLength(fileName);
+            // 记录数据包的总量
+            totalPackageSum = FileIO.getByteLength(fileName);
+            showProgessBar.start();
             // 读取-发送循环
+            System.out.println("文件读取成功！");
             for (currentBlock = 0; currentBlock < blockSum; currentBlock++) {
                 // 开始读取文件的标志
                 isReRoad = true;
@@ -73,8 +122,18 @@ public class SendThread implements Runnable {
                 }
                 Packet dataPacket;
                 List<byte[]> byteData = FileIO.divideToList(fileName, currentBlock);
+                if(byteData == null){
+                    isConneted = false;
+                    socket.disconnect();
+                    socket.close();
+                    return;
+                }
                 for (int j = 0; j < byteData.size(); j++) {
-                    dataPacket = new Packet(0, j + currentBlock * FileIO.MAX_PACK_PER_BLOCK, false, false, 0, byteData.get(j), fileName);
+                    int packetIndex = j + currentBlock * FileIO.MAX_PACK_PER_BLOCK;
+                    dataPacket = new Packet(0, packetIndex, false, false, 0, byteData.get(j), fileName);
+                    if(packetIndex == 0){
+                        dataPacket.setTotalPackage(totalPackageSum);
+                    }
                     sentDataList.add(dataPacket);
                 }
                 isReRoad = false;
@@ -108,6 +167,7 @@ public class SendThread implements Runnable {
                         && currentBlock < blockSum - 1) {}
             }
 
+            isMainSent = true;
             // 发送完成，需要确定ACK最后一个数据包后才能断开
             while (true) {
                 // 注意：此时currentBlock已经再加上1
@@ -116,8 +176,13 @@ public class SendThread implements Runnable {
                     DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
                     socket.send(dp);
                     System.out.println("Sending Success!");
+                    isConneted = false;
                     socket.disconnect();
                     socket.close();
+                    //回调
+                    if(this.callback != null) {
+                        callback.finish();
+                    }
                     return;
                 }
             }
@@ -194,10 +259,11 @@ public class SendThread implements Runnable {
 
     private void SendPacket(int seq) {
         try {
-            byte[] buff = ByteConverter.objectToBytes(sentDataList.get(seq - currentBlock * FileIO.MAX_PACK_PER_BLOCK));
+            // jiance
+            int index = isMainSent ? seq - (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK : seq - currentBlock * FileIO.MAX_PACK_PER_BLOCK;
+            byte[] buff = ByteConverter.objectToBytes(sentDataList.get(index));
             DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
             Packet packet = ByteConverter.bytesToObject(dp.getData());
-            System.out.println("Send: packet index->" + packet.getSeq());
             socket.send(dp);
         } catch (IOException e) {
             System.out.println("Fail to send packets");
@@ -210,7 +276,7 @@ public class SendThread implements Runnable {
         @Override
         public void run() {
             while (isConneted) {
-                // 如果在读取数据，不进行计时，更新时间
+                // 如果在读取数据，不进行计时，更新时间rt
                 while (isReRoad) {
                     startTime = new Date();
                 }
@@ -234,9 +300,11 @@ public class SendThread implements Runnable {
 
         // 记录base值和nextSeq值，防止接收线程对其造成改变
         reSending = true;
+        int myBase = base;
+        if(myBase >= 1) myBase--;
         // 只发送一个报可能出现卡死，故使用GBN的机制
-        for (int i = base; i < nextSeq; ++i) {
-            while (rwnd <= 0) System.out.println("Reciever has no enough buffer!");
+        for (int i = myBase; isConneted && i >= 0 && i < nextSeq; ++i) {
+            while (rwnd <= 0) continue;
             SendPacket(i);
         }
         reSending = false;
