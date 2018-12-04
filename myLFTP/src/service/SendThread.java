@@ -5,15 +5,11 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.text.DecimalFormat;
 import java.util.*;
 
 import tools.ByteConverter;
 import tools.FileIO;
 import tools.Packet;
-import tools.ProgressBar;
-
-import static java.lang.Thread.sleep;
 
 public class SendThread implements Runnable {
     private final static int BUFSIZE = 1024 * 1024;// 数据报的大小最大1024 * 1024
@@ -36,277 +32,213 @@ public class SendThread implements Runnable {
     private int receivePort; // 目的端口
     private DatagramSocket socket; // 用于发送数据包
     private String fileName; // 传输文件的文件名
-    private volatile boolean isFull = false; // 判断接收方的缓存是否已经是满的，以调整速率
-    private volatile boolean isConneted;
-    private final static int SAMPLE = 1; // 速度采样时间
-    private int totalPackageSum;
-    private CallbackEnd callback;
+    private boolean isFull = false; // 判断接收方的缓存是否已经是满的，以调整速率
+    private boolean isConneted;
 
 
-    public interface CallbackEnd {
-        void finish();
-    }
-
-    // 进行进度条的显示
-    class ShowProgressBar implements Runnable{
-        @Override
-        public void run(){
-            ProgressBar pg = new ProgressBar(0, 100, 60, '#');
-            // 之前的时间 现在的时间 之前的ack idnex  现在的ack index
-            Date before, current;
-            int ackAfter, ackBefore;
-            try {
-                while(true){
-                    ackBefore = currAck;
-                    before = new Date();
-                    // 睡眠
-                    sleep(SAMPLE);
-                    ackAfter = currAck;
-                    current = new Date();
-                    // 显示百分比
-                    float haveGot = (float)ackAfter / (float)totalPackageSum;
-                    float rate = (float)(ackAfter - ackBefore) / (float)(current.getTime() - before.getTime());
-                    int val = Math.round(haveGot * 100);
-                    rate = (rate / (float)SAMPLE) * 1000;
-                    pg.show(val, rate);
-                    System.out.println("showErr!!" + currAck + " | " + totalPackageSum);
-                    if(val == 100) break;
-                }
-            }catch (InterruptedException e){
-                System.out.println("Interrupt!");
-            }
-        }
-    }
-
-    // 回调函数
-    public SendThread(String _fileName, InetAddress _receiveAddr, int _sentPort, int _receivePort, CallbackEnd _callback) {
+    public SendThread(String _fileName, InetAddress _receiveAddr, int _sentPort, int _receivePort) {
         this.fileName = _fileName;
         this.receiveAddr = _receiveAddr;
         this.sentPort = _sentPort;
         this.receivePort = _receivePort;
         this.startTime = new Date();
-        this.callback = _callback;
     }
 
+    @Override
+    public void run() {
+        // 创建socket
+        try {
+            this.socket = new DatagramSocket(sentPort);
+            isConneted = true;
+            // 新建ACK接收线程
+            Thread ACKreceiver = new Thread(new RecvAck());
 
+            // 超时判断线程
+            Thread timeCounter;
+            timeCounter = new Thread(new TimeCounter());
+
+            sentDataList = new ArrayList<>();
+            // 记录一共读取的块的数量
+            blockSum = FileIO.getBlockLength(fileName);
+            // 读取-发送循环
+            for (currentBlock = 0; currentBlock < blockSum; currentBlock++) {
+                // 开始读取文件的标志
+                isReRoad = true;
+                // 如果是新的块则对之前的内容清空操作，否则启动超时和ACK接收线程
+                if (currentBlock != 0) {
+                    sentDataList.clear();
+                } else{
+                    timeCounter.start();
+                    ACKreceiver.start();
+                }
+                Packet dataPacket;
+                List<byte[]> byteData = FileIO.divideToList(fileName, currentBlock);
+                for (int j = 0; j < byteData.size(); j++) {
+                    dataPacket = new Packet(0, j + currentBlock * FileIO.MAX_PACK_PER_BLOCK, false, false, 0, byteData.get(j), fileName);
+                    sentDataList.add(dataPacket);
+                }
+                isReRoad = false;
+                // 开始计时
+                startTime = new Date();
+
+                // 启动发送数据包
+                while (nextSeq < sentDataList.size() + currentBlock * FileIO.MAX_PACK_PER_BLOCK) {
+
+                    // 如果接收方的BUFF满发送空的数据报
+                    if (isFull) {
+                        byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, null, ""));
+                        DatagramPacket tmpPack = new DatagramPacket(tmp, tmp.length, receiveAddr, receivePort);
+                        socket.send(tmpPack);
+                        continue;
+                    }
+                    // 拥塞控制和流量控制
+                    int threshold = rwnd < (int) cwnd ? rwnd : (int) cwnd;
+                    if (nextSeq <= base + threshold && reSending == false) {
+                        Packet sentPacket = sentDataList.get(nextSeq - currentBlock * FileIO.MAX_PACK_PER_BLOCK);
+                        byte[] buff = ByteConverter.objectToBytes(sentPacket);
+                        DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
+                        ByteConverter.bytesToObject(dp.getData());
+                        socket.send(dp);
+                        if (base == nextSeq) startTime = new Date();
+                        nextSeq++;
+                    }
+                }
+                // 如果不是最后一块准备文件切换，在ACK最后一个数据报后切换
+                while (base < sentDataList.size() + (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK
+                        && currentBlock < blockSum - 1) {}
+            }
+
+            // 发送完成，需要确定ACK最后一个数据包后才能断开
+            while (true) {
+                // 注意：此时currentBlock已经再加上1
+                if (currAck == sentDataList.size() - 1 + (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK) {
+                    byte[] buff = ByteConverter.objectToBytes(new Packet(-1, -1, false, true, rwnd, null, ""));
+                    DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
+                    socket.send(dp);
+                    System.out.println("Sending Success!");
+                    socket.disconnect();
+                    socket.close();
+                    return;
+                }
+            }
+        } catch (SocketException e) {
+            System.out.println("Fail to create socket!");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Fail to send packets");
+            e.printStackTrace();
+        }
+    }
+
+    // 接收ACK包的线程
+    class RecvAck implements Runnable {
         @Override
         public void run() {
-            // 创建socket
             try {
-                this.socket = new DatagramSocket(sentPort);
-                isConneted = true;
-                // 新建ACK接收线程
-                Thread ACKreceiver = new Thread(new RecvAck());
+                while (isConneted) {
+                    byte[] buff = new byte[BUFSIZE];
+                    DatagramPacket dp = new DatagramPacket(buff, buff.length);
+                    socket.receive(dp);
+                    Packet packet = ByteConverter.bytesToObject(buff);
+                    base = packet.getAck() + 1;
+                    rwnd = packet.getRwnd();
+                    // 如果接收方的BUFF已经满
+                    if (rwnd == 0) {
+                        isFull = true;
+                    } else
+                        isFull = false;
 
-                // 超时判断线程
-                Thread timeCounter = new Thread(new TimeCounter());
-                Thread shower = new Thread(new ShowProgressBar());
-                sentDataList = new ArrayList<>();
-                // 记录一共读取的块的数量
-                blockSum = FileIO.getBlockLength(fileName);
-                totalPackageSum = FileIO.getByteLength(fileName);
-                // 读取-发送循环
-                shower.start();
-                for (currentBlock = 0; currentBlock < blockSum; currentBlock++) {
-                    // 开始读取文件的标志
-                    isReRoad = true;
-                    // 如果是新的块则对之前的内容清空操作，否则启动超时和ACK接收线程
-                    if (currentBlock != 0) {
-                        sentDataList.clear();
-                    } else{
-                        timeCounter.start();
-                        ACKreceiver.start();
-                    }
-                    Packet dataPacket;
-                    List<byte[]> byteData = FileIO.divideToList(fileName, currentBlock);
-                    for (int j = 0; j < byteData.size(); j++) {
-                        dataPacket = new Packet(0, j + currentBlock * FileIO.MAX_PACK_PER_BLOCK, false, false, 0, byteData.get(j), fileName);
-                        if(j == 0){
-                            dataPacket.setTotalPackage(totalPackageSum);
-                        }
-                        sentDataList.add(dataPacket);
-                    }
-                    isReRoad = false;
-                    // 开始计时
-                    startTime = new Date();
-
-                    // 启动发送数据包
-                    while (nextSeq < sentDataList.size() + currentBlock * FileIO.MAX_PACK_PER_BLOCK) {
-
-                        // 如果接收方的BUFF满发送空的数据报
-                        if (isFull) {
-                            byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, null, ""));
-                            DatagramPacket tmpPack = new DatagramPacket(tmp, tmp.length, receiveAddr, receivePort);
-                            socket.send(tmpPack);
-                            continue;
-                        }
-                        // 拥塞控制和流量控制
-                        int threshold = rwnd < (int) cwnd ? rwnd : (int) cwnd;
-                        if (nextSeq <= base + threshold && reSending == false) {
-                            Packet sentPacket = sentDataList.get(nextSeq - currentBlock * FileIO.MAX_PACK_PER_BLOCK);
-                            byte[] buff = ByteConverter.objectToBytes(sentPacket);
-                            DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
-                            ByteConverter.bytesToObject(dp.getData());
-                            socket.send(dp);
-                            if (base == nextSeq) startTime = new Date();
-                            nextSeq++;
-                        }
-                    }
-                    // 如果不是最后一块准备文件切换，在ACK最后一个数据报后切换
-                    while (base < sentDataList.size() + (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK
-                            && currentBlock < blockSum - 1) {}
-                    if(currAck > totalPackageSum - 5) System.out.println("runerr" + currAck + " | " + totalPackageSum);
-                }
-
-                // 发送完成，需要确定ACK最后一个数据包后才能断开
-                while (true) {
-                    // 注意：此时currentBlock已经再加上1
-                    if(currAck > totalPackageSum - 5) System.out.println("runerr" + currAck + " | " + totalPackageSum);
-                    if (currAck == sentDataList.size() - 1 + (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK) {
-                        byte[] buff = ByteConverter.objectToBytes(new Packet(-1, -1, false, true, rwnd, null, ""));
-                        DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
-                        socket.send(dp);
-                        System.out.println("Sending Success!");
-                        socket.disconnect();
-                        isConneted = false;
-                        socket.close();
-                        shower.join();
-                        ACKreceiver.join();
-                        timeCounter.join();
-//                        if(this.callback != null){
-//                            callback.finish();
-//                        }
-                        return;
-                    }
-                }
-            } catch (SocketException e) {
-                System.out.println("Fail to create socket!");
-                e.printStackTrace();
-            } catch (IOException e) {
-                System.out.println("Fail to send packets");
-                e.printStackTrace();
-            } catch (InterruptedException e){
-                System.out.println("Interupt ERR!");
-            }
-        }
-
-        // 接收ACK包的线程
-        class RecvAck implements Runnable {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        System.out.println("ackerr" + currAck + " | " + totalPackageSum);
-                        byte[] buff = new byte[BUFSIZE];
-                        DatagramPacket dp = new DatagramPacket(buff, buff.length);
-                        socket.receive(dp);
-                        Packet packet = ByteConverter.bytesToObject(buff);
-                        base = packet.getAck() + 1;
-                        rwnd = packet.getRwnd();
-                        // 如果接收方的BUFF已经满
-                        if (rwnd == 0) {
-                            isFull = true;
-                        } else
-                            isFull = false;
-
-                        // 检测冗余Ack
-                        if (currAck == packet.getAck()) {
-                            if (isQuickRecover) {
-                                cwnd++;
-                            } else {
-                                duplicateAck++;
-                            }
-
-                            // 3个冗余Ack，快速重传
-                            if (duplicateAck == 3) {
-                                // 更新拥塞窗口
-                                ssthresh = cwnd / 2;
-                                cwnd = ssthresh + 3;
-                                isQuickRecover = true;
-                                SendPacket(base);
-                            }
+                    // 检测冗余Ack
+                    if (currAck == packet.getAck()) {
+                        if (isQuickRecover) {
+                            cwnd++;
                         } else {
-                            duplicateAck = 0;
-
-                            // 拥塞控制
-                            if (isQuickRecover) {
-                                // 快速恢复时，收到新的Ack，转到拥塞避免状态
-                                isQuickRecover = false;
-                                cwnd = ssthresh;
-                            } else {
-                                if (cwnd >= ssthresh) {
-                                    cwnd += 1 / cwnd; // 拥塞避免
-                                } else {
-                                    cwnd++; // 慢启动
-                                }
-                            }
+                            duplicateAck++;
                         }
 
-                        currAck = packet.getAck();
-                        if (base != nextSeq)
-                            startTime = new Date();
-                        if(currAck > totalPackageSum - 5) System.out.println("ackerr" + currAck + " | " + totalPackageSum);
-                        if(packet.getACKBoolean() && packet.getSeq() == totalPackageSum - 1) break;
-                    }
-                } catch (IOException e) {
-                    System.out.println("Fail to receive packets");
-                    e.printStackTrace();
-                }
-            }
-        }
+                        // 3个冗余Ack，快速重传
+                        if (duplicateAck == 3) {
+                            // 更新拥塞窗口
+                            ssthresh = cwnd / 2;
+                            cwnd = ssthresh + 3;
+                            isQuickRecover = true;
+                            SendPacket(base);
+                        }
+                    } else {
+                        duplicateAck = 0;
 
-        private void SendPacket(int seq) {
-            try {
-                int index = seq - currentBlock * FileIO.MAX_PACK_PER_BLOCK;
-                if(index < 0) return;
-                byte[] buff = ByteConverter.objectToBytes(sentDataList.get(index));
-                DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
-                Packet packet = ByteConverter.bytesToObject(dp.getData());
-                System.out.println("Send: packet index->" + packet.getSeq());
-                socket.send(dp);
+                        // 拥塞控制
+                        if (isQuickRecover) {
+                            // 快速恢复时，收到新的Ack，转到拥塞避免状态
+                            isQuickRecover = false;
+                            cwnd = ssthresh;
+                        } else {
+                            if (cwnd >= ssthresh) {
+                                cwnd += 1 / cwnd; // 拥塞避免
+                            } else {
+                                cwnd++; // 慢启动
+                            }
+                        }
+                    }
+
+                    currAck = packet.getAck();
+                    if (base != nextSeq)
+                        startTime = new Date();
+                }
             } catch (IOException e) {
-                System.out.println("Fail to send packets");
+                System.out.println("Fail to receive packets");
                 e.printStackTrace();
             }
-        }
-
-        // 判断是否超时的线程
-        class TimeCounter implements Runnable {
-            @Override
-            public void run() {
-                System.out.println("timeout" + currAck + " | " + totalPackageSum);
-                while (true) {
-                    // 如果在读取数据，不进行计时，更新时间
-                    while (isReRoad) {
-                        startTime = new Date();
-                    }
-                    long curr_time = new Date().getTime();
-                    // 因为有快速重传，所以阈值设为500
-                    if (curr_time - startTime.getTime() > 500) {
-                        startTime = new Date();
-                        timeOut();
-                    }
-                    if(currAck > totalPackageSum - 5) System.out.println("timeout" + currAck + " | " + totalPackageSum);
-                    if(base == totalPackageSum) break;
-                }
-            }
-        }
-
-        // 超时引发重传事件
-        private void timeOut() {
-            // 更新拥塞窗口
-            isQuickRecover = false;
-            duplicateAck = 0;
-            ssthresh = cwnd / 2;
-            cwnd = 1;
-
-            // 记录base值和nextSeq值，防止接收线程对其造成改变
-            reSending = true;
-            // 只发送一个报可能出现卡死，故使用GBN的机制
-            for (int i = base; i < nextSeq; ++i) {
-                while (rwnd <= 0) System.out.println("Reciever has no enough buffer! Stop retransporting!");
-                SendPacket(i);
-            }
-            reSending = false;
         }
     }
+
+    private void SendPacket(int seq) {
+        try {
+            byte[] buff = ByteConverter.objectToBytes(sentDataList.get(seq - currentBlock * FileIO.MAX_PACK_PER_BLOCK));
+            DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
+            Packet packet = ByteConverter.bytesToObject(dp.getData());
+            System.out.println("Send: packet index->" + packet.getSeq());
+            socket.send(dp);
+        } catch (IOException e) {
+            System.out.println("Fail to send packets");
+            e.printStackTrace();
+        }
+    }
+
+    // 判断是否超时的线程
+    class TimeCounter implements Runnable {
+        @Override
+        public void run() {
+            while (isConneted) {
+                // 如果在读取数据，不进行计时，更新时间
+                while (isReRoad) {
+                    startTime = new Date();
+                }
+                long curr_time = new Date().getTime();
+                // 因为有快速重传，所以阈值设为500
+                if (curr_time - startTime.getTime() > 500) {
+                    startTime = new Date();
+                    timeOut();
+                }
+            }
+        }
+    }
+
+    // 超时引发重传事件
+    private void timeOut() {
+        // 更新拥塞窗口
+        isQuickRecover = false;
+        duplicateAck = 0;
+        ssthresh = cwnd / 2;
+        cwnd = 1;
+
+        // 记录base值和nextSeq值，防止接收线程对其造成改变
+        reSending = true;
+        // 只发送一个报可能出现卡死，故使用GBN的机制
+        for (int i = base; i < nextSeq; ++i) {
+            while (rwnd <= 0) System.out.println("Reciever has no enough buffer!");
+            SendPacket(i);
+        }
+        reSending = false;
+    }
+}

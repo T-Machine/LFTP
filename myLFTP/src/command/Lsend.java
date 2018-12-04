@@ -33,7 +33,7 @@ public class Lsend implements Runnable  {
 
     @Override
     public void run() {
-        System.out.println("[Info] Send " + serverAddress + ":" + dataPort + " Filename: " + filename);
+        System.out.println("[Info] Send " + serverAddress + " Filename: " + filename);
         try {
             //将控制信息（请求）发送给服务端（LSEND + 文件名 + 文件长度）
             DatagramSocket socket = new DatagramSocket(controlPort);
