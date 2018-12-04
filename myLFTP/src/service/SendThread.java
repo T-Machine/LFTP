@@ -30,6 +30,7 @@ public class SendThread implements Runnable {
     private volatile int currentBlock = 0; // 当前读取的块
     private volatile int blockSum; // 块的总数量
     private volatile boolean isReRoad; // 判断现在是否是已读
+    private volatile boolean isMainSent = false; //主线程是否送完所有数据
     private List<Packet> sentDataList; // 要发送的数据
     private InetAddress receiveAddr; // 目的地址
     private int sentPort; // 源端口
@@ -37,7 +38,7 @@ public class SendThread implements Runnable {
     private DatagramSocket socket; // 用于发送数据包
     private String fileName; // 传输文件的文件名
     private boolean isFull = false; // 判断接收方的缓存是否已经是满的，以调整速率
-    private boolean isConneted;
+    private volatile boolean isConneted;
     private final static int SAMPLE = 1; // 速度采样时间
     private int totalPackageSum;
     private CallbackEnd callback;
@@ -108,6 +109,7 @@ public class SendThread implements Runnable {
             totalPackageSum = FileIO.getByteLength(fileName);
             showProgessBar.start();
             // 读取-发送循环
+            System.out.println("文件读取成功！");
             for (currentBlock = 0; currentBlock < blockSum; currentBlock++) {
                 // 开始读取文件的标志
                 isReRoad = true;
@@ -165,6 +167,7 @@ public class SendThread implements Runnable {
                         && currentBlock < blockSum - 1) {}
             }
 
+            isMainSent = true;
             // 发送完成，需要确定ACK最后一个数据包后才能断开
             while (true) {
                 // 注意：此时currentBlock已经再加上1
@@ -176,6 +179,10 @@ public class SendThread implements Runnable {
                     isConneted = false;
                     socket.disconnect();
                     socket.close();
+                    //回调
+                    if(this.callback != null) {
+                        callback.finish();
+                    }
                     return;
                 }
             }
@@ -185,11 +192,6 @@ public class SendThread implements Runnable {
         } catch (IOException e) {
             System.out.println("Fail to send packets");
             e.printStackTrace();
-        }
-
-        //回调
-        if(this.callback != null) {
-            callback.finish();
         }
     }
 
@@ -258,8 +260,8 @@ public class SendThread implements Runnable {
     private void SendPacket(int seq) {
         try {
             // jiance
-            if(seq - currentBlock * FileIO.MAX_PACK_PER_BLOCK < 0) return;
-            byte[] buff = ByteConverter.objectToBytes(sentDataList.get(seq - currentBlock * FileIO.MAX_PACK_PER_BLOCK));
+            int index = isMainSent ? seq - (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK : seq - currentBlock * FileIO.MAX_PACK_PER_BLOCK;
+            byte[] buff = ByteConverter.objectToBytes(sentDataList.get(index));
             DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
             Packet packet = ByteConverter.bytesToObject(dp.getData());
             socket.send(dp);
@@ -274,7 +276,7 @@ public class SendThread implements Runnable {
         @Override
         public void run() {
             while (isConneted) {
-                // 如果在读取数据，不进行计时，更新时间
+                // 如果在读取数据，不进行计时，更新时间rt
                 while (isReRoad) {
                     startTime = new Date();
                 }
