@@ -42,7 +42,6 @@ public class Lsend implements Runnable  {
             //从服务端获取可用端口
             String serverInfo = Packet.getStringParketFrom(socket);
             String [] info = serverInfo.split("#");
-            System.out.println("[Info] Server response: " + serverInfo);
 
             if(info[0].equals("NOPORT")) {
                 System.out.println("[Fail] The server has no free port");

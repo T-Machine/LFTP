@@ -54,6 +54,8 @@ public class Packet implements Serializable {
 		return "";
 	}
 
+	public boolean getAckBoolean(){ return this.ACK; }
+
 	public Integer getAck() {
 		return ack;
 	}

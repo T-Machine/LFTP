@@ -1,6 +1,5 @@
 package service;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -18,7 +17,7 @@ import tools.ProgressBar;
 import static java.lang.Thread.sleep;
 
 public class ReceiveThread implements Runnable {
-	private final static int BUFLENGTH = 64 * 1024; // BUFF大小（单位KB）
+	private final static int BUFLENGTH = 8 * 1024; // BUFF大小（单位KB）
 	private final static int BUFSIZE = BUFLENGTH * 1024; // BUFF大小（单位byte）
 	private final static int SAMPLE = 1; // 速度采样时间
 	private DatagramSocket socket; // UDP连接DatagramSocket
@@ -37,11 +36,11 @@ public class ReceiveThread implements Runnable {
 	private volatile boolean isConneted; // 判断当前是否仍在连接
 	private volatile Lock fileLock = new ReentrantLock(); // 文件读写的锁
 	private volatile List<byte[]> receiveDataList = new ArrayList<>();// 存储接收到分组数据的list
-    private CallbackEnd callback;
+	private CallbackEnd callback;
 
-    public interface CallbackEnd {
-        void finish();
-    }
+	public interface CallbackEnd {
+		void finish();
+	}
 
 	public ReceiveThread(int _receivePort, String _fileDic, CallbackEnd _callback) {
 		this.receivePort = _receivePort;
@@ -83,6 +82,7 @@ public class ReceiveThread implements Runnable {
 			Date current;
 			int ackBefore;
 			int ackAfter;
+			System.out.println("\n\n\n");
 			try {
 				while(isConneted){
 					before = new Date();
@@ -97,10 +97,13 @@ public class ReceiveThread implements Runnable {
 					float rate = (float)(ackAfter - ackBefore) / (float)(current.getTime() - before.getTime());
 					rate /= (float)SAMPLE;
 					rate *= 1000;
+					if(!isConneted) break;
+					if(Math.abs(rate - 0) < 1) continue;
 					pg.show(val, rate);
-					if(val == 100) break;
 
 				}
+				System.out.println("\n\n\n");
+				System.out.println("Writing Success!");
 			}catch (InterruptedException e){
 				System.out.println("Interrupt!");
 			}
@@ -129,7 +132,7 @@ public class ReceiveThread implements Runnable {
 			// 获取客户端IP和发送端口
 			setSenderAddr(dp.getAddress());
 			setSenderPort(dp.getPort());
-			System.out.println("开始接收数据\n");
+			System.out.println("开始接收数据" + dp.getAddress().toString() + " port: " + dp.getPort());
 			// 直到接收到最后一个FIN的数据包，一直处于接收状态
 			while (true) {
 				Packet packet = ByteConverter.bytesToObject(receiverBuff);
@@ -140,15 +143,8 @@ public class ReceiveThread implements Runnable {
 				if (ackIndex == 0) {
 					fileName = packet.getFilename();
 					totalPackageSum = packet.getTotalPackage();
+					// 加上完整的文件名
 					totalFileName = fileDic + fileName;
-					File newFile = new File(totalFileName);
-					if (newFile.exists()){
-						System.out.println("\n文件存在\n");
-						isConneted = false;
-						socket.disconnect();
-						socket.close();
-						return;
-					}
 					showProgressBar.start();
 				}
 				// 缓存空间不足
@@ -231,8 +227,6 @@ public class ReceiveThread implements Runnable {
 			FileIO.byte2file(totalFileName, receiveDataList);
 			receiveDataList.clear();
 			fileLock.unlock();
-			System.out.println("\n\n\nWriting Success!");
-			socket.disconnect();
 			socket.close();
 		} catch (SocketException e) {
 			System.out.println("Fail to create socket!");
@@ -243,9 +237,9 @@ public class ReceiveThread implements Runnable {
 		}
 
 		//回调
-        if(this.callback != null) {
-            callback.finish();
-        }
+		if(this.callback != null) {
+			callback.finish();
+		}
 	}
 
 	private void sendSuccessACK() {
