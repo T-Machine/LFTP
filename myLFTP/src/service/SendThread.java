@@ -37,7 +37,7 @@ public class SendThread implements Runnable {
     private int receivePort; // 目的端口
     private DatagramSocket socket; // 用于发送数据包
     private String fileName; // 传输文件的文件名
-    private boolean isFull = false; // 判断接收方的缓存是否已经是满的，以调整速率
+    private volatile boolean isFull = false; // 判断接收方的缓存是否已经是满的，以调整速率
     private volatile boolean isConneted;
     private final static int SAMPLE = 1; // 速度采样时间
     private int totalPackageSum;
@@ -125,6 +125,7 @@ public class SendThread implements Runnable {
                     ACKreceiver.start();
                 }
                 Packet dataPacket;
+                System.out.println("begin to divide");
                 List<byte[]> byteData = FileIO.divideToList(fileName, currentBlock);
                 if(byteData == null){
                     isConneted = false;
@@ -135,6 +136,7 @@ public class SendThread implements Runnable {
                     }
                     return;
                 }
+                System.out.println("create package");
                 for (int j = 0; j < byteData.size(); j++) {
                     int packetIndex = j + currentBlock * FileIO.MAX_PACK_PER_BLOCK;
                     dataPacket = new Packet(0, packetIndex, false, false, 0, byteData.get(j), fileName);
@@ -146,10 +148,10 @@ public class SendThread implements Runnable {
                 isReRoad = false;
                 // 开始计时
                 startTime = new Date();
-
+                System.out.println("Begin to send");
                 // 启动发送数据包
                 while (nextSeq < sentDataList.size() + currentBlock * FileIO.MAX_PACK_PER_BLOCK) {
-
+                    System.out.println("before isNull" + base);
                     // 如果接收方的BUFF满发送空的数据报
                     if (isFull) {
                         byte[] tmp = ByteConverter.objectToBytes(new Packet(0, -1, false, false, -1, null, ""));
@@ -157,18 +159,23 @@ public class SendThread implements Runnable {
                         socket.send(tmpPack);
                         continue;
                     }
+                    System.out.println("before send" + base);
+                    System.out.println(isFull);
                     // 拥塞控制和流量控制
                     int threshold = rwnd < (int) cwnd ? rwnd : (int) cwnd;
                     if (nextSeq <= base + threshold && reSending == false) {
+                        System.out.println("send" + currAck);
                         Packet sentPacket = sentDataList.get(nextSeq - currentBlock * FileIO.MAX_PACK_PER_BLOCK);
                         byte[] buff = ByteConverter.objectToBytes(sentPacket);
                         DatagramPacket dp = new DatagramPacket(buff, buff.length, receiveAddr, receivePort);
                         ByteConverter.bytesToObject(dp.getData());
                         socket.send(dp);
+                        System.out.println("endSend" + currAck);
                         if (base == nextSeq) startTime = new Date();
                         nextSeq++;
                     }
                 }
+                System.out.println("Begin to switch" + currentBlock);
                 // 如果不是最后一块准备文件切换，在ACK最后一个数据报后切换
                 while (base < sentDataList.size() + (currentBlock - 1) * FileIO.MAX_PACK_PER_BLOCK
                         && currentBlock < blockSum - 1) {}

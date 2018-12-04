@@ -46,7 +46,7 @@ public class Lget implements Runnable  {
             } else {
                 System.out.println("[Info] Get file from " + info[1]);
                 //TODO:获取文件长度 info[2]
-                /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(dataPort, "data/", null));
+                /*缺省目录*/Thread receiveThread = new Thread(new ReceiveThread(dataPort, null));
                 receiveThread.start();
                 receiveThread.join();
             }
