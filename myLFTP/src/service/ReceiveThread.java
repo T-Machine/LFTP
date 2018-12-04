@@ -97,6 +97,7 @@ public class ReceiveThread implements Runnable {
 					rate /= (float)SAMPLE;
 					rate *= 1000;
 					if(!isConneted) break;
+					if(Math.abs(rate - 0) < 1) continue;
 					pg.show(val, rate);
 
 				}
@@ -128,7 +129,7 @@ public class ReceiveThread implements Runnable {
 			// 获取客户端IP和发送端口
 			setSenderAddr(dp.getAddress());
 			setSenderPort(dp.getPort());
-			System.out.println("开始接收数据\n");
+			System.out.println("开始接收数据" + dp.getAddress().toString() + " port: " + dp.getPort());
 			// 直到接收到最后一个FIN的数据包，一直处于接收状态
 			while (true) {
 				Packet packet = ByteConverter.bytesToObject(receiverBuff);
@@ -224,7 +225,6 @@ public class ReceiveThread implements Runnable {
 			receiveDataList.clear();
 			fileLock.unlock();
 			System.out.println("Writing Success!");
-			socket.disconnect();
 			socket.close();
 		} catch (SocketException e) {
 			System.out.println("Fail to create socket!");
@@ -259,7 +259,7 @@ public class ReceiveThread implements Runnable {
 	private void sendFailACK() {
 		try {
 			// 返回一个错误接受ACK包
-			Packet errorAckPacket = new Packet(ackIndex - 1, -1, true, false, rwnd, null, "");
+			Packet errorAckPacket = new Packet(ackIndex - 1, -1, false, false, rwnd, null, "");
 			byte[] ackBuffer = ByteConverter.objectToBytes(errorAckPacket);
 			DatagramPacket ackdp = new DatagramPacket(ackBuffer, ackBuffer.length, senderAddr, senderPort);
 			socket.send(ackdp);

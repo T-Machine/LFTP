@@ -71,6 +71,7 @@ public class SendThread implements Runnable {
                     int val = Math.round(haveGot * 100);
                     rate = (rate / (float)SAMPLE) * 1000;
                     if(!isConneted) break;
+                    if(Math.abs(rate - 0) < 1) continue;
                     pg.show(val, rate);
                 }
             }catch (InterruptedException e){
@@ -124,8 +125,11 @@ public class SendThread implements Runnable {
                 List<byte[]> byteData = FileIO.divideToList(fileName, currentBlock);
                 if(byteData == null){
                     isConneted = false;
-                    socket.disconnect();
                     socket.close();
+                    //回调
+                    if(this.callback != null) {
+                        callback.finish();
+                    }
                     return;
                 }
                 for (int j = 0; j < byteData.size(); j++) {
@@ -177,7 +181,6 @@ public class SendThread implements Runnable {
                     socket.send(dp);
                     System.out.println("Sending Success!");
                     isConneted = false;
-                    socket.disconnect();
                     socket.close();
                     //回调
                     if(this.callback != null) {
@@ -249,6 +252,8 @@ public class SendThread implements Runnable {
                     currAck = packet.getAck();
                     if (base != nextSeq)
                         startTime = new Date();
+                    if(!isConneted) break;
+                    if(packet.getAckBoolean() && currAck == totalPackageSum - 1 && isMainSent) break;
                 }
             } catch (IOException e) {
                 System.out.println("Fail to receive packets");
@@ -286,6 +291,7 @@ public class SendThread implements Runnable {
                     startTime = new Date();
                     timeOut();
                 }
+                if(isMainSent && currAck == totalPackageSum - 1) break;
             }
         }
     }
